@@ -36,7 +36,7 @@ aws ec2 import-key-pair &> /dev/null \
         --security-group-ids "${default_sg_id}" \
         --key-name "${keypair_name}" \
         --count 1 \
-        --instance-type t3.micro \
+        --instance-type t3.large \
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${instance_name}}]" \
         --associate-public-ip-address
 }
