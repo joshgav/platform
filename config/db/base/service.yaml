@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: apiserver-dbcluster
+  labels:
+    postgres-operator.crunchydata.com/cluster: apiserver-dbcluster
+    postgres-operator.crunchydata.com/role: primary
+spec:
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: postgres
+  type: ClusterIP
+  selector:
+    postgres-operator.crunchydata.com/cluster: apiserver-dbcluster
+    postgres-operator.crunchydata.com/instance-set: postgres1

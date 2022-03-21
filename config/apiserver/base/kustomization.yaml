@@ -1,0 +1,6 @@
+resources:
+- build.yaml
+- service.yaml
+- images.yaml
+- deployment.yaml
+- route.yaml

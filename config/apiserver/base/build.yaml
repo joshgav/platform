@@ -1,0 +1,33 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: spring-apiserver
+  labels:
+    app: spring-apiserver
+    app.kubernetes.io/component: build-config
+    app.kubernetes.io/instance: spring-apiserver
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'spring-apiserver:latest'
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: app
+        name: 's2i-java-fabric8:latest'
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/joshgav/spring-apiserver.git'
+      ref: keycloak
+  triggers:
+    - type: GitHub
+      github:
+        secret: l-qmx1ae2UvWU3HHeYXf
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange: {}
+  runPolicy: Serial

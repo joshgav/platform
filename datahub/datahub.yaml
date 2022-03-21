@@ -1,0 +1,94 @@
+kind: KfDef
+apiVersion: kfdef.apps.kubeflow.org/v1
+metadata:
+  name: opendatahub
+  namespace: data
+spec:
+  applications:
+
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odh-common
+      name: odh-common
+
+    # Create the SecurityContextConstraint to grant the ceph-nano service account anyuid permissions
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: ceph/object-storage/scc
+      name: ceph-nano-scc
+
+    # Deploy ceph-nano for minimal object storage running in a pod
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: ceph/object-storage/nano
+      name: ceph-nano
+
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: radanalyticsio/spark/cluster
+      name: radanalyticsio-spark-cluster
+
+    - kustomizeConfig:
+        parameters:
+          - name: s3_endpoint_url
+            value: s3.odh.com
+        repoRef:
+          name: manifests
+          path: jupyterhub/jupyterhub
+      name: jupyterhub
+
+    - kustomizeConfig:
+        overlays:
+          - additional
+        repoRef:
+          name: manifests
+          path: jupyterhub/notebook-images
+      name: notebook-images
+
+    # Deploy Hue with configuration to access the ceph-nano object store
+    - kustomizeConfig:
+        # These parameters are required to allow access to object storage provided by ceph-nano
+        parameters:
+          - name: s3_is_secure
+            value: "false"
+          - name: s3_endpoint_url
+            value: "ceph-nano-0"
+          - name: s3_credentials_secret
+            value: ceph-nano-credentials
+        repoRef:
+          name: manifests
+          path: hue/hue
+      name: hue
+
+    # Deploy Thriftserver with configuration to access the ceph-nano object store
+    - kustomizeConfig:
+        overlays:
+          - create-spark-cluster
+        # These parameters are required to allow access to object storage provided by ceph-nano
+        parameters:
+          - name: spark_url
+            value: "spark://spark-cluster-thriftserver"
+          - name: s3_endpoint_url
+            value: "http://ceph-nano-0"
+          - name: s3_credentials_secret
+            value: ceph-nano-credentials
+        repoRef:
+          name: manifests
+          path: thriftserver/thriftserver
+      name: thriftserver
+
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odh-dashboard
+      name: odh-dashboard
+
+  repos:
+    - name: kf-manifests
+      uri: https://github.com/opendatahub-io/manifests/tarball/v1.4.0-openshift
+    - name: manifests
+      uri: 'https://github.com/opendatahub-io/odh-manifests/tarball/v1.1.2'

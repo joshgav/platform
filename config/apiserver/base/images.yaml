@@ -1,0 +1,27 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: s2i-java-fabric8
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: 'docker.io/fabric8/s2i-java:latest'
+      referencePolicy:
+        type: Source
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: spring-apiserver
+  labels:
+    app: spring-apiserver
+    app.kubernetes.io/component: image-stream
+    app.kubernetes.io/instance: spring-apiserver
+spec:
+  lookupPolicy:
+    local: false

@@ -1,8 +1,6 @@
-- Create an alternate SG for bastion hosts
-- Programmatically generate SSH key pair
-- Programmatically add rules to security groups
-- Gather cluster metadata in one place
+- Use "BastionSG" SG for additional hosts (Windows, RHEL)
+    - Programmatically add rules to security groups
+- Programmatically generate new SSH key pair for new clusters
 
-- Add client for Spring Boot app
-- Install postgres for Spring Boot app
-- Install Spring Boot app
+- Install trusted certificate/CA for ingresses.
+    - https://docs.openshift.com/container-platform/4.6/security/certificates/replacing-default-ingress-certificate.html
