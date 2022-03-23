@@ -53,6 +53,17 @@ New-ADUser -Name 'joshgav' `
 Add-ADGroupMember -Identity 'CN=spring,OU=Groups,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
     -Members 'CN=joshgav,OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com'
 
+$username = "calebgav"
+New-ADUser -Name ${username} `
+   -Path 'OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
+   -AccountPassword $(ConvertTo-SecureString ${safe_mode_password} -AsPlainText -Force) `
+   -DisplayName ${username} `
+   -UserPrincipalName "${username}@aws.joshgav.com" `
+   -Enabled $true
+
+Add-ADGroupMember -Identity 'CN=spring,OU=Groups,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
+    -Members "CN=${username},OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com"
+
 ## Step 3.
 
 # - open port in EC2 Security Group for LDAP (389)

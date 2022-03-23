@@ -45,3 +45,23 @@ else
     echo
     echo "INFO: using installed aws CLI"
 fi
+
+### cmctl
+
+if ! type -p cmctl &> /dev/null; then
+    ver=v1.7.1
+    installer_url=https://github.com/cert-manager/cert-manager/releases/download/${ver}/cmctl-linux-amd64.tar.gz
+    filename=cmctl-linux-amd64.tar.gz
+
+    echo
+    echo "INFO: downloading and installing cmctl"
+
+    pushd ${tempdir}
+        curl -o "${filename}" -sSL "${installer_url}"
+        tar -xzf "${filename}"
+        rm "${filename}"
+    popd
+else
+    echo
+    echo "INFO: using installed cmctl"
+fi

@@ -1,7 +1,7 @@
 # schema: https://github.com/openshift/installer/blob/master/pkg/types/installconfig.go
 apiVersion: v1
 metadata:
-  name: aws-ipi
+  name: ${OPENSHIFT_CLUSTER_NAME}
 baseDomain: ${OPENSHIFT_BASE_DOMAIN}
 controlPlane:
   architecture: amd64
