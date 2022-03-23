@@ -31,6 +31,8 @@ spec:
           env:
             - name: HOME
               value: /opt/jboss
+            - name: KEYCLOAK_BASE_URL
+              value: https://keycloak-app.apps.aws-ipi.sandbox930.opentlc.com/auth/
           ports:
             - containerPort: 8080
               protocol: TCP
