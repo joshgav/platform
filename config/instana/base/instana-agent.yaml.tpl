@@ -1,7 +1,7 @@
 apiVersion: instana.io/v1
 kind: InstanaAgent
 metadata:
-  name: default
+  name: instana-agent
   namespace: instana-agent
 spec:
   agent:
