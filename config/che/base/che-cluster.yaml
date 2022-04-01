@@ -1,0 +1,27 @@
+kind: CheCluster
+apiVersion: org.eclipse.che/v1
+metadata:
+  name: codeready-workspaces
+spec:
+  server:
+    workspaceNamespaceDefault: che-<username>
+    # workspacesDefaultPlugins:
+    #   - editor: ''
+    #     plugins:
+    #       - ''
+  database:
+    externalDb: false
+  auth:
+    externalIdentityProvider: false
+    openShiftoAuth: true
+    initialOpenShiftOAuthUser: true
+  storage:
+    pvcStrategy: per-workspace
+    pvcClaimSize: 10Gi
+    preCreateSubPaths: true
+  devWorkspace:
+    enable: true
+  metrics:
+    enable: true
+  imagePuller:
+    enable: false

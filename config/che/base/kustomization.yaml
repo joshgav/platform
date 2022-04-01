@@ -1,0 +1,3 @@
+resources:
+- che-namespace.yaml
+- che-cluster.yaml
