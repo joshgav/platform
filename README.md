@@ -1,17 +1,22 @@
 # devenv
 
-Set up an OpenShift cluster and other goodies.
+Set up OpenShift clusters and services.
 
-## Basic usage
+## AWS IPI
 
 1. Set secrets in `.env`.
-1. Review cluster config in `cluster/install-config.yaml.tpl`.
-1. Run `cluster/install.sh` to install cluster.
+1. Review cluster config in `aws/install-config.yaml.tpl`.
+1. Run `aws/install-ipi.sh` to install cluster.
 
 Cluster will be accessible at this URL:
 
 - https://console-openshift-console.apps.<cluster_name>.<base_domain>/
 - https://console-openshift-console.apps.aws-ipi.sandbox930.opentlc.com/
+
+## Azure ARO
+
+1. Set secrets in `.env`.
+1. Run `azure/install-aro.sh` to install cluster and get kubeadmin binding.
 
 ## Other services
 
