@@ -1,11 +1,11 @@
 kind: CheCluster
 apiVersion: org.eclipse.che/v1
 metadata:
-  name: che
-  namespace: che
+  name: crw
+  namespace: crw
 spec:
   server:
-    workspaceNamespaceDefault: che-<username>
+    workspaceNamespaceDefault: crw-<username>
     # workspacesDefaultPlugins:
     #   - editor: ''
     #     plugins:
@@ -17,7 +17,7 @@ spec:
     # openShiftoAuth: true
     # initialOpenShiftOAuthUser: true
   storage:
-    pvcStrategy: per-workspace
+    pvcStrategy: common
     pvcClaimSize: 10Gi
     preCreateSubPaths: false
   devWorkspace:
