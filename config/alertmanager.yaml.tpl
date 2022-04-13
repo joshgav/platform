@@ -24,7 +24,7 @@ route:
   group_by:
   - namespace
   group_interval: 5m
-  repeat_interval: 5m
+  repeat_interval: 12h
   group_wait: 30s
 
 inhibit_rules:

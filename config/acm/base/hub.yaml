@@ -1,0 +1,6 @@
+# https://github.com/stolostron/multiclusterhub-operator/blob/main/api/v1/multiclusterhub_types.go
+apiVersion: operator.open-cluster-management.io/v1
+kind: MultiClusterHub
+metadata:
+  name: hub
+spec: {}

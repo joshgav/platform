@@ -1,0 +1,5 @@
+resources:
+- gitops-operator.yaml
+- clustersetbinding.yaml
+- placement-all-openshift-clusters.yaml
+- gitopscluster.yaml
