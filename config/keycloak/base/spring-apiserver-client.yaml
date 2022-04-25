@@ -14,7 +14,7 @@ spec:
     name: spring-apiserver
     clientId: spring-apiserver
     redirectUris:
-      - 'https://apiserver-app.apps.aws-ipi.sandbox930.opentlc.com/*'
+      - 'https://apiserver-app.apps.aws-ipi.sandbox1044.opentlc.com/*'
     implicitFlowEnabled: false
     publicClient: false
     standardFlowEnabled: true

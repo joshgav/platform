@@ -6,7 +6,7 @@
 Install-WindowsFeature -IncludeManagementTools -Confirm:$false `
     AD-Domain-Services,RSAT-AD-Tools,RSAT-DNS-Server
 
-$safe_mode_password = "NoSoupForYou#1"
+$safe_mode_password = "$Variable:safe_mode_password"
 
 Install-ADDSForest -DomainName aws.joshgav.com `
     -DomainNetbiosName JOSHGAV `
