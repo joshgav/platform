@@ -1,4 +1,2 @@
 resources:
-- keycloak.yaml
-- realm.yaml
-- spring-apiserver-client.yaml
+  - keycloak.yaml

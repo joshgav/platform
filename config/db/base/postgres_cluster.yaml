@@ -2,50 +2,47 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: apiserver-dbcluster
+    name: apiserver-dbcluster
 spec:
-  postgresVersion: 14
-  # databaseInitSQL:
-  #   name: db-init-sql
-  #   key: init.sql
-  instances:
-  - name: postgres1
-    replicas: 1
-    dataVolumeClaimSpec:
-      accessModes:
-      - "ReadWriteOnce"
-      resources:
-        requests:
-          storage: 10Gi
-    # resources: {}
-  userInterface:
-    pgAdmin:
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 10Gi
-      service:
-        type: ClusterIP
-  monitoring:
-    pgmonitor:
-      exporter: {}
-  service:
-    type: ClusterIP
-  users:
-  - name: apiserver
-    databases:
-    - apiserverdb
-    - postgres
-  backups:
-    pgbackrest:
-      repos:
-      - name: repo1
-        volume:
-          volumeClaimSpec:
+    postgresVersion: 14
+    instances:
+      - name: postgres1
+        replicas: 1
+        dataVolumeClaimSpec:
             accessModes:
-            - "ReadWriteOnce"
+              - "ReadWriteOnce"
             resources:
-              requests:
-                storage: 10Gi 
+                requests:
+                    storage: 10Gi
+        # resources: {}
+    userInterface:
+        pgAdmin:
+            dataVolumeClaimSpec:
+                accessModes:
+                  - "ReadWriteOnce"
+                resources:
+                    requests:
+                        storage: 10Gi
+        service:
+            type: ClusterIP
+    monitoring:
+        pgmonitor:
+            exporter: {}
+    service:
+        type: ClusterIP
+    users:
+      - name: apiserver
+        databases:
+          - apiserverdb
+          - postgres
+    backups:
+        pgbackrest:
+            repos:
+              - name: repo1
+                volume:
+                    volumeClaimSpec:
+                        accessModes:
+                          - "ReadWriteOnce"
+                        resources:
+                            requests:
+                                storage: 10Gi 

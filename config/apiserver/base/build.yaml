@@ -1,5 +1,5 @@
-kind: BuildConfig
 apiVersion: build.openshift.io/v1
+kind: BuildConfig
 metadata:
   name: spring-apiserver
   labels:

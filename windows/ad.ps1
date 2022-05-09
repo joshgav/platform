@@ -18,6 +18,8 @@ Install-ADDSForest -DomainName aws.joshgav.com `
 
 ## Step 2. After restart add the following entities to AD
 
+$safe_mode_password = "$Variable:safe_mode_password"
+
 New-ADUser -Name keycloak `
     -Path 'CN=Users,DC=aws,DC=joshgav,DC=com' `
     -DisplayName keycloak `
@@ -68,5 +70,5 @@ Add-ADGroupMember -Identity 'CN=spring,OU=Groups,OU=Spring Test App,DC=aws,DC=jo
 
 # - open port in EC2 Security Group for LDAP (389)
 #
-# - add A record for msad.aws.joshgav.com to DNS
+# - add A or CNAME record for msad.aws.joshgav.com to DNS
 #     - https://dcc.godaddy.com/manage/joshgav.com/dns

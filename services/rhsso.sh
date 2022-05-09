@@ -14,7 +14,10 @@ echo
 echo "INFO: install rhsso-operator"
 create_subscription rhsso-operator ${namespace}
 
-cat ${root_dir}/config/keycloak/base/realm.yaml.tpl | \
-  envsubst '${LDAP_BIND_SECRET}' > ${root_dir}/config/keycloak/base/realm.yaml
+cat ${root_dir}/config/keycloak/msad/kustomization.yaml.tpl | envsubst > ${root_dir}/config/keycloak/msad/kustomization.yaml
+trap "rm -f ${root_dir}/config/keycloak/msad/kustomization.yaml" EXIT
 
-kustomize build ${root_dir}/config/keycloak | oc apply -f -
+temp_dir=${root_dir}/temp
+mkdir -p ${temp_dir}
+
+kustomize build ${root_dir}/config/keycloak/msad | tee ${temp_dir}/keycloak-msad.yaml | kubectl apply -n ${namespace} -f -

@@ -29,10 +29,10 @@ spec:
               secretRef:
                 name: keycloak-client-secret-spring-apiserver
           env:
+            - name: KEYCLOAK_BASE_URL
+              value: https://keycloak-app.apps.aws-ipi.sandbox1044.opentlc.com/auth/
             - name: HOME
               value: /opt/jboss
-            - name: KEYCLOAK_BASE_URL
-              value: https://keycloak-app.apps.aws-ipi.sandbox930.opentlc.com/auth/
           ports:
             - containerPort: 8080
               protocol: TCP

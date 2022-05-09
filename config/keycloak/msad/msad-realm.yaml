@@ -1,0 +1,104 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+    name: app-realm
+    labels:
+        app: app-keycloak
+        component: app-realm
+spec:
+    instanceSelector:
+        matchLabels:
+            app: app-keycloak
+    realm:
+        realm: app
+        enabled: true
+        rememberMe: true
+        userFederationProviders:
+          - # must be first in list for JSON patch path
+            providerName: ldap
+            displayName: msad
+            config:
+                # connectionUrl: "${LDAP_CONNECTION_URL}"
+                # bindDn: "${LDAP_BIND_DN}"
+                # bindCredential: "${LDAP_BIND_SECRET}"
+                # usersDn: "${LDAP_SEARCH_DN}"
+                searchScope: "2"
+                vendor: "ad"
+                userObjectClasses: "person, organizationalPerson, user"
+                usernameLDAPAttribute: "sAMAccountName"
+                rdnLDAPAttribute: cn
+                uuidLDAPAttribute: "objectGUID"
+                editMode: READ_ONLY
+                syncRegistrations: "true"
+        userFederationMappers:
+          - # must be first in list for JSON patch path
+            name: msad-group2role-mapper
+            federationProviderDisplayName: msad
+            federationMapperType: role-ldap-mapper
+            config:
+                # roles.dn: "${LDAP_ROLES_DN}"
+                role.name.ldap.attribute: cn
+                role.object.classes: group
+                mode: LDAP_ONLY
+                user.roles.retrieve.strategy: LOAD_ROLES_BY_MEMBER_ATTRIBUTE
+                membership.ldap.attribute: member
+                membership.attribute.type: DN
+                # membership.user.ldap.attribute: sAMAccountName
+                # memberof.ldap.attribute: memberOf
+                use.realm.roles.mapping: "true"
+          - name: username
+            federationProviderDisplayName: msad
+            federationMapperType: user-attribute-ldap-mapper
+            config:
+                user.model.attribute: username
+                ldap.attribute: sAMAccountName
+                read.only: "true"
+                is.mandatory.in.ldap: "true"
+                always.read.value.from.ldap: "false"
+                is.binary.attribute: "false"
+          - name: full name
+            federationMapperType: full-name-ldap-mapper
+            federationProviderDisplayName: msad
+            config:
+                ldap.full.name.attribute: cn
+                read.only: "true"
+                write.only: "false"
+          - name: last name
+            federationMapperType: user-attribute-ldap-mapper
+            federationProviderDisplayName: msad
+            config:
+                user.model.attribute: lastName
+                ldap.attribute: sn
+                read.only: "true"
+                always.read.value.from.ldap: "true"
+                is.mandatory.in.ldap: "true"
+          - name: email
+            federationMapperType: user-attribute-ldap-mapper
+            federationProviderDisplayName: msad
+            config:
+                user.model.attribute: email
+                ldap.attribute: mail
+                read.only: "true"
+                always.read.value.from.ldap: "false"
+                is.mandatory.in.ldap: "false"
+          - name: creation date
+            federationMapperType: user-attribute-ldap-mapper
+            federationProviderDisplayName: msad
+            config:
+                user.model.attribute: createTimestamp
+                ldap.attribute: whenCreated
+                read.only: "true"
+                always.read.value.from.ldap: "true"
+                is.mandatory.in.ldap: "false"
+          - name: modify date
+            federationMapperType: user-attribute-ldap-mapper
+            federationProviderDisplayName: msad
+            config:
+                user.model.attribute: modifyTimestamp
+                ldap.attribute: whenChanged
+                is.mandatory.in.ldap: "false"
+                read.only: "true"
+                always.read.value.from.ldap: "true"
+          - name: MSAD account controls
+            federationMapperType: msad-user-account-control-mapper
+            federationProviderDisplayName: msad

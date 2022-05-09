@@ -1,8 +1,10 @@
-  apiVersion: keycloak.org/v1alpha1
-  kind: Keycloak
-  metadata:
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
     name: app-keycloak
-  spec:
+    labels:
+        app: app-keycloak
+spec:
     externalAccess:
-      enabled: true
+        enabled: true
     instances: 1
