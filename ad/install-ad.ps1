@@ -1,15 +1,19 @@
-# NOTE: This is not a script. Rather this is a list of commands to execute to
-# set up Active Directory and a user and group.
+## NOTE: This is not a script at the moment - it's a series of commands to execute manually.
+
+## TODO: read env vars from .env
+$password = $password
+$domainName = $domainName
+$netbiosDomainName = $netbiosDomainName
+
+$safe_mode_password = $password
 
 ## Step 1. Install AD and a forest+domain.
 
 Install-WindowsFeature -IncludeManagementTools -Confirm:$false `
     AD-Domain-Services,RSAT-AD-Tools,RSAT-DNS-Server
 
-$safe_mode_password = "$Variable:safe_mode_password"
-
-Install-ADDSForest -DomainName aws.joshgav.com `
-    -DomainNetbiosName JOSHGAV `
+Install-ADDSForest -DomainName ${domainName} `
+    -DomainNetbiosName ${netbiosDomainName} `
     -DomainMode WinThreshold `
     -ForestMode WinThreshold `
     -SafeModeAdministratorPassword $(ConvertTo-SecureString ${safe_mode_password} -AsPlainText -Force) `
@@ -18,13 +22,11 @@ Install-ADDSForest -DomainName aws.joshgav.com `
 
 ## Step 2. After restart add the following entities to AD
 
-$safe_mode_password = "$Variable:safe_mode_password"
-
 New-ADUser -Name keycloak `
     -Path 'CN=Users,DC=aws,DC=joshgav,DC=com' `
     -DisplayName keycloak `
-    -UserPrincipalName 'keycloak@aws.joshgav.com' `
-    -AccountPassword $(ConvertTo-SecureString ${safe_mode_password} -AsPlainText -Force) `
+    -UserPrincipalName "keycloak@${domainName}" `
+    -AccountPassword $(ConvertTo-SecureString ${password} -AsPlainText -Force) `
     -Enabled $true `
     -PasswordNeverExpires $true
 
@@ -45,22 +47,23 @@ New-ADGroup -Name 'spring' `
     -GroupScope Global `
     -DisplayName 'spring'
 
-New-ADUser -Name 'joshgav' `
+$username='joshgav'
+New-ADUser -Name ${username} `
     -Path 'OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
-    -AccountPassword $(ConvertTo-SecureString ${safe_mode_password} -AsPlainText -Force) `
-    -DisplayName 'joshgav' `
-    -UserPrincipalName 'joshgav@aws.joshgav.com' `
+    -AccountPassword $(ConvertTo-SecureString ${password} -AsPlainText -Force) `
+    -DisplayName ${username} `
+    -UserPrincipalName "${username}@${domainName}" `
     -Enabled $true
 
 Add-ADGroupMember -Identity 'CN=spring,OU=Groups,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
-    -Members 'CN=joshgav,OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com'
+    -Members "CN=${username},OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com"
 
 $username = "calebgav"
 New-ADUser -Name ${username} `
    -Path 'OU=Users,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
    -AccountPassword $(ConvertTo-SecureString ${safe_mode_password} -AsPlainText -Force) `
    -DisplayName ${username} `
-   -UserPrincipalName "${username}@aws.joshgav.com" `
+   -UserPrincipalName "${username}@${domainName}" `
    -Enabled $true
 
 Add-ADGroupMember -Identity 'CN=spring,OU=Groups,OU=Spring Test App,DC=aws,DC=joshgav,DC=com' `
