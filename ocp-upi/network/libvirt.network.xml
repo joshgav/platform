@@ -1,0 +1,7 @@
+<network>
+  <name>openshift</name>
+  <forward mode='bridge'/>
+  <bridge name='br0' stp='on' delay='0' zone='libvirt' />
+  <dns enable='no'/>
+  <ip address='192.168.2.1' netmask='255.255.255.0' />
+</network>

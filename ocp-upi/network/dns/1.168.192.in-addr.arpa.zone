@@ -1,0 +1,13 @@
+$TTL    604800
+
+@       IN      SOA     jugsrv01.openshift.lab. admin.openshift.lab. (
+                  1     ; Serial
+             604800     ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800     ; Negative Cache TTL
+)
+
+@  IN  NS  jugsrv01.openshift.lab.
+
+30.1.168.192.in-addr.arpa.  IN  PTR  master.ocp4-sno.openshift.lab.
