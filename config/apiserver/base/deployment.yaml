@@ -29,7 +29,7 @@ spec:
               secretRef:
                 name: keycloak-client-secret-spring-apiserver
           env:
-            - name: KEYCLOAK_BASE_URL
+            - name: KEYCLOAK_ISSUER_URI
               value: https://keycloak-app.apps.aws-ipi.sandbox1044.opentlc.com/auth/
             - name: HOME
               value: /opt/jboss

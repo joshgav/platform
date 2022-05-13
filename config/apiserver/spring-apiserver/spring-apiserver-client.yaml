@@ -32,4 +32,13 @@ spec:
                 "userinfo.token.claim": "true"
                 "access.token.claim": "true"
                 "id.token.claim": "true"
+        defaultClientScopes:
+          - "web-origins"
+          - "address"
+          - "phone"
+          - "offline_access"
+          - "roles"
+          - "profile"
+          - "microprofile-jwt"
+          - "email"
               
