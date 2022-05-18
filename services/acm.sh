@@ -15,4 +15,4 @@ echo
 echo "INFO: install acm operator"
 create_subscription ${operator_name} ${operator_namespace}
 
-kustomize build ${root_dir}/config/acm | oc apply -f -
+kustomize build ${root_dir}/config/acm/assisted | oc apply -f -

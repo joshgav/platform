@@ -4,4 +4,5 @@ kind: Kustomization
 namespace: open-cluster-management
 
 resources:
-- ./base
+- ../base
+- agentserviceconfig.yaml
