@@ -14,6 +14,13 @@ echo
 echo "INFO: install rhsso-operator"
 create_subscription rhsso-operator ${namespace}
 
+ready=1
+while [[ ${ready} != 0 ]]; do
+    echo "INFO: awaiting readiness of operator"
+    oc api-resources | grep keycloak &> /dev/null
+    ready=$?
+done
+
 cat ${root_dir}/config/keycloak/msad/kustomization.yaml.tpl | envsubst > ${root_dir}/config/keycloak/msad/kustomization.yaml
 trap "rm -f ${root_dir}/config/keycloak/msad/kustomization.yaml" EXIT
 

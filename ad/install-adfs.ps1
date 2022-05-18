@@ -4,7 +4,7 @@
 $password = $password
 $domainName = $domainName
 $netbiosDomainName = $netbiosDomainName
-$clientRedirectUri = $clientRedirectUri
+
 
 $adfsUserName = 'adfs'
 $subjectName = "${adfsUserName}.${domainName}"
@@ -26,6 +26,6 @@ New-ADUser -Name $adfsUserName `
 
 $cred = Get-Credential ${netbiosDomainName}\${adfsUserName}
 Install-AdfsFarm `
-    -CertificateThumbprint "${cert.Thumbprint}" `
+    -CertificateThumbprint $cert.Thumbprint `
     -FederationServiceName "$subjectName" `
     -ServiceAccountCredential $cred

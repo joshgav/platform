@@ -36,7 +36,6 @@ spec:
           - "web-origins"
           - "address"
           - "phone"
-          - "offline_access"
           - "roles"
           - "profile"
           - "microprofile-jwt"

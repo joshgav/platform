@@ -12,4 +12,11 @@ echo
 echo "INFO: install crunchy-postgres-operator"
 create_subscription crunchy-postgres-operator openshift-operators
 
+ready=1
+while [[ ${ready} != 0 ]]; do
+    echo "INFO: awaiting readiness of operator"
+    oc api-resources | grep postgres &> /dev/null
+    ready=$?
+done
+
 kustomize build ${root_dir}/config/db/base | oc apply -n ${namespace} -f -
