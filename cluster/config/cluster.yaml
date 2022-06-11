@@ -1,0 +1,46 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+localAPIEndpoint:
+    advertiseAddress: 192.168.126.10
+    bindPort: 6443
+nodeRegistration:
+    name: master01
+    criSocket: "unix:///var/run/containerd/containerd.sock"
+    # remove control-plane taint
+    taints: []
+    kubeletExtraArgs:
+        # TODO: extract
+        "resolv-conf": "/home/joshgav/src/devenv/cluster/config/resolv.conf.k8s"
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+clusterName: kubernetes
+controlPlaneEndpoint: ${apiserver_san}
+imageRepository: k8s.gcr.io
+kubernetesVersion: ${kubernetes_version}
+certificatesDir: /etc/kubernetes/pki
+networking:
+    dnsDomain: cluster.local
+    serviceSubnet: 10.96.0.0/12
+    podSubnet: 10.80.0.0/12
+etcd:
+    local:
+        extraArgs:
+            name: master01
+            listen-peer-urls: https://0.0.0.0:2380
+            listen-client-urls: https://0.0.0.0:2379
+            listen-metrics-urls: http://0.0.0.0:2381
+            advertise-client-urls: https://${host_ip}:2379
+            initial-advertise-peer-urls: https://${host_ip}:2380
+apiServer:
+    timeoutForControlPlane: 4m0s
+    certSANs:
+      - "${apiserver_san}"
+      - "${host_ip}"
+controllerManager: {}
+scheduler: {}
+---
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd

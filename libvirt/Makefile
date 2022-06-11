@@ -9,7 +9,7 @@ HOST_IP  ?= 192.168.126.10
 NET_CONFIG_TEMPLATE := $(THIS_DIR)/net.xml.template
 NET_CONFIG          := $(THIS_DIR)/net.xml
 
-SSH_KEY_DIR        := $(THIS_DIR)/ssh-key
+SSH_KEY_DIR        := $(THIS_DIR)/.ssh
 SSH_KEY_PUB_PATH   := $(SSH_KEY_DIR)/key.pub
 SSH_KEY_PRIV_PATH  := $(SSH_KEY_DIR)/key
 
