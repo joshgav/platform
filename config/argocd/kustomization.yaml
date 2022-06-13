@@ -1,7 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
-namespace: openshift-gitops
-
 resources:
-- ./base
+- github.com/argoproj/argo-cd/manifests/crds?ref=v2.4.0
+- github.com/argoproj/argo-cd/manifests/base?ref=v2.4.0
+- base/host.yaml
+- base/ingress.yaml
+patchesStrategicMerge:
+- patches/argocd-application-controller_patch.yaml
+- patches/argocd-server_patch.yaml

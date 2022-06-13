@@ -9,6 +9,10 @@ cat /etc/systemd/system/kubelet.service.d/kubeadm.conf | sed 's/^Environment="KU
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
+# set hostname
+# alternatively add kubelet flag `--hostname-override master01`
+hostnamectl hostname master01
+
 # set up firewall
 if type -p firewall-cmd; then
     ## kubelet

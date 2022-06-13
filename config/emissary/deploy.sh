@@ -2,7 +2,6 @@
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 root_dir=$(cd ${this_dir}/.. && pwd)
-config_dir=${this_dir}
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 
 namespace=emissary-ingress
@@ -27,4 +26,6 @@ kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext 
 
 helm upgrade --install emissary-ingress ${repo_name}/${chart_name} \
     --namespace ${namespace} \
-    --values ${config_dir}/values.yaml
+    --values ${this_dir}/values.yaml
+
+kustomize build ${this_dir}/base | kubectl apply -n ${namespace} -f -
