@@ -1,10 +1,11 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-root_dir=$(cd ${this_dir}/.. && pwd)
-if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 
 source ${root_dir}/lib/aws.sh
+source ${root_dir}/lib/requirements.sh
+
+install_cmctl
 
 ## Prefer Helm chart via cmctl CLI over subscription to operator, because Helm chart/cmctl can be modified.
 ## We modify the nameservers used for DNS01 ACME checks to ensure they work on AWS.
@@ -16,8 +17,6 @@ if ! cmctl check api &> /dev/null; then
 else
     echo "INFO: cert-manager already installed"
 fi
-
-config_path=${root_dir}/config/certmanager
 
 echo "INFO: applying access key secret for route53 DNS01 config"
 oc apply -f - <<EOF
@@ -35,7 +34,7 @@ echo "INFO: finding public hosted zone ID for ${OPENSHIFT_BASE_DOMAIN}"
 export zone_id=$(hosted_zone_id "${OPENSHIFT_BASE_DOMAIN}.")
 
 echo "INFO: prerender manifests"
-for file in $(dir ${config_path}/base/*.yaml.tpl); do 
+for file in $(dir ${this_dir}/aws/*.yaml.tpl); do 
     echo "rendering ${file} to ${file%%'.tpl'}"
     cat "${file}" | envsubst > "${file%%'.tpl'}"
 done

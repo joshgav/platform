@@ -1,0 +1,7 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Host
+metadata:
+  name: argocd
+spec:
+  tlsSecret:
+    name: argocd-tls-keypair
