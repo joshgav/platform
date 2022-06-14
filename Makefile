@@ -15,3 +15,6 @@ cert-manager:
 
 argocd:
 	${root_dir}/config/argocd/deploy.sh
+
+crossplane:
+	${root_dir}/config/crossplane/deploy.sh

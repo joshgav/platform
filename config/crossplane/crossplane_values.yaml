@@ -1,0 +1,99 @@
+# replicas: 1
+
+# deploymentStrategy: RollingUpdate
+
+# image:
+#   repository: crossplane/crossplane
+#   tag: v1.8.1
+#   pullPolicy: IfNotPresent
+
+# nodeSelector: {}
+# tolerations: {}
+# affinity: {}
+
+# # -- Custom labels to add into metadata
+# customLabels: {}
+
+# # -- Custom annotations to add to the Crossplane deployment and pod
+# customAnnotations: {}
+
+# # -- Custom annotations to add to the serviceaccount of Crossplane
+# serviceAccount:
+#   customAnnotations: {}
+
+# leaderElection: true
+# args: {}
+
+# # How frequently Crossplane may reconcile its resources (seconds). Default: 10
+# maxReconcileRate: ""
+
+# provider:
+#   packages: []
+
+# configuration:
+#   packages: []
+
+# imagePullSecrets:
+# - dockerhub
+
+# registryCaBundleConfig: {}
+
+# webhooks:
+#   enabled: false
+
+# rbacManager:
+#   deploy: true
+#   skipAggregatedClusterRoles: false
+#   replicas: 1
+#   managementPolicy: All
+#   leaderElection: true
+#   args: {}
+#   nodeSelector: {}
+#   tolerations: {}
+#   affinity: {}
+
+# priorityClassName: ""
+
+# resourcesCrossplane:
+#   limits:
+#     cpu: 100m
+#     memory: 512Mi
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
+
+# securityContextCrossplane:
+#   runAsUser: 65532
+#   runAsGroup: 65532
+#   allowPrivilegeEscalation: false
+#   readOnlyRootFilesystem: true
+
+# packageCache:
+#   medium: ""
+#   sizeLimit: 5Mi
+#   pvc: ""
+
+# resourcesRBACManager:
+#   limits:
+#     cpu: 100m
+#     memory: 512Mi
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
+
+# securityContextRBACManager:
+#   runAsUser: 65532
+#   runAsGroup: 65532
+#   allowPrivilegeEscalation: false
+#   readOnlyRootFilesystem: true
+
+# metrics:
+#   enabled: false
+
+# extraEnvVarsCrossplane: {}
+
+# extraEnvVarsRBACManager: {}
+
+# podSecurityContextCrossplane: {}
+
+# podSecurityContextRBACManager: {}

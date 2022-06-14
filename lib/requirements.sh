@@ -122,3 +122,20 @@ function install_operator_sdk {
     echo "INFO: operator-sdk --version"
     operator-sdk version
 }
+
+function install_crossplane_cli {
+    install_dir=$(get_install_dir)
+    export PATH="${install_dir}:${PATH}"
+
+    kubectl_dir=$(dirname $(which kubectl))
+
+    if [[ ! -e ${kubectl_dir}/kubectl-crossplane ]]; then
+        if [[ ${UID} != 0 ]]; then
+            echo "WARN: must be root to install kubectl plugin for crossplane"
+            return
+        else
+            curl -sL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh | sh
+            mv kubectl-crossplane ${kubectl_dir}
+        fi
+    fi
+}
