@@ -1,18 +1,19 @@
+# ${device_name} as in /dev/${device_name}, /dev/vdb1
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: local-pv
+  name: local-pv-${device_name}
 spec:
   capacity:
-    storage: 300Gi
+    storage: 10Gi
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
   local:
-    path: /dev/sda2
+    path: /dev/${device_name}
     fsType: ext4
   nodeAffinity:
     required:

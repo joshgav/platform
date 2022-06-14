@@ -1,5 +1,9 @@
 THIS_DIR = .
 
+export root_dir := $(shell cd ${THIS_DIR}/.. && pwd)
+export BASH_ENV := $(shell ${THIS_DIR}/../.env)
+SHELL := bash
+
 NET_NAME ?= cluster1-net
 VM_NAME  ?= cluster1-vm
 VOL_NAME ?= $(VM_NAME).qcow2
@@ -23,8 +27,7 @@ VM_RAM_MB     ?= 18432
 VM_CPU_CORES  ?= 6
 VM_DISK_GB    ?= 50
 
-
-.PHONY: destroy network machine ssh
+.PHONY: destroy network machine ssh volume
 
 destroy:
 	VM_NAME=${VM_NAME} NET_NAME=${NET_NAME} VOL_NAME=${VOL_NAME} \
@@ -73,3 +76,8 @@ machine: network $(SSH_KEY_PUB_PATH)
 		--events on_reboot=restart \
 		--disk pool=default,size=$(VM_DISK_GB) \
 		--boot hd,cdrom
+
+volumes:
+	for devname in vdb vdc vdd vde vdf; do \
+		./apply-volume.sh $${devname} ${VM_NAME}; \
+	done
