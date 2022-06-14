@@ -2,13 +2,17 @@
 
 Deliver Kubernetes clusters, services and apps.
 
-## Infrastructure
+## Infrastructure providers
+
+One of:
 
 - libvirt
 - AWS
 - Azure
 
-## Clusters
+## Cluster types
+
+One of:
 
 - OpenShift IPI for AWS
 - OpenShift on Azure (ARO)

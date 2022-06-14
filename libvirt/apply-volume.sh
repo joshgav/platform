@@ -8,8 +8,7 @@ function apply_volume {
 	virsh vol-create-as \
 		--pool default \
 		--name ${vm_name}-${device_name}.qcow2 \
-		--capacity 10GB \
-		--format qcow2
+		--capacity 11000000000
 	virsh attach-disk \
 		--domain ${vm_name} \
 		--source /var/lib/libvirt/images/${vm_name}-${device_name}.qcow2 \

@@ -35,6 +35,9 @@ if type -p firewall-cmd; then
     firewall-cmd --reload
 fi
 
+# systemctl stop firewalld
+# systemctl disable firewalld
+
 modprobe br-netfilter
 sysctl -w net.bridge.bridge-nf-call-iptables=1
 sysctl -w net.bridge.bridge-nf-call-ip6tables=1

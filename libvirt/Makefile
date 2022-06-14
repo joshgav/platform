@@ -81,3 +81,9 @@ volumes:
 	for devname in vdb vdc vdd vde vdf; do \
 		./apply-volume.sh $${devname} ${VM_NAME}; \
 	done
+
+destroy-volumes:
+	for devname in vdb vdc vdd vde vdf; do \
+		virsh detach-disk --domain cluster1-vm /var/lib/libvirt/images/cluster1-vm-$${devname}.qcow2 --persistent; \
+		virsh vol-delete --pool default cluster1-vm-$${devname}.qcow2; \
+	done
