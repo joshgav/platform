@@ -30,7 +30,7 @@ patches:
         {
             "op": "add",
             "path": "/spec/realm/userFederationProviders/0/config/usersDn",
-            "value": "${LDAP_SEARCH_DN}"
+            "value": "${LDAP_USERS_DN}"
         },
         {
             "op": "add",

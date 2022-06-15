@@ -24,3 +24,6 @@ postgres:
 
 dashboard:
 	${root_dir}/config/dashboard/deploy.sh
+
+keycloak:
+	${root_dir}/config/keycloak/deploy.sh

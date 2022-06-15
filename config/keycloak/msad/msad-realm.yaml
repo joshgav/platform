@@ -14,14 +14,14 @@ spec:
         enabled: true
         rememberMe: true
         userFederationProviders:
-          - # must be first in list for JSON patch path
+          - # order of providers matters for kustomize patches
             providerName: ldap
             displayName: msad
             config:
                 # connectionUrl: "${LDAP_CONNECTION_URL}"
                 # bindDn: "${LDAP_BIND_DN}"
                 # bindCredential: "${LDAP_BIND_SECRET}"
-                # usersDn: "${LDAP_SEARCH_DN}"
+                # usersDn: "${LDAP_USERS_DN}"
                 searchScope: "2"
                 vendor: "ad"
                 userObjectClasses: "person, organizationalPerson, user"
@@ -31,7 +31,7 @@ spec:
                 editMode: READ_ONLY
                 syncRegistrations: "true"
         userFederationMappers:
-          - # must be first in list for JSON patch path
+          - # order of mappers matters for kustomize patches
             name: msad-group2role-mapper
             federationProviderDisplayName: msad
             federationMapperType: role-ldap-mapper

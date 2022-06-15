@@ -6,5 +6,5 @@ metadata:
         app: app-keycloak
 spec:
     externalAccess:
-        enabled: true
+        enabled: false
     instances: 1

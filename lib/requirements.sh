@@ -103,7 +103,7 @@ function install_operator_sdk {
     export PATH="${install_dir}:${PATH}"
     export ARCH=amd64
     export OS=linux
-    export VER=v1.21.0
+    export VER=v1.22.0
 
     if ! type -p operator-sdk &> /dev/null; then
         installer_url=https://github.com/operator-framework/operator-sdk/releases/download/${VER}/operator-sdk_${OS}_${ARCH}
