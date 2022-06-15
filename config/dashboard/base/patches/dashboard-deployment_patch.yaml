@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  template:
+    spec:
+      containers:
+      - name: kubernetes-dashboard
+        args:
+        - --namespace=kubernetes-dashboard
+        - --enable-insecure-login
+        ## with these disabled dashboard will be served over HTTP
+        # - --tls-cert-file=/tls.crt
+        # - --tls-key-file=/tls.key
+        # - --auto-generate-certificates
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9090
+            scheme: HTTP

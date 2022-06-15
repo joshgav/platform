@@ -21,3 +21,6 @@ crossplane:
 
 postgres:
 	${root_dir}/config/postgres/deploy.sh
+
+dashboard:
+	${root_dir}/config/dashboard/deploy.sh

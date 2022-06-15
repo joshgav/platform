@@ -1,0 +1,11 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Host
+metadata:
+  name: dashboard
+spec:
+  hostname: dashboard.cluster1.joshgav.com
+  tlsSecret:
+    name: dashboard-tls-keypair
+  requestPolicy:
+    insecure:
+      action: Redirect
