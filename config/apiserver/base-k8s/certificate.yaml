@@ -1,0 +1,25 @@
+# https://docs.openshift.com/container-platform/4.6/security/certificates/replacing-default-ingress-certificate.html
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apiserver-tls-certificate
+  namespace: app
+spec:
+  commonName: apiserver.cluster1.joshgav.com
+  dnsNames:
+    - apiserver.cluster1.joshgav.com
+  secretName: apiserver-tls-keypair
+  issuerRef:
+    name: ca
+    # name: acme
+    kind: ClusterIssuer
+    group: cert-manager.io
+  subject:
+    organizationalUnits:
+      - 'kubernetes'
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+    - key encipherment
+    - signing

@@ -53,7 +53,7 @@ $(NET_CONFIG): $(NET_CONFIG_TEMPLATE)
 		-e 's/REPLACE_HOST_IP/$(HOST_IP)/' \
 	    $(NET_CONFIG_TEMPLATE) > $@
 
-network: destroy $(NET_CONFIG)
+network: $(NET_CONFIG)
 	sudo virsh net-define "$(NET_CONFIG)"
 	echo server=/api.cluster1.joshgav.com/192.168.126.10 | sudo tee /etc/NetworkManager/dnsmasq.d/aio.conf
 	echo -e "[main]\ndns=dnsmasq" | sudo tee /etc/NetworkManager/conf.d/aio.conf

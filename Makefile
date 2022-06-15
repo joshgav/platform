@@ -27,3 +27,9 @@ dashboard:
 
 keycloak:
 	${root_dir}/config/keycloak/deploy.sh
+
+tekton:
+	${root_dir}/config/tekton/deploy.sh
+
+apiserver: # postgres keycloak
+	${root_dir}/config/apiserver/deploy.sh

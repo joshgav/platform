@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-apiserver
+  namespace: app
+spec:
+  template:
+    spec:
+      containers:
+        - name: spring-apiserver
+          image: quay.io/joshgav/spring-apiserver:latest
+          envFrom:
+            - prefix: KEYCLOAK_
+              secretRef:
+                name: keycloak-client-secret-spring-apiserver
+          env:
+            - name: KEYCLOAK_ISSUER_URI
+              value: https://keycloak.cluster1.joshgav.com/auth/

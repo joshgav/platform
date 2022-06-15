@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-pipeline
+spec:
+  params:
+    - name: git-url
+      type: string
+      default: https://github.com/joshgav/spring-apiserver.git
+    - name: git-revision
+      type: string
+      default: base
+    - name: target-image
+      type: string
+      default: quay.io/joshgav/spring-apiserver:latest
+  workspaces:
+    - name: shared
+  tasks:
+    - name: fetch-repo
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: shared
+    - name: build-image
+      taskRef:
+        name: buildah
+      runAfter:
+        - fetch-repo
+      params:
+        - name: IMAGE
+          value: $(params.target-image)
+      workspaces:
+        - name: source
+          workspace: shared

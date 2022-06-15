@@ -139,3 +139,26 @@ function install_crossplane_cli {
         fi
     fi
 }
+
+function install_tkn_cli {
+    install_dir=$(get_install_dir)
+    export PATH="${install_dir}:${PATH}"
+    tkn_ver=v0.24.0
+
+    if ! type -p tkn &> /dev/null; then
+        installer_url=https://github.com/tektoncd/cli/releases/download/${tkn_ver}/tkn_${tkn_ver#v}_Linux_x86_64.tar.gz
+        filename=tkn-linux-amd64.tar.gz
+
+        echo "INFO: downloading and installing tkn"
+
+        pushd ${install_dir}
+            curl -o "${filename}" -sSL "${installer_url}"
+            tar -xzf "${filename}" tkn
+            rm -f "${filename}"
+        popd
+    else
+        echo "INFO: using installed tkn"
+    fi
+    echo "INFO: tkn version"
+    tkn version
+}

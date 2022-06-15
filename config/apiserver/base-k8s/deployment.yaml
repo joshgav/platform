@@ -17,20 +17,17 @@ spec:
       labels:
         app.kubernetes.io/component: spring-apiserver
     spec:
+      imagePullSecrets:
+        - name: quay-secret
       containers:
         - name: spring-apiserver
-          image: image-registry.openshift-image-registry.svc:5000/app/spring-apiserver:latest
+          image: quay.io/joshgav/spring-apiserver:latest
           imagePullPolicy: Always
           envFrom:
             - prefix: PG_
               secretRef:
                 name: apiserver-dbcluster-pguser-apiserver
-            - prefix: KEYCLOAK_
-              secretRef:
-                name: keycloak-client-secret-spring-apiserver
           env:
-            - name: KEYCLOAK_ISSUER_URI
-              value: https://keycloak-app.apps.aws-ipi.sandbox1044.opentlc.com/auth/
             - name: HOME
               value: /opt/jboss
           ports:

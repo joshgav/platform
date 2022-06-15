@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-apiserver
+  namespace: app
+  labels:
+    app: spring-apiserver
+    app.kubernetes.io/component: spring-apiserver
+    app.kubernetes.io/instance: spring-apiserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: spring-apiserver
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: spring-apiserver
+    spec:
+      containers:
+        - name: spring-apiserver
+          image: image-registry.openshift-image-registry.svc:5000/app/spring-apiserver:latest
+          imagePullPolicy: Always
+          envFrom:
+            - prefix: PG_
+              secretRef:
+                name: apiserver-dbcluster-pguser-apiserver
+          env:
+            - name: HOME
+              value: /opt/jboss
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+            - containerPort: 9779
+              protocol: TCP

@@ -2,25 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: app
 resources:
-- ../base
+- ../base-k8s
+# - ../base-openshift
 - ./spring-apiserver-client.yaml
+namespace: app
+
+patchesStrategicMerge:
+- ./deployment.yaml
 
 patches:
-- target:
-    group: build.openshift.io
-    version: v1
-    kind: BuildConfig
-    name: spring-apiserver
-  patch: |
-    [{
-        "op": "replace",
-        "path": "/spec/source/git/uri",
-        "value": "${APISERVER_SOURCE_URL}"
-    },{
-        "op": "replace",
-        "path": "/spec/source/git/ref",
-        "value": "${APISERVER_SOURCE_REF}"
-    }]
 - target:
     group: apps
     version: v1
