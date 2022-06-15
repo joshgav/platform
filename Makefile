@@ -18,3 +18,6 @@ argocd:
 
 crossplane:
 	${root_dir}/config/crossplane/deploy.sh
+
+postgres:
+	${root_dir}/config/postgres/deploy.sh

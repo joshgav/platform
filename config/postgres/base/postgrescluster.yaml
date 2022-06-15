@@ -23,8 +23,6 @@ spec:
                 resources:
                     requests:
                         storage: 10Gi
-        service:
-            type: ClusterIP
     monitoring:
         pgmonitor:
             exporter: {}
