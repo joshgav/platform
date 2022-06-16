@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+
+this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+source ${root_dir}/lib/olm-subscriptions.sh
+
+create_subscription codeready-workspaces2 openshift-operators
+
+# TODO: wait for readiness
+
+echo "INFO: render and apply manifests"
+kustomize build ${this_dir}/base | oc apply -f -

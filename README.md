@@ -1,6 +1,7 @@
 # devenv
 
 Deliver Kubernetes clusters, services and apps.
+NOTE: This repo is in development. For one, more parameterization is needed.
 
 ## Infrastructure providers
 
@@ -20,17 +21,24 @@ One of:
 
 ## Services
 
-- cert-manager
-- keycloak (RHSSO)
-- postgres
-- acm
+- cert-manager (JetStack)
+- keycloak
+- postgres (Crunchy)
+- acm (Red Hat)
 - argocd
-- eclipse-che
-- opendatahub
-- emissary-ingress
+- che (Eclipse)
+- opendatahub (Red Hat)
+- emissary-ingress (Ambassador)
 - freeipa (LDAP/KRB)
 - metallb
-- active directory
+- active directory (Microsoft)
+- crossplane with AWS
+- kubernetes-dashboard
+- freeipa (Red Hat)
+- instana (IBM)
+- kafka (Strimzi)
+- olm (Red Hat)
+- tekton
 
 ## Apps
 
