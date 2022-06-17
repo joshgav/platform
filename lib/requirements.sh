@@ -5,6 +5,7 @@
 # - download tarball with binary
 # - download tarball/zip with install program
 
+# get_install_dir returns the path where the tool should be installed
 function get_install_dir {
     install_dir=${1:-${INSTALL_DIR}}
 
@@ -15,6 +16,29 @@ function get_install_dir {
     fi
 
     echo ${install_dir}
+}
+
+# install_binary retrieves a binary from download_url and puts it in INSTALL_DIR
+# as binary_name
+function install_binary {
+    local download_url=${1}
+    local binary_name=${2}
+
+    install_dir=$(get_install_dir)
+
+    if ! type -p ${binary_name} &> /dev/null; then
+        echo "INFO: downloading and installing ${binary_name}"
+
+        pushd ${install_dir}
+            curl -o "${binary_name}" -sSL "${download_url}"
+            chmod +x ${binary_name}
+        popd
+    else
+        echo "INFO: using installed ${binary_name}"
+    fi
+
+    echo "INFO: ${binary_name} version"
+    ${binary_name} version
 }
 
 function install_openshift_install {
@@ -103,31 +127,7 @@ function install_security_tools {
     cosign version
 }
 
-# download binary directly
-function install_operator_sdk {
-    install_dir=$(get_install_dir)
-    export PATH="${install_dir}:${PATH}"
-    export ARCH=amd64
-    export OS=linux
-    export VER=v1.22.0
 
-    if ! type -p operator-sdk &> /dev/null; then
-        installer_url=https://github.com/operator-framework/operator-sdk/releases/download/${VER}/operator-sdk_${OS}_${ARCH}
-        filename=operator-sdk
-
-        echo "INFO: downloading and installing operator-sdk CLI"
-
-        pushd ${install_dir}
-            curl -o "${filename}" -sSL "${installer_url}"
-            chmod +x ${filename}
-        popd
-    else
-        echo "INFO: using installed operator-sdk CLI"
-    fi
-
-    echo "INFO: operator-sdk --version"
-    operator-sdk version
-}
 
 function install_crossplane_cli {
     install_dir=$(get_install_dir)
@@ -169,7 +169,7 @@ function install_tkn_cli {
     tkn version
 }
 
-# download binary directly
+# TODO: use install_binary
 function install_argocd_cli {
     install_dir=$(get_install_dir)
     export PATH="${install_dir}:${PATH}"
@@ -190,4 +190,17 @@ function install_argocd_cli {
 
     echo "INFO: argocd version"
     argocd version --client
+}
+
+function install_kubebuilder {
+    download_url=https://go.kubebuilder.io/dl/latest/$(go env GOOS)/$(go env GOARCH)
+    binary_name=kubebuilder
+    install_binary ${download_url} ${binary_name}
+}
+
+function install_operator_sdk {
+    operator_sdk_ver=v1.22.0
+    download_url=https://github.com/operator-framework/operator-sdk/releases/download/${operator_sdk_ver}/operator-sdk_linux_amd64
+    binary_name=operator-sdk
+    install_binary ${download_url} ${binary_name}
 }

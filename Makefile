@@ -1,6 +1,5 @@
 export root_dir = $(realpath .)
-export BASH_ENV := $(shell ${root_dir}/.env)
-SHELL := bash
+include ${root_dir}/.env
 
 # cluster:
 

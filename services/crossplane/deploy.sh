@@ -31,11 +31,11 @@ aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
 EOF
 )
 
-kubectl get secret aws-creds &> /dev/null || true
+kubectl get secret -n ${namespace} aws-creds &> /dev/null
 if [[ $? != 0 ]]; then
     kubectl create secret generic aws-creds -n ${namespace} --from-literal=key="${aws_creds}"
 fi
-kubectl get secret dbinstance1-password &> /dev/null || true
+kubectl get secret -n ${namespace} dbinstance1-password &> /dev/null
 if [[ $? != 0 ]]; then
     kubectl create secret generic dbinstance1-password -n ${namespace} --from-literal=password="$(echo ${RANDOM}${RANDOM}${RANDOM})"
 fi

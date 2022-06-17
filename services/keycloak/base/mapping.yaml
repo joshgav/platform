@@ -1,7 +1,7 @@
 apiVersion: getambassador.io/v3alpha1
 kind: Mapping
 metadata:
-  name: keycloak-mapping
+  name: keycloak
 spec:
   hostname: keycloak.cluster1.joshgav.com
   prefix: /

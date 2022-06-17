@@ -1,0 +1,6 @@
+apiVersion: apps.podtatohead.io/v1alpha1
+kind: PodtatoHeadApp
+metadata:
+  name: podtatohead-app
+spec:
+  fullnameOverride: podtato-head
