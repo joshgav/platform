@@ -22,6 +22,9 @@ crossplane:
 postgres:
 	${root_dir}/services/postgres/deploy.sh
 
+postgres-argo:
+	${root_dir}/services/postgres/deploy-argo.sh
+
 dashboard:
 	${root_dir}/services/dashboard/deploy.sh
 
@@ -33,3 +36,6 @@ tekton:
 
 apiserver: # postgres
 	${root_dir}/services/apiserver/deploy.sh
+
+apiserver-argo: postgres-argo
+	${root_dir}/services/apiserver/deploy-argo.sh

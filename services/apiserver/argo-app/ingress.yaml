@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apiserver
+spec:
+  ingressClassName: emissary
+  rules:
+  - host: argo-apiserver.cluster1.joshgav.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: spring-apiserver
+            port:
+              number: 8080
+  tls:
+  - secretName: argo-apiserver-tls-keypair

@@ -1,0 +1,9 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apiserver-tls-certificate
+spec:
+  commonName: argo-apiserver.cluster1.joshgav.com
+  dnsNames:
+    - argo-apiserver.cluster1.joshgav.com
+  secretName: argo-apiserver-tls-keypair

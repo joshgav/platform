@@ -1,0 +1,26 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-dbms
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argo-app
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: services/postgres/base
+    repoURL: https://github.com/joshgav/devenv.git
+    targetRevision: master
+    kustomize: {}
+  syncPolicy:
+    automated: {}
+  info: []
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argo-app

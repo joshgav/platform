@@ -78,12 +78,12 @@ machine: network $(SSH_KEY_PUB_PATH)
 		--boot hd,cdrom
 
 volumes:
-	for devname in vdb vdc vdd vde vdf vdg vdh; do \
+	for devname in vdb vdc vdd vde vdf vdg vdh vdi vdj vdk; do \
 		./apply-volume.sh $${devname} ${VM_NAME}; \
 	done
 
 destroy-volumes:
-	for devname in vdb vdc vdd vde vdf vdg vdh; do \
+	for devname in vdb vdc vdd vde vdf vdg vdh vdi vdj vdk; do \
 		virsh detach-disk --domain cluster1-vm /var/lib/libvirt/images/cluster1-vm-$${devname}.qcow2 --persistent; \
 		virsh vol-delete --pool default cluster1-vm-$${devname}.qcow2; \
 	done

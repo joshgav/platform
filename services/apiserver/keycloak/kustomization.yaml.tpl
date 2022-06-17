@@ -1,11 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: app
 resources:
 - ../base-k8s
 # - ../base-openshift
 - ./spring-apiserver-client.yaml
-namespace: app
 
 patchesStrategicMerge:
 - ./deployment.yaml

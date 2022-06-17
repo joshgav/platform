@@ -1,6 +1,8 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+source ${root_dir}/lib/requirements.sh
+install_argocd_cli
 
 namespace=argocd
 kubectl create namespace ${namespace} &> /dev/null || true
@@ -18,3 +20,8 @@ fi
 
 echo "INFO: install argocd"
 kustomize build ${this_dir}/${kustomize_base} | kubectl apply -n ${namespace} -f -
+
+argocd login --core
+
+echo "INFO: initial admin secret:"
+kubectl get secrets argocd-initial-admin-secret -n ${namespace} -o json | jq -r '.data.password | @base64d'

@@ -1,5 +1,10 @@
 #! /usr/bin/env bash
 
+# install types:
+# - direct download of binary (e.g. operator-sdk, argocd)
+# - download tarball with binary
+# - download tarball/zip with install program
+
 function get_install_dir {
     install_dir=${1:-${INSTALL_DIR}}
 
@@ -98,6 +103,7 @@ function install_security_tools {
     cosign version
 }
 
+# download binary directly
 function install_operator_sdk {
     install_dir=$(get_install_dir)
     export PATH="${install_dir}:${PATH}"
@@ -161,4 +167,27 @@ function install_tkn_cli {
     fi
     echo "INFO: tkn version"
     tkn version
+}
+
+# download binary directly
+function install_argocd_cli {
+    install_dir=$(get_install_dir)
+    export PATH="${install_dir}:${PATH}"
+
+    if ! type -p argocd &> /dev/null; then
+        installer_url=https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        filename=argocd
+
+        echo "INFO: downloading and installing argocd CLI"
+
+        pushd ${install_dir}
+            curl -o "${filename}" -sSL "${installer_url}"
+            chmod +x ${filename}
+        popd
+    else
+        echo "INFO: using installed argocd CLI"
+    fi
+
+    echo "INFO: argocd version"
+    argocd version --client
 }
