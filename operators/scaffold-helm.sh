@@ -18,13 +18,17 @@ popd
 mkdir -p ${this_dir}/${operator_name}
 pushd ${this_dir}/${operator_name}
 
-operator-sdk init --plugins 'helm.sdk.operatorframework.io/v1' --project-version=3 \
-  --project-name ${operator_name} \
-  --domain podtatohead.io \
-  --group apps \
-  --version v1alpha1 \
-  --kind PodtatoHeadApp \
-  --helm-chart ${this_dir}/podtatohead/delivery/chart
+if [[ ! -e PROJECT ]]; then
+  operator-sdk init --plugins 'helm.sdk.operatorframework.io/v1' --project-version=3 \
+    --project-name ${operator_name} \
+    --domain podtatohead.io \
+    --group apps \
+    --version v1alpha1 \
+    --kind PodtatoHeadApp \
+    --helm-chart ${this_dir}/podtatohead/delivery/chart
+else
+  echo "INFO: using previously initialized project"
+fi
 
 export IMAGE_TAG_BASE=quay.io/joshgav/podtatohead-operator
 export IMG=${IMAGE_TAG_BASE}:latest

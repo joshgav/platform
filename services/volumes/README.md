@@ -2,6 +2,12 @@
 
 ## Helpers
 
+**Delete "Failed" PVs**:
+
+```bash
+kubectl get pv | grep Failed | awk '{print $1}' | xargs kubectl delete pv
+```
+
 **[Re]create static PVs**:
 
 ```bash

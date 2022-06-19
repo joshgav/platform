@@ -10,14 +10,20 @@ operator_name=scratch-operator
 mkdir -p ${this_dir}/${operator_name}
 pushd ${this_dir}/${operator_name}
 
-operator-sdk init --plugins go/v3 --project-version 3 \
-    --domain 'joshgav.com' \
-    --owner 'joshgav' \
-    --project-name ${operator_name} \
-    --repo "github.com/joshgav/${operator_name}"
+if [[ ! -e PROJECT ]]; then
+    operator-sdk init --plugins go/v3 --project-version 3 \
+        --domain 'joshgav.com' \
+        --owner 'joshgav' \
+        --project-name ${operator_name} \
+        --repo "github.com/joshgav/${operator_name}"
+else
+  echo "INFO: using previously initialized project"
+fi
 
-operator-sdk create api --force --group 'resources' --version v1alpha1 --kind Scratcher \
-    --controller --resource --make
+operator-sdk create api --force --controller --resource --make \
+    --group 'resources' \
+    --version v1alpha1 \
+    --kind Scratcher
 
 make deploy
 

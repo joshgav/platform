@@ -4,3 +4,7 @@ metadata:
   name: podtatohead-app
 spec:
   fullnameOverride: podtato-head
+  hat:
+    env:
+      - name: PODTATO_PART_NUMBER
+        value: "02"
