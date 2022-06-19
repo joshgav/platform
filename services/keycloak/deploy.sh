@@ -3,7 +3,7 @@
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 source ${root_dir}/lib/olm-subscriptions.sh
 
-namespace=app
+namespace=keycloak
 kubectl create namespace ${namespace} 2> /dev/null || true
 create_local_operatorgroup ${namespace}
 

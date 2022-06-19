@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak-tls-certificate
+spec:
+  commonName: keycloak.cluster1.joshgav.com
+  dnsNames:
+    - keycloak.cluster1.joshgav.com
+  secretName: keycloak-tls-keypair
+  issuerRef:
+    name: ca
+    # name: acme
+    kind: ClusterIssuer
+    group: cert-manager.io
+  subject:
+    organizationalUnits:
+      - 'kubernetes'
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+    - key encipherment
+    - signing

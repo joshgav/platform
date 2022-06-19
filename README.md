@@ -3,6 +3,25 @@
 Deliver Kubernetes clusters, services and apps.
 NOTE: This repo is in development. For one, more parameterization is needed.
 
+**To install local tools**:
+
+```bash
+sudo -E su
+
+source ./lib/requirements.sh
+export INSTALL_DIR=/usr/local/bin
+
+install_cmctl
+install_aws_cli
+install_crossplane_cli
+install_tkn_cli
+install_argocd_cli
+install_kubebuilder
+install_operator_sdk
+
+exit
+```
+
 ## Infrastructure providers
 
 One of:

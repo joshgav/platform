@@ -5,4 +5,4 @@ metadata:
 spec:
   hostname: keycloak.cluster1.joshgav.com
   prefix: /
-  service: https://keycloak.app:8443/
+  service: https://keycloak:8443/

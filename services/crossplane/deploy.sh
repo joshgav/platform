@@ -3,7 +3,6 @@
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
 source ${root_dir}/lib/requirements.sh
-
 install_crossplane_cli
 
 namespace=crossplane-system
