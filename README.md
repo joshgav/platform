@@ -1,9 +1,49 @@
 # devenv
 
 Deliver Kubernetes clusters, services and apps.
-NOTE: This repo is in development. For one, more parameterization is needed.
+NOTE: This repo is in development.
 
-**To install local tools**:
+## Infrastructure
+
+- clouds/libvirt
+- clouds/aws
+- clouds/azure
+- clouds/ocp-upi (WIP)
+
+## Kubernetes
+
+- kubeadm (cluster/deploy.sh)
+- OpenShift IPI for AWS (clouds/aws/install-openshift-ipi.sh)
+- Azure Red Hat OpenShift (ARO) (clouds/azure/install-aro.sh)
+
+## Services
+
+- cert-manager (JetStack)
+- keycloak (Red Hat)
+- postgres (CrunchyData)
+- acm (Red Hat)
+- argocd (CNCF)
+- che (Eclipse)
+- opendatahub (Red Hat)
+- crossplane (CNCF)
+- emissary-ingress (Ambassador)
+- freeipa (Red Hat)
+- metallb
+- active directory (Microsoft)
+- crossplane with AWS
+- kubernetes-dashboard (Kubernetes/CNCF)
+- freeipa (Red Hat)
+- instana (IBM)
+- kafka (Strimzi)
+- olm (Red Hat)
+- tekton (CDF)
+
+## Apps
+
+- [spring-apiserver](https://github.com/joshgav/spring-apiserver)
+- [podtato-head](https://github.com/podtato-head/podtato-head)
+
+## Install local tools
 
 ```bash
 sudo -E su
@@ -21,44 +61,3 @@ install_operator_sdk
 
 exit
 ```
-
-## Infrastructure providers
-
-One of:
-
-- libvirt
-- AWS
-- Azure
-
-## Cluster types
-
-One of:
-
-- OpenShift IPI for AWS
-- OpenShift on Azure (ARO)
-- Kubernetes via kubeadm
-
-## Services
-
-- cert-manager (JetStack)
-- keycloak
-- postgres (Crunchy)
-- acm (Red Hat)
-- argocd
-- che (Eclipse)
-- opendatahub (Red Hat)
-- emissary-ingress (Ambassador)
-- freeipa (LDAP/KRB)
-- metallb
-- active directory (Microsoft)
-- crossplane with AWS
-- kubernetes-dashboard
-- freeipa (Red Hat)
-- instana (IBM)
-- kafka (Strimzi)
-- olm (Red Hat)
-- tekton
-
-## Apps
-
-- spring-apiserver
