@@ -30,6 +30,8 @@ aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
 EOF
 )
 
+aws ec2 create-default-vpc 1> /dev/null
+
 kubectl get secret -n ${namespace} aws-creds &> /dev/null
 if [[ $? != 0 ]]; then
     kubectl create secret generic aws-creds -n ${namespace} --from-literal=key="${aws_creds}"
