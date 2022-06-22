@@ -2,25 +2,18 @@
 
 ## Helpers
 
-**Delete "Failed" PVs**:
+**Delete only "Failed" PVs**:
 
 ```bash
-kubectl get pv | grep Failed | awk '{print $1}' | xargs kubectl delete pv
+source clouds/libvirt/volumes.sh
+kubectl get pv | grep Failed | awk '{print $1}' | sed 's/local-pv-\(.*\)/\1/' | xargs delete_local_pv
 ```
 
 **[Re]create static PVs**:
 
-```bash
-(cd ./clouds/libvirt && sudo -E make volumes)
+- Root make task includes `libvirt-`
+- `-E` includes environment, specifically `KUBECONFIG` if set
+
 ```
-
-**Delete a static PV**:
-
-```bash
-devname=vdc
-
-# ensure any referring PVC is deleted
-kubectl delete pv local-pv-${devname}
-sudo virsh detach-disk --persistent --domain cluster1-vm --target ${devname}
-sudo virsh vol-delete --pool default --vol /var/lib/libvirt/images/cluster1-vm-${devname}.qcow2
+sudo -E make [libvirt-]pvs
 ```

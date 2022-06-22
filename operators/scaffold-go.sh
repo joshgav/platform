@@ -16,14 +16,23 @@ if [[ ! -e PROJECT ]]; then
         --owner 'joshgav' \
         --project-name ${operator_name} \
         --repo "github.com/joshgav/${operator_name}"
+    operator-sdk create api --force --controller --resource --make \
+        --group 'resources' \
+        --version v1alpha1 \
+        --kind Scratcher
 else
-  echo "INFO: using previously initialized project"
+    echo "INFO: using previously initialized project"
 fi
 
-operator-sdk create api --force --controller --resource --make \
-    --group 'resources' \
-    --version v1alpha1 \
-    --kind Scratcher
+export IMAGE_TAG_BASE=quay.io/joshgav/scratch-operator
+export IMG=${IMAGE_TAG_BASE}:latest
+export VERSION=latest
+make docker-build
+make docker-push
+
+# simple log method to add to `Reconcile()`:
+#    log := log.FromContext(ctx)
+#    log.Info("Reconciling resource")
 
 make deploy
 

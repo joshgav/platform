@@ -77,13 +77,15 @@ machine: network $(SSH_KEY_PUB_PATH)
 		--disk pool=default,size=$(VM_DISK_GB) \
 		--boot hd,cdrom
 
-volumes:
-	for devname in vdb vdc vdd vde vdf vdg vdh vdi; do \
-		./apply-volume.sh $${devname} ${VM_NAME}; \
+devices := vdb vdc vdd vde vdf vdg vdh vdi
+pvs:
+	source ${THIS_DIR}/volumes.sh; \
+	for devname in ${devices}; do \
+		create_local_pv $${devname} ${VM_NAME}; \
 	done
 
-destroy-volumes:
-	for devname in vdb vdc vdd vde vdf vdg vdh vdi; do \
-		virsh detach-disk --domain cluster1-vm /var/lib/libvirt/images/cluster1-vm-$${devname}.qcow2 --persistent; \
-		virsh vol-delete --pool default cluster1-vm-$${devname}.qcow2; \
+destroy-pvs:
+	source ${THIS_DIR}/volumes.sh; \
+	for devname in ${devices}; do \
+		delete_local_pv $${devname} ${VM_NAME}; \
 	done

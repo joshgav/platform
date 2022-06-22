@@ -3,6 +3,12 @@ include ${root_dir}/.env
 
 # cluster:
 
+libvirt-pvs:
+	cd ${root_dir}/clouds/libvirt && $(MAKE) pvs
+
+destroy-libvirt-pvs:
+	cd ${root_dir}/clouds/libvirt && $(MAKE) destroy-pvs
+
 kafka-operator:
 	${root_dir}/services/kafka/deploy-operator.sh
 
