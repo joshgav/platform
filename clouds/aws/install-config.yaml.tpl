@@ -28,7 +28,7 @@ platform:
   aws:
     region: us-east-2
 publish: External
-pullSecret: '${OPENSHIFT_PULL_SECRET}'
+pullSecret: ${OPENSHIFT_PULL_SECRET}
 sshKey: '${OPENSHIFT_SSH_PUBLIC_KEY}'
 
 # baselineCapabilitySet: vCurrent

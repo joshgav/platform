@@ -59,3 +59,15 @@ function create_local_operatorgroup {
               - ${operator_namespace}
 EOF
 }
+
+function create_cluster_operatorgroup {
+    local operator_namespace=${1}
+
+    kubectl apply -f - <<EOF
+        apiVersion: operators.coreos.com/v1alpha2
+        kind: OperatorGroup
+        metadata:
+            name: cluster
+            namespace: ${operator_namespace}
+EOF
+}

@@ -1,7 +1,11 @@
 export root_dir = $(realpath .)
 include ${root_dir}/.env
 
-# cluster:
+openshift-aws-ipi:
+	${root_dir}/clouds/aws/install-openshift-ipi.sh
+
+openshift-serverless:
+	${root_dir}/openshift-services/serverless/deploy.sh
 
 libvirt-pvs:
 	cd ${root_dir}/clouds/libvirt && $(MAKE) pvs
