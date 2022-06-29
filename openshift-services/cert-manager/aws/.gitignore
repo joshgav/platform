@@ -1,0 +1,3 @@
+# prevent checking in rendered secrets
+issuer-acme_patch.yaml
+route53-secret.yaml

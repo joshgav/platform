@@ -105,8 +105,8 @@ function install_cmctl {
     else
         echo "INFO: using installed cmctl"
     fi
-    echo "INFO: cmctl version"
-    cmctl version
+    echo "INFO: cmctl version --client"
+    cmctl version --client
 }
 
 function install_security_tools {

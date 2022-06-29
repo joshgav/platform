@@ -1,0 +1,15 @@
+# see https://github.com/openshift/cert-manager-operator/blob/master/bindata/cert-manager-deployment/controller/cert-manager-deployment.yaml
+apiVersion: operator.openshift.io/v1alpha1
+kind: CertManager
+metadata:
+  name: cluster
+spec:
+  managementState: "Managed"
+  unsupportedConfigOverrides:
+    controller:
+      args:
+        - "--v=2"
+        - "--cluster-resource-namespace=openshift-cert-manager"
+        - "--leader-election-namespace=kube-system"
+        - "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"
+        - "--dns01-recursive-nameservers-only"

@@ -4,6 +4,9 @@ include ${root_dir}/.env
 openshift-aws-ipi:
 	${root_dir}/clouds/aws/install-openshift-ipi.sh
 
+openshift-cert-manager:
+	${root_dir}/openshift-services/cert-manager/deploy.sh
+
 openshift-serverless:
 	${root_dir}/openshift-services/serverless/deploy.sh
 

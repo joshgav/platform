@@ -1,0 +1,12 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: acme
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: joshgavant@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-issuer-keypair
+    solvers: []
