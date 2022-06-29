@@ -7,6 +7,12 @@ openshift-aws-ipi:
 openshift-cert-manager:
 	${root_dir}/openshift-services/cert-manager/deploy.sh
 
+openshift-sso-operator:
+	${root_dir}/openshift-services/rhsso/deploy-operator.sh
+
+openshift-sso-realm:
+	${root_dir}/openshift-services/rhsso/deploy.sh
+
 openshift-serverless:
 	${root_dir}/openshift-services/serverless/deploy.sh
 
