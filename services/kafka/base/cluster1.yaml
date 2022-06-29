@@ -28,14 +28,14 @@ spec:
       - id: 0
         type: persistent-claim
         size: 10Gi
-        class: local-storage
+        class: gp2
         deleteClaim: true
   zookeeper:
     replicas: 1
     storage:
       type: persistent-claim
       size: 10Gi
-      class: local-storage
+      class: gp2
       deleteClaim: true
   entityOperator:
     topicOperator: {}

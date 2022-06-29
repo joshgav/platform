@@ -13,8 +13,11 @@ openshift-sso-operator:
 openshift-sso-realm:
 	${root_dir}/openshift-services/rhsso/deploy.sh
 
-openshift-serverless:
-	${root_dir}/openshift-services/serverless/deploy.sh
+openshift-serverless-operator:
+	${root_dir}/openshift-services/serverless/deploy-operator.sh
+
+openshift-serverless-knative:
+	${root_dir}/openshift-services/serverless/deploy-knative.sh
 
 libvirt-pvs:
 	cd ${root_dir}/clouds/libvirt && $(MAKE) pvs

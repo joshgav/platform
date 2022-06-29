@@ -204,3 +204,10 @@ function install_operator_sdk {
     binary_name=operator-sdk
     install_binary ${download_url} ${binary_name}
 }
+
+function install_kn_cli {
+    kn_ver=v1.5.0
+    download_url=https://github.com/knative/client/releases/download/knative-${kn_ver}/kn-linux-amd64
+    binary_name=kn
+    install_binary ${download_url} ${binary_name}
+}

@@ -12,7 +12,7 @@ if [[ $? == 1 ]]; then
     echo "INFO: kafka operator not found, installing now"
     kubectl create \
         -n ${namespace} \
-        -f 'https://strimzi.io/install/latest?namespace=${namespace}'
+        -f "https://strimzi.io/install/latest?namespace=${namespace}"
 else
     echo "INFO: kafka operator already installed"
 fi
