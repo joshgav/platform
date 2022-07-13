@@ -2,7 +2,7 @@ export root_dir = $(realpath .)
 include ${root_dir}/.env
 
 openshift-aws-ipi:
-	${root_dir}/clouds/aws/install-openshift-ipi.sh
+	${root_dir}/clusters/openshift-aws-ipi/deploy.sh
 
 openshift-cert-manager:
 	${root_dir}/openshift-services/cert-manager/deploy.sh
@@ -20,10 +20,10 @@ openshift-serverless-knative:
 	${root_dir}/openshift-services/serverless/deploy-knative.sh
 
 libvirt-pvs:
-	cd ${root_dir}/clouds/libvirt && $(MAKE) pvs
+	cd ${root_dir}/infrastructure/libvirt && $(MAKE) pvs
 
 destroy-libvirt-pvs:
-	cd ${root_dir}/clouds/libvirt && $(MAKE) destroy-pvs
+	cd ${root_dir}/infrastructure/libvirt && $(MAKE) destroy-pvs
 
 kafka-operator:
 	${root_dir}/services/kafka/deploy-operator.sh

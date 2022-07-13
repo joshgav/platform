@@ -11,7 +11,7 @@ v=v2.19.0
 
 ## deploy instances
 for instance in "${servers[@]}"; do
-    ${root_dir}/clouds/aws/deploy-instance.sh ${instance}
+    ${root_dir}/infrastructure/aws/deploy-instance.sh ${instance}
 done
 
 # TODO: await readiness of instances

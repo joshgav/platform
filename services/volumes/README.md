@@ -5,7 +5,7 @@
 **Delete only "Failed" PVs**:
 
 ```bash
-source clouds/libvirt/volumes.sh
+source infrastructure/libvirt/volumes.sh
 kubectl get pv | grep Failed | awk '{print $1}' | sed 's/local-pv-\(.*\)/\1/' | xargs delete_local_pv
 ```
 

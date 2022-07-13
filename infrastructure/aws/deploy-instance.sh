@@ -15,7 +15,7 @@ aws cloudformation describe-stacks --stack-name ${vpc_stack_name} &> /dev/null
 if [[ $? == 254 ]]; then
     echo "INFO: creating cfn stack ${vpc_stack_name}"
     aws cloudformation create-stack --stack-name "${vpc_stack_name}" \
-        --template-body "$(cat ${root_dir}/clouds/aws/templates/vpc.yaml)"
+        --template-body "$(cat ${root_dir}/infrastructure/aws/templates/vpc.yaml)"
 else
     echo "INFO: using existing cfn stack ${vpc_stack_name}"
 fi
@@ -39,7 +39,7 @@ aws cloudformation describe-stacks --stack-name shared &> /dev/null
 if [[ $? == 254 ]]; then
     echo "INFO: creating cfn stack shared"
     aws cloudformation create-stack --stack-name shared \
-        --template-body "$(cat ${root_dir}/clouds/aws/templates/shared.yaml)" \
+        --template-body "$(cat ${root_dir}/infrastructure/aws/templates/shared.yaml)" \
         --parameters "ParameterKey=VpcId,ParameterValue=${vpc_id}"
 else
     echo "INFO: using existing cfn stack shared"
@@ -65,7 +65,7 @@ aws cloudformation describe-stacks --stack-name ${instance_stack_name} &> /dev/n
 if [[ $? == 254 ]]; then
     echo "INFO: creating cfn stack ${instance_stack_name}"
     aws cloudformation create-stack --stack-name ${instance_stack_name} \
-        --template-body "$(cat ${root_dir}/clouds/aws/templates/ec2-instance.yaml)" \
+        --template-body "$(cat ${root_dir}/infrastructure/aws/templates/ec2-instance.yaml)" \
         --parameters "ParameterKey=SubnetId,ParameterValue=${subnet_id}" \
                      "ParameterKey=AMI,ParameterValue=${ami_id}" \
                      "ParameterKey=SecurityGroupId,ParameterValue=${security_group_id}" \
