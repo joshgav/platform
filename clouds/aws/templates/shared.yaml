@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  VpcId:
+    Type: String
+Resources:
+  KeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: devenv
+      PublicKeyMaterial: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCaC5dERYL/Ind/8hnQ5OscBFx/JF2SmAtQ3okNT2NK/DZ7HSAhuhPv96PH+Xbr832kNK4tbKcTbMfZ5qiSCbWbfMVUWRFHmTxLbjvsiTVenyvyMa5S3DfJMPJfQCSA4ivLAawdqcio9AjlGk409/fpKmlU+uhOWA9FTFCmsGklU58s3K/pG80odxSf067YRw/pcEJtKR30EWgctwme+PNwJ2jMGt5Ac/VeAEDJh4uxTNLoVlCRdkFZQ0hvrPtBHE2PFBnx1SsIyQabOUBfHvUFvbWOVRNhudDzXdwxCbSmH3a9sum3rTCFPzVnuRb7k64iLKldOFsGaVCifx4puykAPrOE77N6kizHbBpPxtBUZFJoR+PvxlB/Tq11CPO1RP37q8LEkjX+sBfZEuMKtW73AlHNoG5ITT7oadChyXhoVngQ0WEqmlSltIwTTwyz8ywPHiwqMDRbZ+74PZME7rzPjWfzkIGpq7uHCTPypEO/0efVXXeR9KSf2K27fbWZDhM= devenv
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "Base"
+      GroupDescription: "SSH in, all out"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp:  0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0

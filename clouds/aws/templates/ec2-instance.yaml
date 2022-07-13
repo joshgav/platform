@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  SubnetId:
+    Type: String
+  SecurityGroupId:
+    Type: String
+  InstanceType:
+    Type: String
+    Default: t3a.xlarge
+    Description: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
+  AMI:
+    Type: String
+    Default: ami-08f3d892de259504d
+  InstanceName:
+    Type: String
+    Default: server
+  KeyPairName:
+    Type: String
+    Default: devenv
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      ImageId: !Ref AMI
+      KeyName: !Ref KeyPairName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: SecurityGroupId
+          SubnetId: 
+            Ref: SubnetId
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 250
+            VolumeType: gp3
+        - DeviceName: /dev/xvdb
+          Ebs:
+            VolumeSize: 250
+            VolumeType: gp3
+      Tags:
+        - Key: Name
+          Value: !Ref InstanceName
+        - Key: Application
+          Value: Linux
+        - Key: Environment
+          Value: Test
+        - Key: OS
+          Value: Linux
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          echo "Hello from empty UserData"
+Outputs:
+  PublicIp:
+    Value:
+      Fn::GetAtt:
+        - Instance
+        - PublicIp
+    Description: Server's public IP address
