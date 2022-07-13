@@ -26,9 +26,9 @@ networking:
   - 172.30.0.0/16
 platform:
   aws:
-    region: us-east-2
+    region: us-east-1
 publish: External
-pullSecret: ${OPENSHIFT_PULL_SECRET}
+pullSecret: '${OPENSHIFT_PULL_SECRET}'
 sshKey: '${OPENSHIFT_SSH_PUBLIC_KEY}'
 
 # baselineCapabilitySet: vCurrent
