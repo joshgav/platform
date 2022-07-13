@@ -1,63 +1,56 @@
-# devenv
+# Cloud the Hard Way
 
-Deliver Kubernetes clusters, services and apps.
-NOTE: This repo is in development.
+Scripts and configs for deployment of:
+
+- Cloud (e.g. AWS, Azure) and virtual (e.g. libvirt) infrastructure
+- Kubernetes and OpenShift clusters
+- Supporting services and capabilities for clusters
+- Representative custom applications
 
 ## Infrastructure
 
-- clouds/libvirt
-- clouds/aws
-- clouds/azure
-- clouds/ocp-upi (WIP)
+- infrastructure/aws
+- infrastructure/libvirt
 
-## Kubernetes
+## Kubernetes Clusters
 
-- kubeadm (cluster/deploy.sh)
-- OpenShift IPI for AWS (clouds/aws/install-openshift-ipi.sh)
-- Azure Red Hat OpenShift (ARO) (clouds/azure/install-aro.sh)
+- clusters/kubeadm
+- clusters/kubespray
+- clusters/openshift-aro
+- clusters/openshfit-aws-ipi
+- clusters/openshift-rosa
 
 ## Services
 
+- Active Directory
+- ArgoCD
 - cert-manager (JetStack)
-- keycloak (Red Hat)
-- postgres (CrunchyData)
-- acm (Red Hat)
-- argocd (CNCF)
-- che (Eclipse)
-- opendatahub (Red Hat)
-- crossplane (CNCF)
-- emissary-ingress (Ambassador)
-- freeipa (Red Hat)
-- metallb
-- active directory (Microsoft)
-- crossplane with AWS
-- kubernetes-dashboard (Kubernetes/CNCF)
-- freeipa (Red Hat)
-- instana (IBM)
-- kafka (Strimzi)
-- olm (Red Hat)
-- tekton (CDF)
+- Eclipse Che
+- Crossplane
+- Kubernetes Dashboard
+- Emissary Ingress
+- Instana
+- Kafka (Strimzi)
+- Keycloak
+- MetalLB
+- Operator Lifecycle Manager (OLM)
+- Postgres (CrunchyData)
+- Tekton
+
+## Openshift Services
+
+- Advanced Cluster Manager (Open Cluster Management)
+- GitOps (ArgoCD)
+- Dev Spaces (Eclipse Che)
+- Open Data Hub
+- SSO (Keycloak)
+- Serverless (Knative)
+- cert-manager
+- FreeIPA
+- alertmanager config
+- identity provider config
 
 ## Apps
 
 - [spring-apiserver](https://github.com/joshgav/spring-apiserver)
 - [podtato-head](https://github.com/podtato-head/podtato-head)
-
-## Install local tools
-
-```bash
-sudo -E su
-
-source ./lib/requirements.sh
-export INSTALL_DIR=/usr/local/bin
-
-install_cmctl
-install_aws_cli
-install_crossplane_cli
-install_tkn_cli
-install_argocd_cli
-install_kubebuilder
-install_operator_sdk
-
-exit
-```

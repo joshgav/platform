@@ -41,6 +41,34 @@ function install_binary {
     ${binary_name} version
 }
 
+function install_from_tarball {
+    local download_url=${1}
+    local binary_name=${2}
+
+    local file_name="$(basename ${download_url})"
+
+    install_dir=$(get_install_dir)
+
+    if ! type -p ${binary_name} &> /dev/null; then
+        echo "INFO: downloading and unpacking ${binary_name}"
+
+        pushd ${install_dir}
+            curl -sSL "${download_url}" -o "${file_name}"
+            tar -xzf "${file_name}" "${binary_name}"
+            rm -f "${file_name}"
+        popd
+    else
+        echo "INFO: using installed ${binary_name}"
+    fi
+}
+
+function install_rosa_cli {
+    download_url=https://mirror.openshift.com/pub/openshift-v4/clients/rosa/latest/rosa-linux.tar.gz
+    binary_name=rosa
+    install_from_tarball ${download_url} ${binary_name}
+    rosa version
+}
+
 function install_openshift_install {
     install_dir=$(get_install_dir)
     export PATH="${install_dir}:${PATH}"
