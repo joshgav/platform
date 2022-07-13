@@ -3,9 +3,10 @@
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
+if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 
 az login --service-principal &> /dev/null \
-    --tenant ${AZURE_TENANT_ID} \
+    --tenant   ${AZURE_TENANT_ID} \
     --username ${AZURE_PRINCIPAL_ID} \
     --password ${AZURE_PRINCIPAL_SECRET}
 if [[ $? != 0 ]]; then
@@ -26,12 +27,12 @@ if [[ $? != 0 ]]; then
     az network vnet subnet create --name master-subnet \
         --resource-group ${group_name} --vnet-name ${vnet_name} \
         --address-prefixes 10.0.0.0/23 --service-endpoints Microsoft.ContainerRegistry
-    az network vnet subnet create --name worker-subnet \
-        --resource-group ${group_name} --vnet-name ${vnet_name} \
-        --address-prefixes 10.0.2.0/23 --service-endpoints Microsoft.ContainerRegistry
     az network vnet subnet update --name master-subnet \
         --resource-group ${group_name} --vnet-name ${vnet_name} \
         --disable-private-link-service-network-policies true
+    az network vnet subnet create --name worker-subnet \
+        --resource-group ${group_name} --vnet-name ${vnet_name} \
+        --address-prefixes 10.0.2.0/23 --service-endpoints Microsoft.ContainerRegistry
 fi
 
 az aro show --resource-group ${group_name} --name ${cluster_name} --output none &> /dev/null
