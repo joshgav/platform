@@ -1,0 +1,46 @@
+# https://github.com/CrunchyData/postgres-operator/tree/master/pkg/apis/postgres-operator.crunchydata.com/v1beta1
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+    name: apicurio-dbcluster
+spec:
+    postgresVersion: 14
+    instances:
+      - name: apicurio-postgres1
+        replicas: 1
+        dataVolumeClaimSpec:
+            accessModes:
+              - "ReadWriteOnce"
+            resources:
+                requests:
+                    storage: 10Gi
+        # resources: {}
+    userInterface:
+        pgAdmin:
+            dataVolumeClaimSpec:
+                accessModes:
+                  - "ReadWriteOnce"
+                resources:
+                    requests:
+                        storage: 10Gi
+    monitoring:
+        pgmonitor:
+            exporter: {}
+    service:
+        type: ClusterIP
+    users:
+      - name: apicurio
+        databases:
+          - apicurio
+          - postgres
+    backups:
+        pgbackrest:
+            repos:
+              - name: repo1
+                volume:
+                    volumeClaimSpec:
+                        accessModes:
+                          - "ReadWriteOnce"
+                        resources:
+                            requests:
+                                storage: 10Gi 

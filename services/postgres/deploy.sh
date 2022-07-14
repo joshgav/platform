@@ -18,6 +18,6 @@ while [[ ${ready} != 0 ]]; do
     ready=$?
 done
 
-namespace=app
-kubectl create namespace ${namespace} &> /dev/null || true
-kustomize build ${this_dir}/base | kubectl apply -n ${namespace} -f -
+# namespace=app
+# kubectl create namespace ${namespace} &> /dev/null || true
+# kustomize build ${this_dir}/base | kubectl apply -n ${namespace} -f -
