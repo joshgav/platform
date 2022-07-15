@@ -55,11 +55,11 @@ keycloak:
 tekton:
 	${root_dir}/services/tekton/deploy.sh
 
-apiserver: # postgres
-	${root_dir}/services/apiserver/deploy.sh
-
 postgres-argo:
 	${root_dir}/services/postgres/deploy-argo.sh
 
+apiserver: # postgres
+	${root_dir}/apps/apiserver/deploy.sh
+
 apiserver-argo: postgres-argo
-	${root_dir}/services/apiserver/deploy-argo.sh
+	${root_dir}/apps/apiserver/deploy-argo.sh
