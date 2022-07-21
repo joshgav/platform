@@ -1,5 +1,7 @@
 # Red Hat OpenShift on AWS (ROSA)
 
+Manage clusters at <https://console.redhat.com/openshift>.
+
 1. Get a token from <https://console.redhat.com/openshift/token/rosa> and put it in `.env`.
 1. Run `deploy.sh`.
     - You'll have to click through prompts as the `--yes` parameters are not respected.

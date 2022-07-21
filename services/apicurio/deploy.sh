@@ -14,7 +14,7 @@ namespace=apicurio
 kubectl create namespace ${namespace} &> /dev/null || true
 kubectl config set-context --current --namespace ${namespace}
 
-echo "INFO: installing a Postgres cluster"
+echo "INFO: installing an Apicurio registry"
 kubectl apply -n ${namespace} -f ${this_dir}/registry/postgrescluster.yaml
 
 ready=0

@@ -46,7 +46,7 @@ argocd:
 crossplane:
 	${root_dir}/services/crossplane/deploy.sh
 
-postgres:
+postgres-operator:
 	${root_dir}/services/postgres/deploy.sh
 
 keycloak:
@@ -63,3 +63,9 @@ apiserver: # postgres
 
 apiserver-argo: postgres-argo
 	${root_dir}/apps/apiserver/deploy-argo.sh
+
+apicurio: postgres-operator
+	${root_dir}/services/apicurio/deploy.sh
+
+service-binding-operator:
+	${root_dir}/openshift-services/sbo/deploy.sh
