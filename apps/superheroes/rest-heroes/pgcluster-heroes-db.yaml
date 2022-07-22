@@ -1,0 +1,41 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: heroes-db
+spec:
+  postgresVersion: 14
+  databaseInitSQL:
+    name: heroes-db-init
+    key: init.sql
+  instances:
+    - name: heroes-db
+      replicas: 1
+      dataVolumeClaimSpec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        pg_hba:
+          - "host all all 0.0.0.0/0 trust"
+          - "host all postgres 127.0.0.1/32 md5"
+  service:
+    type: ClusterIP
+  users:
+    - name: heroes-db
+      databases:
+        - heroes-db
+  backups:
+    pgbackrest:
+      repos:
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - "ReadWriteOnce"
+              resources:
+                requests:
+                  storage: 10Gi

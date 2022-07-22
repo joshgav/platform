@@ -1,0 +1,35 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: villains-db
+spec:
+  postgresVersion: 14
+  databaseInitSQL:
+    name: villains-db-init
+    key: init.sql
+  instances:
+    - name: villains-db
+      replicas: 1
+      dataVolumeClaimSpec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+  service:
+    type: ClusterIP
+  users:
+    - name: villains-db
+      databases:
+        - villains-db
+  backups:
+    pgbackrest:
+      repos:
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - "ReadWriteOnce"
+              resources:
+                requests:
+                  storage: 10Gi
