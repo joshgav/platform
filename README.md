@@ -53,4 +53,5 @@ Scripts and configs for deployment of:
 ## Apps
 
 - [spring-apiserver](https://github.com/joshgav/spring-apiserver)
+- [quarkus-super-heroes](https://github.com/quarkusio/quarkus-super-heroes)
 - [podtato-head](https://github.com/podtato-head/podtato-head)
