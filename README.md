@@ -17,8 +17,7 @@ Scripts and configs for deployment of:
 - clusters/kubeadm
 - clusters/kubespray
 - clusters/openshift-aro
-- clusters/openshfit-aws-ipi
-- clusters/openshift-rosa
+- [OpenShift on AWS](https://github.com/joshgav/openshift-on-aws.git) (separate repo)
 
 ## Services
 
