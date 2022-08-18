@@ -1,7 +1,10 @@
 # OpenShift cert-manager
 
-## Notes
-- Using the operator causes the builtin `cluster-admin` ClusterRole to be overwritten, breaking the cluster. So we're using `cmctl` still for now. See `deploy-operator.sh`.
+- Run `deploy-operator.sh` to just deploy the openshift-cert-manager operator via OLM.
+- Run `deploy.sh` to deploy the operator and then configurations for AWS and OpenShift.
+
+Modifications would be required to support other infrastructure providers than AWS and Route53.
 
 ## Docs
-- https://docs.openshift.com/container-platform/4.10/security/cert_manager_operator/
+
+- https://docs.openshift.com/container-platform/4.11/security/cert_manager_operator/

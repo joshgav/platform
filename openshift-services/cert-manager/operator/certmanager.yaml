@@ -2,9 +2,11 @@
 apiVersion: operator.openshift.io/v1alpha1
 kind: CertManager
 metadata:
+  # must be named cluster for operator-managed instance
   name: cluster
 spec:
   managementState: "Managed"
+  # see https://github.com/openshift/cert-manager-operator#using-unsupported-config-overrides-options
   unsupportedConfigOverrides:
     controller:
       args:
