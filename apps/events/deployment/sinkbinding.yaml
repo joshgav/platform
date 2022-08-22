@@ -1,0 +1,14 @@
+apiVersion: sources.knative.dev/v1
+kind: SinkBinding
+metadata:
+  name: sender-to-broker
+spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: eventsender
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: default

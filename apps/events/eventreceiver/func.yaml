@@ -1,0 +1,21 @@
+specVersion: 0.25.0
+name: eventreceiver
+namespace: events
+runtime: go
+build: local
+git: {}
+buildpacks:
+- gcr.io/paketo-buildpacks/go-dist:latest
+- ghcr.io/boson-project/go-function-buildpack:tip
+volumes: []
+buildEnvs: []
+envs: []
+annotations: {}
+options: {}
+labels: []
+healthEndpoints:
+  liveness: /health/liveness
+  readiness: /health/readiness
+created: 2022-08-22T20:52:12.355832636-04:00
+invocation:
+  format: cloudevent

@@ -155,8 +155,6 @@ function install_security_tools {
     cosign version
 }
 
-
-
 function install_crossplane_cli {
     install_dir=$(get_install_dir)
     export PATH="${install_dir}:${PATH}"
@@ -234,8 +232,15 @@ function install_operator_sdk {
 }
 
 function install_kn_cli {
-    kn_ver=v1.5.0
+    kn_ver=v1.6.1
     download_url=https://github.com/knative/client/releases/download/knative-${kn_ver}/kn-linux-amd64
     binary_name=kn
+    install_binary ${download_url} ${binary_name}
+}
+
+function install_kn_func_plugin {
+    knfunc_ver=v0.25.1
+    download_url=https://github.com/knative-sandbox/kn-plugin-func/releases/download/${knfunc_ver}/func_linux_amd64
+    binary_name=kn-func
     install_binary ${download_url} ${binary_name}
 }
