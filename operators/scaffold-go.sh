@@ -2,7 +2,7 @@
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 root_dir=$(cd ${this_dir}/.. && pwd)
-source ${root_dir}/lib/requirements.sh
+source ${root_dir}/lib/install.sh
 install_operator_sdk
 
 operator_name=scratch-operator

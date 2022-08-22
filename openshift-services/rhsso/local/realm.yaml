@@ -1,0 +1,15 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+    name: main
+    labels:
+        keycloak: main
+        realm: main
+spec:
+    instanceSelector:
+        matchLabels:
+            keycloak: main
+    realm:
+        realm: main
+        enabled: true
+        rememberMe: true

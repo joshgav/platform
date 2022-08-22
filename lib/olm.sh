@@ -67,7 +67,19 @@ function create_cluster_operatorgroup {
         apiVersion: operators.coreos.com/v1alpha2
         kind: OperatorGroup
         metadata:
-            name: cluster
+            name: ${operator_namespace}-group
             namespace: ${operator_namespace}
 EOF
+}
+
+function await_resource_ready {
+    local resource_name=${1}
+
+    ready=1
+    while [[ ${ready} != 0 ]]; do
+        echo "INFO: awaiting readiness of operator resource ${resource_name}"
+        kubectl api-resources | grep ${resource_name} &> /dev/null
+        ready=$?
+        if [[ ${ready} != 0 ]]; then sleep 2; else echo "INFO: operator resource ready"; fi
+    done
 }

@@ -1,16 +1,16 @@
 apiVersion: keycloak.org/v1alpha1
 kind: KeycloakRealm
 metadata:
-    name: app-realm
+    name: main
     labels:
-        app: app-keycloak
-        component: app-realm
+        keycloak: main
+        realm: main
 spec:
     instanceSelector:
         matchLabels:
-            app: app-keycloak
+            keycloak: main
     realm:
-        realm: app
+        realm: main
         enabled: true
         rememberMe: true
         userFederationProviders:

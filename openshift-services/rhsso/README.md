@@ -1,10 +1,18 @@
 # Keycloak
 
-To enable federation with Windows Active Directory via LDAP, set LDAP parameters
-in `./msad/.env` prior to running `make openshift-sso-realm`.
+1. Deploy operator, service and realm with `deploy.sh`. Default namespace is `keycloak`, optionally specify target namespace as parameter.
 
-If you don't need AD support you can disable that provider once Keycloak is
-online.
+To enable federation with Windows Active Directory via LDAP, set LDAP parameters in `./msad/.env` and use `msad` kustomize dir instead of `local`.
 
-Perhaps in the future we should separate the `app` realm config from
-the `msad` federation provider.
+Get admin username and password:
+
+```bash
+oc get secret -n keycloak credential-main -o json | jq -r '.data.ADMIN_USERNAME | @base64d'
+oc get secret -n keycloak credential-main -o json | jq -r '.data.ADMIN_PASSWORD | @base64d'
+```
+
+Get route:
+
+```bash
+oc get route -n keycloak keycloak -o json | jq -r '.status.ingress[0].host'
+```

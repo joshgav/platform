@@ -2,7 +2,7 @@
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
-source ${root_dir}/lib/requirements.sh
+source ${root_dir}/lib/install.sh
 install_cmctl
 
 if ! cmctl check api &> /dev/null; then

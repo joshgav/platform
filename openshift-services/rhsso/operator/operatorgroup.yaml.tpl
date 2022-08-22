@@ -1,7 +1,7 @@
 apiVersion: operators.coreos.com/v1alpha2
 kind: OperatorGroup
 metadata:
-    name: app
+    name: keycloak-group
 spec:
     targetNamespaces:
-      - app
+      - ${KEYCLOAK_NAMESPACE}

@@ -1,14 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: app
-
+namespace: ${KEYCLOAK_NAMESPACE}
 resources:
-- ../base
-- ./keycloak-realm-with-msad.yaml
+- keycloak.yaml
+- realm.yaml
 
 patches:
   - target:
-        name: app-realm
+        name: main
         group: keycloak.org
         version: v1alpha1
         kind: KeycloakRealm

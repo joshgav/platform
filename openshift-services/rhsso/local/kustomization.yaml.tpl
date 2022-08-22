@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: app
+namespace: ${KEYCLOAK_NAMESPACE}
 resources:
-- keycloak.yaml
+- ./keycloak.yaml
+- ./realm.yaml
