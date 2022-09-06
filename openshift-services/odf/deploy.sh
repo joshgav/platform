@@ -6,8 +6,6 @@ if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
 source ${root_dir}/lib/yaml.sh
 source ${root_dir}/lib/olm.sh
 
-oc label nodes --all "cluster.ocs.openshift.io/openshift-storage="
-
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready storagesystems
 
