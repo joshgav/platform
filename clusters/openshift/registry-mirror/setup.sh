@@ -14,10 +14,10 @@ echo "${OPENSHIFT_PULL_SECRET}" > /run/user/${UID}/containers/auth.json
 podman login ${registry_hostname} \
     --username ${QUAY_REGISTRY_USERNAME} --password ${QUAY_REGISTRY_PASSWORD}
 
-if [[ ! -f ${this_dir}/imageset-config.yaml ]]; then
-    oc mirror init \
-        --registry=${registry_hostname}/openshift-mirror/data \
-            > ${this_dir}/imageset-config.yaml
-fi
+oc mirror init \
+    --registry=${registry_hostname}/openshift-mirror/data \
+        > ${this_dir}/imageset-config.yaml
 
+pushd ${this_dir}
 oc mirror --config=${this_dir}/imageset-config.yaml docker://${registry_hostname}/openshift-mirror/data
+popd

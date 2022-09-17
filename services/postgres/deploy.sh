@@ -1,7 +1,9 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-source ${root_dir}/lib/olm.sh
+root_dir=$(cd ${this_dir}/../.. && pwd)
+if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
+source ${root_dir}/lib/kubernetes.sh
 
 echo "INFO: install crunchy-postgres-operator via OLM"
 if is_openshift; then
@@ -10,14 +12,9 @@ else
     operator_name=postgresql
 fi
 create_subscription ${operator_name}
+await_resource_ready PostgresCluster
 
-ready=1
-while [[ ${ready} != 0 ]]; do
-    echo "INFO: awaiting readiness of operator"
-    kubectl api-resources | grep postgres &> /dev/null
-    ready=$?
-done
-
+## also create an instance:
 # namespace=app
 # kubectl create namespace ${namespace} &> /dev/null || true
 # kustomize build ${this_dir}/base | kubectl apply -n ${namespace} -f -

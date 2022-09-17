@@ -1,0 +1,166 @@
+# setup_workdir preps a dir to store working state
+# if no dir exists create one
+# if dir exists depend on env vars
+#   - if none set - emit warning and `exit 2`
+#   - if RESUME set - use existing dir
+#   - if OVERWRITE set - reset dir
+function setup_workdir {
+    local workdir=${1:-"${this_dir:-'.'}/_workdir"}
+
+    if [[ -e ${workdir} && -z "${RESUME}" && -z "${OVERWRITE}" ]]; then
+        echo "WARNING: workdir already exists, set OVERWRITE=1 to remove or RESUME=1 to continue"
+        exit 2
+    elif [[ -e ${workdir} && -n "${RESUME}" ]]; then
+        echo "INFO: continuing from existing workdir"
+    elif [[ -e ${workdir} && -n "${OVERWRITE}" ]]; then
+        rm -rf ${workdir}
+        mkdir -p "${workdir}"
+    else
+        mkdir -p "${workdir}"
+    fi
+}
+
+# ensure_ssh_keypair ensures an RSA SSH keypair exists in the specified directory
+function ensure_ssh_keypair {
+    keypair_path=${1:-"${root_dir:-'.'}/.ssh"}
+
+    mkdir -p "${ssh_key_path}"
+    if [[ ! -e "${ssh_key_path}/id_rsa" ]]; then
+        ssh-keygen -t rsa -b 4096 -C "user@openshift" -f "${ssh_key_path}/id_rsa" -N ''
+    fi
+}
+
+# is_openshift returns 0 if cluster appears to be OpenShift
+function is_openshift() {
+    set +e
+    kubectl get namespaces openshift-operators &> /dev/null
+    if [[ $? != 0 ]]; then
+        return 1
+    fi
+    return 0
+}
+
+# create_subscription registers a subscription to an operator by packagemanifest name
+# by default the subscription is registered in the cluster's default operator namespace
+#   for the operator's default channel
+function create_subscription() {
+    if is_openshift; then
+        DEFAULT_OPERATOR_NAMESPACE=openshift-operators
+    else
+        DEFAULT_OPERATOR_NAMESPACE=operators
+    fi
+
+    operator_name=${1}
+    operator_namespace=${2:-${DEFAULT_OPERATOR_NAMESPACE}}
+    operator_channel=${3}
+
+    package_manifest=$(kubectl get packagemanifests ${operator_name} --output json)
+    catalog_name=$(echo ${package_manifest} | jq -r '.status.catalogSource')
+    catalog_namespace=$(echo ${package_manifest} | jq -r '.status.catalogSourceNamespace')
+    default_channel=$(echo ${package_manifest} | jq -r '.status.defaultChannel')
+    if [[ -z "${operator_channel}" ]]; then
+        operator_channel=${default_channel}
+    fi
+    starting_csv=$(echo ${package_manifest} | jq -r ".status.channels[] | select(.name == \"${operator_channel}\") | .currentCSV")
+
+    kubectl apply -f - <<EOF
+        apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        metadata:
+            name: ${operator_name}
+            namespace: ${operator_namespace}
+        spec:
+            channel: ${operator_channel}
+            installPlanApproval: Automatic
+            name: ${operator_name}
+            source: ${catalog_name}
+            sourceNamespace: ${catalog_namespace}
+            startingCSV: ${starting_csv}
+EOF
+}
+
+# create_local_operatorgroup creates a namespace-local operatorgroup targeting
+# the selfsame namespace
+# useful for operators which target only their own namespace
+function create_local_operatorgroup {
+    local operator_namespace=${1}
+
+    kubectl apply -f - <<EOF
+        apiVersion: operators.coreos.com/v1alpha2
+        kind: OperatorGroup
+        metadata:
+            name: local
+            namespace: ${operator_namespace}
+        spec:
+            targetNamespaces:
+              - ${operator_namespace}
+EOF
+}
+
+# create_cluster_operatorgroup 
+function create_cluster_operatorgroup {
+    local operator_namespace=${1}
+
+    kubectl apply -f - <<EOF
+        apiVersion: operators.coreos.com/v1alpha2
+        kind: OperatorGroup
+        metadata:
+            name: ${operator_namespace}-group
+            namespace: ${operator_namespace}
+EOF
+}
+
+function await_resource_ready {
+    local resource_name=${1}
+
+    ready=1
+    while [[ ${ready} != 0 ]]; do
+        echo "INFO: awaiting readiness of operator resource ${resource_name}"
+        kubectl api-resources | grep ${resource_name} &> /dev/null
+        ready=$?
+        if [[ ${ready} != 0 ]]; then sleep 2; else echo "INFO: operator resource ready"; fi
+    done
+}
+
+function render_yaml {
+    local directory=${1:-'.'}
+
+    echo "INFO: rendering env vars in manifests"
+    for file in $(find ${directory} -type f -iname '*.tpl'); do 
+        echo "DEBUG: rendering ${file} to ${file%%'.tpl'}"
+        cat "${file}" | envsubst > "${file%%'.tpl'}"
+    done
+}
+
+function apply_kustomize_dir {
+    local directory=${1:-'.'}
+
+    echo "INFO: rendering and applying kustomize dir ${directory}"
+    if [[ -e "${directory}/.env" ]]; then
+        echo "INFO: sourcing .env found in kustomize dir"
+        set -o allexport
+        source ${directory}/.env
+        set +o allexport
+    fi
+    render_yaml "${directory}"
+    kustomize build ${directory} | kubectl apply -f -
+}
+
+function ensure_namespace {
+    local namespace=${1}
+    local change_context=${2:-''}
+
+    kubectl get namespace ${namespace} &> /dev/null
+    result=$?
+    if [[ ${result} != 0 ]]; then
+        echo "INFO: namespace ${namespace} not found, attempting to create"
+        kubectl create namespace --save-config ${namespace}
+        result=$?
+    fi
+    if [[ ${result} == 0 && -n "${change_context}" ]]; then
+        echo "INFO: switching context to namespace ${namespace}"
+        kubectl config set-context --current --namespace ${namespace}
+        result=$?
+    fi
+    return ${result}
+}

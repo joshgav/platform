@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-source ${root_dir}/lib/olm.sh
+source ${root_dir}/lib/kubernetes.sh
 
 namespace=app
 kubectl create namespace ${namespace} 2> /dev/null || true

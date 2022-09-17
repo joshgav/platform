@@ -16,12 +16,6 @@ spec:
         resources:
           requests:
             storage: 10Gi
-  patroni:
-    dynamicConfiguration:
-      postgresql:
-        pg_hba:
-          - "host all all 0.0.0.0/0 trust"
-          - "host all postgres 127.0.0.1/32 md5"
   service:
     type: ClusterIP
   users:
@@ -39,3 +33,11 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        pg_hba:
+          # disable TLS
+          - "hostnossl all all all md5"
+          # disable auth
+          # - "host all all 0.0.0.0/0 trust"

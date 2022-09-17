@@ -2,7 +2,7 @@
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 
-source ${root_dir}/lib/olm.sh
+source ${root_dir}/lib/kubernetes.sh
 operator_name=advanced-cluster-management
 operator_namespace=open-cluster-management
 
