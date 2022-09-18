@@ -1,0 +1,39 @@
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+    name: fights-db
+spec:
+    members: 1
+    arbiters: 0
+    type: ReplicaSet
+    version: "5.0.12"
+    security:
+        authentication:
+            modes:
+              - SCRAM-SHA-256
+        tls:
+            enabled: false
+            optional: true
+    users:
+      - name: fights-user
+        db: admin
+        passwordSecretRef:
+            name: fights-user-mongodb-password
+        scramCredentialsSecretName: fights-user-mongodb
+        roles:
+          - db: fights-db
+            name: root
+          - db: admin
+            name: root
+      - name: admin
+        db: admin
+        passwordSecretRef:
+            name: admin-mongodb-password
+        scramCredentialsSecretName: admin-mongodb
+        roles:
+          - db: admin
+            name: root
+    statefulSet:
+        spec:
+            serviceName: fights-db
+        

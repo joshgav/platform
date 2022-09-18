@@ -164,3 +164,20 @@ function ensure_namespace {
     fi
     return ${result}
 }
+
+# ensure_helm_repo ensures the repo name exists
+# if it doesn't exist it adds it with specified URL
+function ensure_helm_repo {
+    local name=${1}
+    local url=${2}
+
+    repos=($(helm repo list -o json | jq -r '.[].name'))
+    echo "${repos[@]}" | grep -wq "${name}"
+    result=$?
+    if [[ ${result} == 0 ]]; then
+        echo "INFO: repo named \"${name}\" already exists"
+        helm repo update
+        return
+    fi
+    helm repo add --force-update "${name}" "${url}"
+}

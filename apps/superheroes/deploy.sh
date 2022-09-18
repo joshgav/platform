@@ -46,3 +46,7 @@ for service in "villains" "heroes"; do
         -Dquarkus.datasource.reactive.postgresql.ssl-mode=prefer
     popd
 done
+
+kustomize build ${this_dir}/rest-fights | kubectl apply -f -
+oc adm policy add-scc-to-user anyuid -n ${namespace} -z mongodb-database
+oc adm policy add-role-to-user edit -z mongodb-database
