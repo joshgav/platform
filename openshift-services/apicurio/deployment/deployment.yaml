@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apicurio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: apicurio
+  template:
+    metadata:
+      labels:
+        name: apicurio
+    spec:
+      containers:
+        - env:
+            - name: REGISTRY_AUTH_ANONYMOUS_READ_ACCESS_ENABLED
+              value: "true"
+            - name: REGISTRY_DATASOURCE_URL
+              value: jdbc:postgresql://apicurio-dbcluster-primary.apicurio.svc:5432/apicurio
+            - name: REGISTRY_DATASOURCE_USERNAME
+              value: apicurio
+            - name: REGISTRY_DATASOURCE_PASSWORD
+              value: S;TKWOUg]AD@@R?hoDN3FrTm
+          image: quay.io/apicurio/apicurio-registry-sql:2.3.0.Final
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: apicurio
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources:
+            limits:
+              memory: 768Mi
+            requests:
+              memory: 128Mi

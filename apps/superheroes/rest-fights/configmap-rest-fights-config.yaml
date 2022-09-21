@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rest-fights-config
+data:
+  quarkus.liquibase-mongodb.migrate-at-start: "false"
+  quarkus.stork.hero-service.service-discovery.type: kubernetes
+  quarkus.stork.hero-service.service-discovery.application: rest-heroes
+  quarkus.stork.hero-service.service-discovery.refresh-period: 1M
+  quarkus.stork.villain-service.service-discovery.type: kubernetes
+  quarkus.stork.villain-service.service-discovery.application: rest-villains
+  quarkus.stork.villain-service.service-discovery.refresh-period: 1M
+  quarkus.rest-client.hero-client.url: stork://hero-service/
+  fight.villain.client-base-url: stork://villain-service/
+  mp.messaging.connector.smallrye-kafka.apicurio.registry.url: http://apicurio.apicurio:8080/apis/registry/v2
+  kafka.bootstrap.servers: PLAINTEXT://cluster-main-kafka-bootstrap.kafka-cluster:9094
+  quarkus.opentelemetry.tracer.exporter.otlp.endpoint: http://otel-collector-collector.opentelemetry:4317

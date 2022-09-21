@@ -1,0 +1,28 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: kafka-admin
+  labels:
+    strimzi.io/cluster: cluster-main
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: test
+          patternType: prefix
+        operation: All
+        host: "*"
+      - resource:
+          type: cluster
+        operation: All
+        host: '*'
+      - resource:
+          type: group
+          name: group
+          patternType: prefix
+        operation: All
+        host: '*'

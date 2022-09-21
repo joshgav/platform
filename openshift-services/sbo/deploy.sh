@@ -5,18 +5,5 @@ root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
-echo "INFO: install operator subscription"
-oc apply -f - <<EOF
-    apiVersion: operators.coreos.com/v1alpha1
-    kind: Subscription
-    metadata:
-        name: rh-service-binding-operator
-        namespace: openshift-operators
-    spec:
-        name: rh-service-binding-operator
-        source: redhat-operators
-        sourceNamespace: openshift-marketplace
-        channel: stable
-        installPlanApproval: Automatic
-EOF
+create_subscription rh-service-binding-operator
 await_resource_ready "servicebinding"

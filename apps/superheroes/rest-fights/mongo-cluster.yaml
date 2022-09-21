@@ -16,7 +16,7 @@ spec:
             optional: true
     users:
       - name: fights-user
-        db: admin
+        db: fights
         passwordSecretRef:
             name: fights-user-mongodb-password
         scramCredentialsSecretName: fights-user-mongodb

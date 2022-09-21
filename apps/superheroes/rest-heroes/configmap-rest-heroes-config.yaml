@@ -6,3 +6,4 @@ metadata:
 data:
   quarkus.hibernate-orm.database.generation: validate
   quarkus.hibernate-orm.sql-load-script: no-file
+  quarkus.opentelemetry.tracer.exporter.otlp.endpoint: http://otel-collector-collector.opentelemetry:4317

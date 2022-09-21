@@ -5,3 +5,4 @@ resources:
 - pgcluster-heroes-db.yaml
 - configmap-rest-heroes-config.yaml
 - secret-rest-heroes-config-creds.yaml
+- route.yaml

@@ -3,15 +3,22 @@ kind: Kustomization
 resources:
 - mongo-serviceaccount.yaml
 - mongo-cluster.yaml
+- kafka-topic-fights.yaml
+- kafka-user-fights.yaml
+- configmap-rest-fights-config.yaml
+- secret-rest-fights-config-creds.yaml
+- role.yaml
+- rolebinding.yaml
+- route.yaml
 
 # TODO: generate a random password
 secretGenerator:
   - name: fights-user-mongodb-password
     literals:
-      - password=password
+      - password=password5243
   - name: admin-mongodb-password
     literals:
-      - password=password
+      - password=password3352
 
 generatorOptions:
     disableNameSuffixHash: true

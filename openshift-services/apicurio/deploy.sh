@@ -6,7 +6,7 @@ if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 
 source ${root_dir}/lib/kubernetes.sh
 
-operator_name=apicurio-registry
+operator_name=service-registry-operator
 echo "INFO: install ${operator_name} via OLM"
 create_subscription ${operator_name}
 
@@ -34,10 +34,12 @@ db_bindings=$(kubectl get secret apicurio-dbcluster-pguser-apicurio --output jso
 export DB_URL=$(echo "${db_bindings}" | jq -r '."jdbc-uri" | @base64d' | sed 's/\?.*$//')
 export DB_USERNAME=$(echo "${db_bindings}" | jq -r '.user | @base64d')
 export DB_PASSWORD=$(echo "${db_bindings}" | jq -r '.password | @base64d')
-cat ${this_dir}/registry/registry.yaml.tpl | envsubst > ${this_dir}/registry/registry.yaml
-kubectl apply -f ${this_dir}/registry/registry.yaml
 
-kubectl wait --for condition=Ready apicurioregistries/apicurio-registry
+# cat ${this_dir}/registry/registry.yaml.tpl | envsubst > ${this_dir}/registry/registry.yaml
+# kubectl apply -f ${this_dir}/registry/registry.yaml
+# kubectl wait --for condition=Ready apicurioregistries/apicurio-registry
+# route_host=$(kubectl get routes -l "app=apicurio-registry" --output json | jq -r '.items[0].status.ingress[0].host')
+# echo "INFO: registry is available at http://${route_host}/"
 
-route_host=$(kubectl get routes -l "app=apicurio-registry" --output json | jq -r '.items[0].status.ingress[0].host')
-echo "INFO: registry is available at http://${route_host}/"
+cat ${this_dir}/deployment/deployment.yaml.tpl | envsubst > ${this_dir}/deployment/deployment.yaml
+kustomize build ${this_dir}/deployment | kubectl apply -f -

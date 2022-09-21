@@ -5,3 +5,4 @@ resources:
 - pgcluster-villains-db.yaml
 - configmap-rest-villains-config.yaml
 - secret-rest-villains-config-creds.yaml
+- route.yaml

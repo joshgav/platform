@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: event-statistics
+    application: event-stats
+    system: quarkus-super-heroes
+  name: event-statistics-config
+data:
+  kafka.bootstrap.servers: PLAINTEXT://cluster-main-kafka-bootstrap.kafka-cluster:9094
+  mp.messaging.connector.smallrye-kafka.apicurio.registry.url: http://apicurio.apicurio:8080/apis/registry/v2
+  quarkus.opentelemetry.tracer.exporter.otlp.endpoint: http://otel-collector-collector.opentelemetry:4317

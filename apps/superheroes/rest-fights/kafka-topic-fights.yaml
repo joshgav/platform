@@ -1,9 +1,10 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
-  name: topic1
+  name: fights
+  namespace: kafka-cluster
   labels:
-    strimzi.io/cluster: cluster1
+    strimzi.io/cluster: cluster-main
 spec:
   partitions: 1
   replicas: 1

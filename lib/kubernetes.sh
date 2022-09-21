@@ -122,6 +122,12 @@ function await_resource_ready {
     done
 }
 
+function ensure_resource_exists {
+    local resource_name=${1}
+
+    await_resource_ready "${resource_name}"
+}
+
 function render_yaml {
     local directory=${1:-'.'}
 
