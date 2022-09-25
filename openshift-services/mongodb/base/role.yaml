@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mongodbcommunity-view
+rules:
+  - apiGroups: ["mongodbcommunity.mongodb.com"]
+    resources: ["mongodbcommunity"]
+    verbs:
+      - get
+      - list
+      - watch

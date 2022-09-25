@@ -1,2 +1,7 @@
 superheroes/
 wip/
+event-statistics/configmap-event-statistics-config.yaml
+rest-fights/configmap-rest-fights-config.yaml
+rest-heroes/configmap-rest-heroes-config.yaml
+rest-villains/configmap-rest-villains-config.yaml
+ui-super-heroes/app-knative.yaml

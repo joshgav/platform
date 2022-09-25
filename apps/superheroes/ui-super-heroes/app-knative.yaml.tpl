@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-        - image: quay.io/joshgav/ui-super-heroes:latest
+        - image: quay.io/${container_image_group_name}/ui-super-heroes:latest
           name: ui-super-heroes
           env:
             - name: CALCULATE_API_BASE_URL

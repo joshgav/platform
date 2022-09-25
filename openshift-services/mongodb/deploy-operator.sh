@@ -10,8 +10,9 @@ operator_namespace=mongodb
 
 ensure_helm_repo mongodb https://mongodb.github.io/helm-charts
 
-helm install ${operator_name} mongodb/community-operator \
+helm upgrade --install ${operator_name} mongodb/community-operator \
     --namespace "${operator_namespace}" --create-namespace \
     --set 'operator.watchNamespace=*'
 
 oc adm policy add-scc-to-user anyuid -n ${operator_namespace} -z mongodb-kubernetes-operator
+oc apply -f ${this_dir}/base/role.yaml

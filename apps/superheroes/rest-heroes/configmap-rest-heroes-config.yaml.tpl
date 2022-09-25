@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rest-villains-config
+  name: rest-heroes-config
 data:
   quarkus.hibernate-orm.database.generation: validate
   quarkus.hibernate-orm.sql-load-script: no-file
-  quarkus.opentelemetry.tracer.exporter.otlp.endpoint: http://otel-collector-collector.opentelemetry:4317
+  quarkus.opentelemetry.tracer.exporter.otlp.endpoint: ${opentelemetry_collector_endpoint}

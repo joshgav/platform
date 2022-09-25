@@ -21,7 +21,7 @@ spec:
             name: fights-user-mongodb-password
         scramCredentialsSecretName: fights-user-mongodb
         roles:
-          - db: fights-db
+          - db: fights
             name: root
           - db: admin
             name: root
