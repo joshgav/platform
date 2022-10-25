@@ -1,4 +1,0 @@
-apiVersion: resources.joshgav.com/v1alpha1
-kind: Scratcher
-metadata:
-  name: scratch-scratcher

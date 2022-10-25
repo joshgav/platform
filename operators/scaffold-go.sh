@@ -5,7 +5,7 @@ root_dir=$(cd ${this_dir}/.. && pwd)
 source ${root_dir}/lib/install.sh
 install_operator_sdk
 
-operator_name=scratch-operator
+operator_name=example-resource-operator
 
 mkdir -p ${this_dir}/${operator_name}
 pushd ${this_dir}/${operator_name}
@@ -19,21 +19,18 @@ if [[ ! -e PROJECT ]]; then
     operator-sdk create api --force --controller --resource --make \
         --group 'resources' \
         --version v1alpha1 \
-        --kind Scratcher
+        --kind ExampleResource
 else
     echo "INFO: using previously initialized project"
 fi
 
-export IMAGE_TAG_BASE=quay.io/joshgav/scratch-operator
+## add code from ./reconcile.go.md
+
+export IMAGE_TAG_BASE=quay.io/joshgav/${operator_name}
 export IMG=${IMAGE_TAG_BASE}:latest
 export VERSION=latest
 make docker-build
 make docker-push
-
-# simple log method to add to `Reconcile()`:
-#    log := log.FromContext(ctx)
-#    log.Info("Reconciling resource")
-
 make deploy
 
-kubectl apply -f ${this_dir}/scratcher.yaml
+kubectl apply -f ${this_dir}/exampleresource.yaml

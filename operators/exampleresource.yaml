@@ -1,0 +1,6 @@
+apiVersion: resources.joshgav.com/v1alpha1
+kind: ExampleResource
+metadata:
+  name: my-first-example
+spec:
+  exampleAttribute: my-first-attribute
