@@ -22,7 +22,7 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/joshgav/spring-apiserver.git'
-      ref: keycloak
+      ref: master
   triggers:
     - type: GitHub
       github:

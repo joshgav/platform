@@ -19,3 +19,8 @@ while ! ${ready}; do
 done
 
 kustomize build ${this_dir}/base | oc apply -f -
+
+oc adm policy add-cluster-role-to-user \
+    cluster-admin \
+    'system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller'
+    

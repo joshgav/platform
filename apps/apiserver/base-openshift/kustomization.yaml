@@ -3,4 +3,5 @@ resources:
 - service.yaml
 - images.yaml
 - deployment.yaml
+- certificate.yaml
 - route.yaml

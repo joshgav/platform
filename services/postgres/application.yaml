@@ -3,6 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: app-dbms
+  # TODO: fix for OpenShift
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -14,7 +15,7 @@ spec:
   source:
     path: services/postgres/base
     repoURL: https://github.com/joshgav/devenv.git
-    targetRevision: master
+    targetRevision: main
     kustomize: {}
   syncPolicy:
     automated: {}

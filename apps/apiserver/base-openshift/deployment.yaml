@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: spring-apiserver
-          image: image-registry.openshift-image-registry.svc:5000/app/spring-apiserver:latest
+          image: spring-apiserver:latest
           imagePullPolicy: Always
           envFrom:
             - prefix: PG_

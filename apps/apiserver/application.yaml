@@ -3,6 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: app-apiserver
+  # TODO: fix for OpenShift
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -12,9 +13,10 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: services/apiserver/argo-app
+    # TODO: fix for OpenShift
+    path: apps/apiserver/base-k8s
     repoURL: https://github.com/joshgav/devenv.git
-    targetRevision: master
+    targetRevision: main
     kustomize: {}
   syncPolicy:
     automated: {}

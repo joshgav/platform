@@ -24,4 +24,4 @@ metadata:
     app.kubernetes.io/instance: spring-apiserver
 spec:
   lookupPolicy:
-    local: false
+    local: true
