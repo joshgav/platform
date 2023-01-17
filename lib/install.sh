@@ -244,3 +244,10 @@ function install_kn_func_plugin {
     binary_name=kn-func
     install_binary ${download_url} ${binary_name}
 }
+
+function install_vcluster_cli {
+    vcluster_ver=v0.13.0
+    download_url=https://github.com/loft-sh/vcluster/releases/download/${vcluster_ver}/vcluster-linux-amd64
+    binary_name=vcluster
+    install_binary ${download_url} ${binary_name}
+}

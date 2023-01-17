@@ -24,9 +24,9 @@ function setup_workdir {
 function ensure_ssh_keypair {
     keypair_path=${1:-"${root_dir:-'.'}/.ssh"}
 
-    mkdir -p "${ssh_key_path}"
-    if [[ ! -e "${ssh_key_path}/id_rsa" ]]; then
-        ssh-keygen -t rsa -b 4096 -C "user@openshift" -f "${ssh_key_path}/id_rsa" -N ''
+    mkdir -p "${keypair_path}"
+    if [[ ! -e "${keypair_path}/id_rsa" ]]; then
+        ssh-keygen -t rsa -b 4096 -C "user@openshift" -f "${keypair_path}/id_rsa" -N ''
     fi
 }
 
