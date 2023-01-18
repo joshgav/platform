@@ -22,7 +22,7 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/joshgav/spring-apiserver.git'
-      ref: master
+      ref: base
   triggers:
     - type: GitHub
       github:

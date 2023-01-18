@@ -1,0 +1,24 @@
+apiVersion: agent-install.openshift.io/v1beta1
+kind: AgentServiceConfig
+metadata:
+ name: agent
+spec:
+  databaseStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+  filesystemStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+  # osImages:
+  #   - openshiftVersion: "4.11"
+  #     # find at https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/release.txt
+  #     version: "411.86.202210201510-0"
+  #     url: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/rhcos-live.x86_64.iso"
+  #     rootFSUrl: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/rhcos-live-rootfs.x86_64.img"
+  #     cpuArchitecture: "x86_64"
