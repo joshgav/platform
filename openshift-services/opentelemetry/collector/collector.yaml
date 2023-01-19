@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-collector
+  name: cluster-opentelemetry
 spec:
   mode: deployment
   config: |
@@ -11,13 +11,15 @@ spec:
           grpc:
           http:
     processors:
-
     exporters:
-      logging:
-
+      jaeger:
+        endpoint: jaeger-collector-headless.tracing-system.svc:14250
+        tls:
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+      logging: 
     service:
       pipelines:
         traces:
           receivers: [otlp]
           processors: []
-          exporters: [logging]
+          exporters: [logging,jaeger]
