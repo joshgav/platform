@@ -3,8 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: app-dbms
-  # TODO: fix for OpenShift
-  namespace: argocd
+  namespace: ${argocd_namespace}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: services/postgres/base
+    path: services/postgres/${kustomize_path}
     repoURL: https://github.com/joshgav/devenv.git
     targetRevision: main
     kustomize: {}
