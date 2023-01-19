@@ -1,0 +1,25 @@
+---
+apiVersion: operator.tekton.dev/v1alpha1
+kind: TektonConfig
+metadata:
+    name: config
+spec:
+    profile: all
+    targetNamespace: openshift-pipelines
+    params:
+      - name: createRbacResource
+        value: "true"
+    addon:
+        params:
+          - name: clusterTasks
+            value: "true"
+          - name: pipelineTemplates
+            value: "true"
+          - name: communityClusterTasks
+            value: "true"
+    pruner:
+        keep: 100
+        resources:
+          - pipelinerun
+          - taskrun
+        schedule: "0 8 * * *"
