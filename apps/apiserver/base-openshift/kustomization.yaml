@@ -2,6 +2,7 @@ resources:
 - build.yaml
 - service.yaml
 - cm.yaml
+- instrumentation.yaml
 - images.yaml
 - certificate.yaml
 - deployment.yaml
