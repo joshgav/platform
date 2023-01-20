@@ -6,6 +6,17 @@ metadata:
     app: spring-apiserver
     app.kubernetes.io/component: spring-apiserver
     app.kubernetes.io/instance: spring-apiserver
+  annotations:
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "spring-apiserver:latest"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
 spec:
   replicas: 1
   selector:
@@ -34,3 +45,11 @@ spec:
               protocol: TCP
             - containerPort: 9779
               protocol: TCP
+          volumeMounts:
+            - mountPath: /opt/config
+              name: app-properties
+      volumes:
+        - name: app-properties
+          configMap:
+            name: spring-apiserver-app-properties
+            optional: true

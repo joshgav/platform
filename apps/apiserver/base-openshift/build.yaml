@@ -17,7 +17,7 @@ spec:
       from:
         kind: ImageStreamTag
         namespace: app
-        name: 's2i-java-fabric8:latest'
+        name: 's2i-openjdk-17:latest'
   source:
     type: Git
     git:

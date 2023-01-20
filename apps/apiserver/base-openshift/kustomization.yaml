@@ -1,7 +1,8 @@
 resources:
 - build.yaml
 - service.yaml
+- cm.yaml
 - images.yaml
-- deployment.yaml
 - certificate.yaml
+- deployment.yaml
 - route.yaml

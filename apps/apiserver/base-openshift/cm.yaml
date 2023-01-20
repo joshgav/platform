@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-apiserver-app-properties
+data:
+  application.yaml: |
+    spring:
+      sleuth:
+        enabled: true
+        otel:
+          exporter:
+            otlp:
+              endpoint: http://cluster-opentelemetry-collector-headless.tracing-system.svc:4317

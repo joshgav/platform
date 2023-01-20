@@ -2,7 +2,7 @@
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  name: s2i-java-fabric8
+  name: s2i-openjdk-17
 spec:
   lookupPolicy:
     local: false
@@ -10,7 +10,7 @@ spec:
     - name: latest
       from:
         kind: DockerImage
-        name: 'docker.io/fabric8/s2i-java:latest'
+        name: 'registry.redhat.io/ubi9/openjdk-17:latest'
       referencePolicy:
         type: Source
 ---
