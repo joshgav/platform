@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: spring-apiserver
+  name: spring-apiserver
+spec:
+  endpoints:
+  - interval: 30s
+    port: 9090-tcp
+    scheme: http
+    path: "/actuator/prometheus"
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: spring-apiserver

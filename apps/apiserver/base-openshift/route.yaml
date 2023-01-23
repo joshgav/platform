@@ -16,3 +16,23 @@ spec:
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: apiserver-metrics
+  labels:
+    app: spring-apiserver
+    app.kubernetes.io/component: route-metrics
+    app.kubernetes.io/instance: spring-apiserver
+spec:
+  path: /actuator
+  to:
+    kind: Service
+    name: spring-apiserver
+    weight: 100
+  port:
+    targetPort: 9090-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

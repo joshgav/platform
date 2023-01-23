@@ -43,10 +43,24 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-            - containerPort: 8778
+              name: web
+            - containerPort: 9090
               protocol: TCP
-            - containerPort: 9779
-              protocol: TCP
+              name: actuator
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: "/actuator/health/readiness"
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 10
           volumeMounts:
             - mountPath: /opt/config
               name: app-properties
