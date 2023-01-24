@@ -1,0 +1,11 @@
+apiVersion: org.eclipse.che/v2
+kind: CheCluster
+metadata:
+  name: devspaces
+  namespace: openshift-operators
+spec:
+  components: {}
+  containerRegistry: {}
+  devEnvironments: {}
+  gitServices: {}
+  networking: {}
