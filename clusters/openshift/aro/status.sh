@@ -1,21 +1,23 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-root_dir=$(cd ${this_dir}/../.. && pwd)
+root_dir=$(cd ${this_dir}/../../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
+if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 
-az login --service-principal &> /dev/null \
-    --tenant ${AZURE_TENANT_ID} \
-    --username ${AZURE_PRINCIPAL_ID} \
-    --password ${AZURE_PRINCIPAL_SECRET}
-if [[ $? != 0 ]]; then
-    echo "ERROR: failed to login"
-    exit 2
-fi
+# az login --service-principal \
+#     --tenant ${AZURE_TENANT_ID} \
+#     --username ${AZURE_PRINCIPAL_ID} \
+#     --password ${AZURE_PRINCIPAL_SECRET}
+# if [[ $? != 0 ]]; then
+#     echo "ERROR: failed to login"
+#     exit 2
+# fi
+# az account set --subscription ${AZURE_SUBSCRIPTION_ID}
 
-group_name=openenv-${AZURE_GROUP_ID}
-vnet_name=aro-vnet-${AZURE_GROUP_ID}
-cluster_name=aro-cluster-${AZURE_GROUP_ID}
+group_name=${1:-${AZURE_GROUP_NAME:-aro1}}
+vnet_name=${group_name}-vnet
+cluster_name=${group_name}-cluster
 
 az aro wait --created -g ${group_name} -n ${cluster_name} &> /dev/null
 if [[ $? != 0 ]]; then
