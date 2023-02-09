@@ -7,6 +7,9 @@ metadata:
     app.kubernetes.io/component: spring-apiserver
     app.kubernetes.io/instance: spring-apiserver
   annotations:
+    app.openshift.io/connects-to: >-
+      [{"apiVersion":"postgres-operator.crunchydata.com/v1beta1","kind":"PostgresCluster","name":"apiserver-dbcluster"}]
+    app.openshift.io/vcs-uri: 'https://github.com/joshgav/spring-apiserver'
     image.openshift.io/triggers: |-
       [
         {

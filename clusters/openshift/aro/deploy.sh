@@ -13,11 +13,23 @@ if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 #     echo "ERROR: failed to login"
 #     exit 2
 # fi
-# az account set --subscription ${AZURE_SUBSCRIPTION_ID}
+
+az account set --subscription ${AZURE_SUBSCRIPTION_ID}
+az provider register -n Microsoft.RedHatOpenShift --wait
+az provider register -n Microsoft.Authorization --wait
 
 group_name=${1:-${AZURE_GROUP_NAME:-aro1}}
+group_location=${AZURE_LOCATION:-eastus}
 vnet_name=${group_name}-vnet
 cluster_name=${group_name}-cluster
+
+az group show --resource-group ${group_name} --output none &> /dev/null
+if [[ $? == 3 ]]; then
+    echo "INFO: creating group for networks"
+    az group create --resource-group ${group_name} --location ${group_location}
+else
+    echo "INFO: using existing group ${group_name}"
+fi
 
 az network vnet show --resource-group ${group_name} --name ${vnet_name} --output none &> /dev/null
 if [[ $? != 0 ]]; then
@@ -34,16 +46,23 @@ if [[ $? != 0 ]]; then
     az network vnet subnet create --name worker-subnet \
         --resource-group ${group_name} --vnet-name ${vnet_name} \
         --address-prefixes 10.6.1.0/24 --service-endpoints Microsoft.ContainerRegistry Microsoft.Storage
+else
+    echo "INFO: using existing vnet and subnets for cluster"
 fi
 
 az aro show --resource-group ${group_name} --name ${cluster_name} --output none &> /dev/null
 if [[ $? != 0 ]]; then
+    echo "INFO: creating ARO cluster"
     az aro create --resource-group ${group_name} --name ${cluster_name} \
         --vnet ${vnet_name} --vnet-resource-group ${group_name} \
         --master-subnet master-subnet --worker-subnet worker-subnet \
         --pull-secret "${OPENSHIFT_PULL_SECRET}" \
         --no-wait
+else
+    echo "INFO: using existing ARO cluster"
 fi
+
+echo "INFO: awaiting cluster creation"
 az aro wait --created -g ${group_name} -n ${cluster_name} &> /dev/null
 if [[ $? != 0 ]]; then
     echo "ERROR: failed to wait for ready cluster"
