@@ -1,0 +1,18 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ${bs_app_name}-backstage
+  labels:
+    app.kubernetes.io/name: backstage
+    app.kubernetes.io/component: route
+    app.kubernetes.io/instance: ${bs_app_name}
+spec:
+  to:
+    kind: Service
+    name: ${bs_app_name}-backstage
+    weight: 100
+  port:
+    targetPort: http-backend
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

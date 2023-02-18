@@ -1,0 +1,14 @@
+# upstream uses different Group
+# apiVersion: postgresql.cnpg.io/v1
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: Cluster
+metadata:
+  name: ${bs_app_name}-backstage-pgcluster
+  labels:
+    app.kubernetes.io/name: backstage
+    app.kubernetes.io/component: pgcluster
+    app.kubernetes.io/instance: ${bs_app_name}
+spec:
+  instances: 1
+  storage:
+    size: 1Gi

@@ -1,0 +1,36 @@
+commonAnnotations:
+  app.openshift.io/connects-to: >-
+    [{"apiVersion":"postgresql.k8s.enterprisedb.io/v1","kind":"Cluster","name":"${bs_app_name}-backstage-pgcluster"}]
+  app.openshift.io/vcs-uri: 'https://github.com/joshgav/backstage1'
+backstage:
+  image:
+    registry: quay.io
+    repository: ${quay_user_name}/${bs_app_name}-backstage
+    tag: latest
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-nodejs: "true"
+  extraAppConfig:
+    - configMapRef: ${bs_app_name}-backstage-app-config-base
+      filename: ${bs_app_name}.app-config.base.yaml
+    - configMapRef: ${bs_app_name}-backstage-app-config-cluster
+      filename: ${bs_app_name}.app-config.cluster.yaml
+  extraVolumes:
+    - name: backstage-pgcluster-ca
+      secret:
+        secretName: ${bs_app_name}-backstage-pgcluster-ca
+        items:
+          - key: ca.crt
+            path: ca.crt
+  extraVolumeMounts:
+    - name: backstage-pgcluster-ca
+      mountPath: /var/run/secrets/backstage-pgcluster-ca
+      subPath: ca.crt 
+  extraEnvVarsSecrets:
+    # app does not have permission to create databases
+    # - ${bs_app_name}-backstage-pgcluster-app
+    - ${bs_app_name}-backstage-pgcluster-superuser
+  extraEnvVars:
+    - name: PGSSLMODE
+      value: "require"
+postgresql:
+  enabled: false
