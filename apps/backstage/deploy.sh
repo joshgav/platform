@@ -19,6 +19,8 @@ if [[ "${REBUILD_IMAGE}" == "1" ]]; then
     cp -r overlay/* ${bs_app_name}
     echo "INFO: build & push quay.io/${quay_user_name}/${bs_app_name}-backstage"
     pushd ${bs_app_name}
+        yarn install
+        yarn tsc
         yarn build:all
         yarn build-image
         docker tag backstage:latest quay.io/${quay_user_name}/${bs_app_name}-backstage:latest
@@ -29,8 +31,8 @@ fi
 ensure_namespace backstage
 kubectl config set-context --current --namespace backstage
 
-## TODO: fix to not require this
-oc adm policy add-scc-to-user --serviceaccount=default anyuid
+## TODO: test further, fix image and avoid this
+oc adm policy add-scc-to-user --serviceaccount=default nonroot-v2
 
 echo ""
 echo "INFO: apply resources from ${this_dir}/base/*.yaml"
@@ -42,22 +44,19 @@ for file in $(ls ${this_dir}/base/*.yaml); do
 done
 
 echo ""
-for config_name in "base" "cluster"; do
-    file_path=${this_dir}/${bs_app_name}.app-config${config_name:+".${config_name}"}.yaml
-    if [[ -e "${file_path}" ]]; then
-        echo "INFO: applying appconfig configmap from ${file_path}"
+file_path=${this_dir}/${bs_app_name}.app-config.yaml
+if [[ -e "${file_path}" ]]; then
+    echo "INFO: applying appconfig configmap from ${file_path}"
 
-        kubectl delete configmap ${bs_app_name}-backstage-app-config${config_name:+"-${config_name}"} 2> /dev/null
+    kubectl delete configmap ${bs_app_name}-backstage-app-config 2> /dev/null
 
-        tmpfile=$(mktemp)
-        cat "${file_path}" | envsubst '${bs_app_name} ${quay_user_name} ${openshift_ingress_domain}' > ${tmpfile}
-        kubectl create configmap ${bs_app_name}-backstage-app-config${config_name:+"-${config_name}"} \
-            --from-file "$(basename ${file_path})=${tmpfile}"
-    else
-        echo "INFO: no file found at ${file_path}"
-    fi
-done
-
+    tmpfile=$(mktemp)
+    cat "${file_path}" | envsubst '${bs_app_name} ${quay_user_name} ${openshift_ingress_domain}' > ${tmpfile}
+    kubectl create configmap ${bs_app_name}-backstage-app-config \
+        --from-file "$(basename ${file_path})=${tmpfile}"
+else
+    echo "INFO: no file found at ${file_path}"
+fi
 
 echo ""
 echo "INFO: helm upgrade --install"

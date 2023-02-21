@@ -1,15 +1,14 @@
-## Backstage developer portal on OpenShift
+## Quickstart Backstage on OpenShift
 
 Deploy a Backstage portal instance in an OpenShift cluster.
 
-Edit these ConfigMaps to dynamically reconfigure the portal. NOTE: **delete the
-current pod** so the modified configMap is loaded.
+After deployment edit configMap `bs1-backstage-app-config` to dynamically
+reconfigure the portal; or change it in the file here and run `deploy.sh` to
+reconfigure. NOTE: **delete the current pod** so the modified configMap is
+loaded.
 
-- bs1-backstage-app-config-base
-- bs1-backstage-app-config-cluster
-
-For example, add a URL-based location, or delete one, then delete (that is,
-restart) the pod.
+For example, try uncommenting one of the commented URL locations in the initial
+configMap, then deleting the pod, then refreshing Backstage.
 
 ### Dependencies
 
@@ -23,11 +22,12 @@ restart) the pod.
 1. Run `npx @backstage/create-app@latest --path bs1`
 1. Run `REBUILD_IMAGE=1 ./deploy.sh`
 
-- Visit your instance at <https://bs1-backstage-backstage.${openshift_ingress_domain}>,
-  where `openshift_ingress_domain` is found via `oc get ingresses.config.openshift.io cluster -ojson | jq -r .spec.domain`
 - The resolved URL is echoed at the end of `deploy.sh` (which can be run anytime)
 
 ## Iterate
+
+- Visit your instance at <https://bs1-backstage-backstage.${openshift_ingress_domain}>,
+  where `openshift_ingress_domain` is found via `oc get ingresses.config.openshift.io cluster -ojson | jq -r .spec.domain`
 
 - Modify Backstage instance in `bs1` directory
 - Reconfigure and deploy with `deploy.sh` (it's idempotent)
@@ -52,6 +52,8 @@ Delete the namespace `backstage` (`kubectl delete namespace backstage`) and star
 - If you have OpenTelemetry in your cluster uncomment the
   `base/instrumentation.yaml` file to add OpenTelemetry injection to the namespace
   and the Backstage deployment.
+- You must use the latest LTS version of Node.js. Jump to it if you use nvm with
+  `nvm use --lts --latest`.
 
 [EDB Postgres]: https://artifacthub.io/packages/olm/community-operators/cloud-native-postgresql
 [openshift-services/postgres]: ../../openshift-services/postgres

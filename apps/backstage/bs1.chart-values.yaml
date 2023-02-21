@@ -10,10 +10,8 @@ backstage:
   podAnnotations:
     instrumentation.opentelemetry.io/inject-nodejs: "true"
   extraAppConfig:
-    - configMapRef: ${bs_app_name}-backstage-app-config-base
-      filename: ${bs_app_name}.app-config.base.yaml
-    - configMapRef: ${bs_app_name}-backstage-app-config-cluster
-      filename: ${bs_app_name}.app-config.cluster.yaml
+    - configMapRef: ${bs_app_name}-backstage-app-config
+      filename: ${bs_app_name}.app-config.yaml
   extraVolumes:
     - name: backstage-pgcluster-ca
       secret:
@@ -32,5 +30,7 @@ backstage:
   extraEnvVars:
     - name: PGSSLMODE
       value: "require"
+  podSecurityContext:
+    runAsUser: 1000
 postgresql:
   enabled: false

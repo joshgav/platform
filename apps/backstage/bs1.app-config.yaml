@@ -1,18 +1,32 @@
 app:
-  title: Scaffolded Backstage App
-  # baseUrl: http://localhost:7007
+  title: Backstage on OpenShift
+  baseUrl: https://${bs_app_name}-backstage-backstage.${openshift_ingress_domain}/
 
 organization:
-  name: My Company
+  name: Red Hat
 
 backend:
+  baseUrl: https://${bs_app_name}-backstage-backstage.${openshift_ingress_domain}/
+  database:
+    client: pg
+    connection:
+      # config options: https://node-postgres.com/apis/client
+      host: ${bs_app_name}-backstage-pgcluster-rw
+      port: 5432
+      user: ${username}
+      password: ${password}
+      # https://node-postgres.com/features/ssl
+      # you can set the sslmode configuration option via the `PGSSLMODE` environment variable
+      # see https://www.postgresql.org/docs/current/libpq-ssl.html Table 33.1. SSL Mode Descriptions (e.g. require)
+      ssl:
+        ca: # if you have a CA file and want to verify it you can uncomment this section
+          $file: /var/run/secrets/backstage-pgcluster-ca
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/tutorials/backend-to-backend-auth for
   # information on the format
   # auth:
   #   keys:
   #     - secret: ${BACKEND_SECRET}
-  # baseUrl: http://localhost:7007
   listen:
     port: 7007
   #   # Uncomment the following host directive to bind to specific interfaces
@@ -25,11 +39,6 @@ backend:
     origin: http://localhost:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
-  # This is for local development only, it is not recommended to use this in production
-  # The production database configuration is stored in app-config.production.yaml
-  # database:
-  #   client: better-sqlite3
-  #   connection: ':memory:'
   cache:
     store: memory
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
@@ -67,13 +76,17 @@ scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
+  ## examples
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
     - allow: [Component, System, API, Resource, Location]
   locations:
-    # example data copied into the container
+    # example files must be copied into the container
+    # TODO: enable Helm chart to transit files as config maps
+    # See # https://backstage.io/docs/features/software-catalog/software-catalog-overview#adding-components-to-the-catalog
+    # for more details on how to get entities into the catalog.
     - type: file
       target: examples/entities.yaml
     - type: file
