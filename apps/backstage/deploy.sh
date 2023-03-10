@@ -33,6 +33,7 @@ kubectl config set-context --current --namespace backstage
 
 ## TODO: test further, fix image and avoid this
 oc adm policy add-scc-to-user --serviceaccount=default nonroot-v2
+oc adm policy add-cluster-role-to-user --serviceaccount=default view
 
 echo ""
 echo "INFO: apply resources from ${this_dir}/base/*.yaml"

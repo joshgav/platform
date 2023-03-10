@@ -97,6 +97,8 @@ catalog:
       target: examples/org.yaml
       rules:
         - allow: [User, Group]
+    - type: url
+      target: https://github.com/joshgav/devenv/blob/main/apps/apiserver/catalog-info.yaml
     # example public data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
@@ -104,3 +106,20 @@ catalog:
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
     #   rules:
     #     - allow: [User, Group]
+
+kubernetes:
+  serviceLocatorMethod:
+    type: multiTenant
+  clusterLocatorMethods:
+    - type: config
+      clusters:
+        - url: https://kubernetes.default.svc/
+          name: local
+          caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          authProvider: serviceAccount
+          # don't specify this attribute to force lookup in pod in cluster
+          # serviceAccountToken: ''
+          dashboardUrl: https://console-openshift-console.${openshift_ingress_domain}/
+          dashboardApp: openshift
+          skipTLSVerify: false
+          skipMetricsLookup: false

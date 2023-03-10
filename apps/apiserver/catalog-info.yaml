@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: spring-apiserver
+  description: A basic API server in Spring.
+  annotations:
+    backstage.io/kubernetes-namespace: app
+    backstage.io/kubernetes-label-selector: app=spring-apiserver
+spec:
+  type: service
+  owner: josh@joshgav.com
+  lifecycle: experimental

@@ -1,3 +1,5 @@
+commonLabels:
+  app: spring-apiserver
 resources:
 - build.yaml
 - service.yaml
