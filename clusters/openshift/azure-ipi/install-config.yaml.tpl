@@ -1,0 +1,35 @@
+# schema: https://github.com/openshift/installer/blob/master/pkg/types/installconfig.go
+apiVersion: v1
+metadata:
+  name: ${OPENSHIFT_CLUSTER_NAME}
+baseDomain: ${OPENSHIFT_BASE_DOMAIN}
+platform:
+  azure:
+    baseDomainResourceGroupName: ${AZURE_DNS_GROUP_NAME}
+    networkResourceGroupName: ${AZURE_GROUP_NAME}
+    resourceGroupName: ${AZURE_GROUP_NAME}
+    region: ${AZURE_LOCATION}
+pullSecret: '${OPENSHIFT_PULL_SECRET}'
+sshKey: '${SSH_PUBLIC_KEY}'
+publish: External
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: 3
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  platform: {}
+  replicas: 3
+networking:
+  networkType: OVNKubernetes
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  serviceNetwork:
+  - 172.30.0.0/16
