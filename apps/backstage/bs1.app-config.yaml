@@ -81,7 +81,7 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, Template]
   locations:
     # example files must be copied into the container
     # TODO: enable Helm chart to transit files as config maps
@@ -99,6 +99,9 @@ catalog:
         - allow: [User, Group]
     - type: url
       target: https://github.com/joshgav/devenv/blob/main/apps/apiserver/catalog-info.yaml
+    # Janus (Red Hat) templates
+    - type: url
+      target: https://github.com/janus-idp/software-templates/blob/main/showcase-templates.yaml
     # example public data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml

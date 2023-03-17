@@ -13,6 +13,8 @@ configMap, then deleting the pod, then refreshing Backstage.
 ### Dependencies
 
 - [EDB Postgres][] - [openshift-services/postgres][]
+- Create a Secret named `github-token` with key `GITHUB_TOKEN` with value set to
+  a GitHub Token with repo and workflow permissions.
 
 ## Build and deploy (first time)
 
@@ -54,6 +56,8 @@ Delete the namespace `backstage` (`kubectl delete namespace backstage`) and star
   and the Backstage deployment.
 - You must use the latest LTS version of Node.js. Jump to it if you use nvm with
   `nvm use --lts --latest`.
+- Try importing Janus' templates in the `/catalog-import` page from
+  <https://github.com/janus-idp/software-templates/blob/main/showcase-templates.yaml>.
 
 [EDB Postgres]: https://artifacthub.io/packages/olm/community-operators/cloud-native-postgresql
 [openshift-services/postgres]: ../../openshift-services/postgres
