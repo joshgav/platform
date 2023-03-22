@@ -1,0 +1,50 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: tenant0
+  labels:
+    app: minio
+spec:
+  serviceAccountName: default
+  credsSecret:
+    name: minio-root-creds
+  users:
+    - name: minio-user
+  configuration:
+    name: minio-tenant-config
+  requestAutoCert: true
+  features:
+    bucketDNS: false
+    domains: {}
+  podManagementPolicy: Parallel
+  env: []
+  pools:
+    - servers: 4
+      name: pool-0
+      volumesPerServer: 4
+      nodeSelector: {}
+      tolerations: []
+      affinity:
+        nodeAffinity: {}
+        podAffinity: {}
+        podAntiAffinity: {}
+      resources: {}
+      volumeClaimTemplate:
+        apiVersion: v1
+        kind: persistentvolumeclaims
+        metadata: {}
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Gi
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+      containerSecurityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true

@@ -13,7 +13,11 @@ spec:
     type: elasticsearch
     retentionPolicy:
       application:
-        maxAge: 7d
+        maxAge: 3d
+      infra:
+        maxAge: 3d
+      audit:
+        maxAge: 3d
     elasticsearch:
       nodeCount: 3
       redundancyPolicy: SingleRedundancy

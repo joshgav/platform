@@ -17,3 +17,5 @@ oc label nodes --all "cluster.ocs.openshift.io/openshift-storage="
 - https://www.redhat.com/sysadmin/finding-block-and-file1
 - https://red-hat-storage.github.io/ocs-training/training/index.html
 - https://github.com/rook/rook/blob/master/design/ceph/resource-constraints.md
+- https://github.com/red-hat-storage/odf-operator
+- https://github.com/red-hat-storage/ocs-operator
