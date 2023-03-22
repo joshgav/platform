@@ -7,5 +7,8 @@ source ${root_dir}/lib/kubernetes.sh
 
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready "clusterlogforwarders"
+await_resource_ready "lokistacks"
 
-apply_kustomize_dir ${this_dir}/operand
+# logging_stack=elk
+logging_stack=loki
+apply_kustomize_dir ${this_dir}/${logging_stack}
