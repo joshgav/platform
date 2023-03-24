@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ansible-automation-controller
+resources:
+- namespace.yaml
+- ansible-automation-hub-s3-secret.yaml
+# - postgres-configuration.yaml
+- automationcontroller.yaml
+- automationhub.yaml

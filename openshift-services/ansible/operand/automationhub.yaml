@@ -1,0 +1,18 @@
+apiVersion: automationhub.ansible.com/v1beta1
+kind: AutomationHub
+metadata:
+  name: ansible-automation-hub
+# see https://github.com/pulp/pulp-operator/blob/main/api/v1alpha1/repo_manager_types.go
+spec:
+  object_storage_s3_secret: ansible-automation-hub-s3
+  storage_type: s3
+  ingress_type: Route
+  api: {}
+# database:
+#   external_db_secret: ''
+  content: {}
+  worker: {}
+  web: {}
+# cache:
+#   external_cache_secret: ''
+  pulp_settings: {}

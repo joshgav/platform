@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: ansible-automation-controller-postgres-configuration
+  namespace: <target namespace>
+stringData:
+  host: <external ip or url resolvable by the cluster>
+  port: <external port, this usually defaults to 5432>
+  database: <desired database name>
+  username: <username to connect as>
+  password: <password to connect with>
+  sslmode: prefer
+  type: unmanaged
