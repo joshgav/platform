@@ -2,12 +2,9 @@
 
 ## For Lokistack and Vector
 
-NOTE: this is a work in progress!
-
+- Provision an S3 bucket and specify its coordinates in `.env`
+- If using minio make sure the TLS cert for the minio tenant is recognized by the Lokistack.
 - In `deploy.sh` set `logging_stack=loki`
-- Depends on minio or ODF to provide buckets.
-- Currently I copied the access key ID and secret manually.
-- When using minio make sure the TLS cert for the minio tenant is recognized by the Lokistack.
 - Enable the console plugin in the OpenShift ClusterLogging resource.
 
 ## For ELK
