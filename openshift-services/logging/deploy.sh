@@ -3,9 +3,13 @@
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
+if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready "clusterlogforwarders"
+await_resource_ready "lokistacks"
 
-apply_kustomize_dir ${this_dir}/operand
+# logging_stack=elk
+logging_stack=loki
+apply_kustomize_dir ${this_dir}/${logging_stack}
