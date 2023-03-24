@@ -1,0 +1,22 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: backstage-ocm-plugin
+rules:
+  - apiGroups:
+      - cluster.open-cluster-management.io
+    resources:
+      - managedclusters
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - internal.open-cluster-management.io
+    resources:
+      - managedclusterinfos
+    verbs:
+      - get
+      - watch
+      - list

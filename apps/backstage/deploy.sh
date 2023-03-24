@@ -52,12 +52,24 @@ if [[ -e "${file_path}" ]]; then
     kubectl delete configmap ${bs_app_name}-backstage-app-config 2> /dev/null
 
     tmpfile=$(mktemp)
-    cat "${file_path}" | envsubst '${bs_app_name} ${quay_user_name} ${openshift_ingress_domain}' > ${tmpfile}
+    cat "${file_path}" | envsubst '${bs_app_name} ${quay_user_name} ${openshift_ingress_domain} ${ARGOCD_USERNAME} ${ARGOCD_PASSWORD}' > ${tmpfile}
     kubectl create configmap ${bs_app_name}-backstage-app-config \
         --from-file "$(basename ${file_path})=${tmpfile}"
 else
     echo "INFO: no file found at ${file_path}"
 fi
+
+echo ""
+github_app_creds_path=${this_dir}/github-app-credentials.yaml
+if [[ -e ${github_app_creds_path} ]]; then
+    echo "INFO: applying github-app-credentials.yaml as a secret"
+
+    kubectl delete secret github-app-credentials 2> /dev/null
+    kubectl create secret generic github-app-credentials --from-file=github-app-credentials.yaml
+fi
+
+oc create clusterrolebinding backstage-backend-k8s --clusterrole=backstage-k8s-plugin --serviceaccount=backstage:default
+oc create clusterrolebinding backstage-backend-ocm --clusterrole=backstage-ocm-plugin --serviceaccount=backstage:default
 
 echo ""
 echo "INFO: helm upgrade --install"

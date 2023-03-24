@@ -19,10 +19,19 @@ backstage:
         items:
           - key: ca.crt
             path: ca.crt
+    - name: github-app-credentials
+      secret:
+        secretName: github-app-credentials
+        items:
+          - key: github-app-credentials.yaml
+            path: github-app-credentials.yaml
   extraVolumeMounts:
     - name: backstage-pgcluster-ca
       mountPath: /var/run/secrets/backstage-pgcluster-ca
       subPath: ca.crt 
+    - name: github-app-credentials
+      mountPath: /app/github-app-credentials.yaml
+      subPath: github-app-credentials.yaml
   extraEnvVarsSecrets:
     # app does not have permission to create databases
     # - ${bs_app_name}-backstage-pgcluster-app

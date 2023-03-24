@@ -6,6 +6,10 @@ metadata:
   annotations:
     backstage.io/kubernetes-namespace: app
     backstage.io/kubernetes-label-selector: app=spring-apiserver
+    backstage.io/techdocs-ref: dir:.
+    argocd/app-name: app-apiserver
+    github.com/project-slug: joshgav/spring-apiserver
+    quay.io/repository-slug: joshgav/spring-apiserver
 spec:
   type: service
   owner: josh@joshgav.com
