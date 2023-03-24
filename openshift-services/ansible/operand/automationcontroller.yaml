@@ -1,0 +1,10 @@
+apiVersion: automationcontroller.ansible.com/v1beta1
+kind: AutomationController
+metadata:
+  name: ansible-automation-controller
+# see https://github.com/ansible/awx-operator/blob/devel/roles/installer/defaults/main.yml
+spec:
+  admin_user: admin
+  service_type: ClusterIP
+  ingress_type: Route
+# postgres_configuration_secret: ansible-automation-controller-postgres-configuration
