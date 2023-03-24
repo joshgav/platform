@@ -1,56 +1,22 @@
-# Cloud the Hard Way
+# devenv
 
-Scripts and configs for deployment of:
+Configurations and scripts for development and delivery of infrastructure,
+Kubernetes, platform capabilities, operators and applications.
 
-- Cloud (e.g. AWS, Azure) and virtual (e.g. libvirt) infrastructure
-- Kubernetes and OpenShift clusters
-- Supporting services and capabilities for clusters
-- Representative custom applications
+Use the `./deploy.sh` in any directory.
 
-## Infrastructure
+Most parameters are set via `.env` in the root; some are set via `.env` in the
+leaf directory.
 
-- infrastructure/aws
-- infrastructure/libvirt
+- **apps**: deploy applications that use capabilities
+- **clusters**: deploy Kubernetes and OpenShift clusters
+- **docs**: extra info about some capabilities
+- **infrastructure**: bare metal and cloud provided compute, network and storage
+- **lib**: helper scripts
+- **openshift-services**: deploy capabilities on OpenShift
+- **operators**: scaffold custom operators
+- **services**: deploy capabilities on Kubernetes
 
-## Kubernetes Clusters
+## LICENSE
 
-- clusters/kubeadm
-- clusters/kubespray
-- clusters/openshift-aro
-- [OpenShift on AWS](https://github.com/joshgav/openshift-on-aws.git) (separate repo)
-
-## Services
-
-- Active Directory
-- ArgoCD
-- cert-manager (JetStack)
-- Eclipse Che
-- Crossplane
-- Kubernetes Dashboard
-- Emissary Ingress
-- Instana
-- Kafka (Strimzi)
-- Keycloak
-- MetalLB
-- Operator Lifecycle Manager (OLM)
-- Postgres (CrunchyData)
-- Tekton
-
-## Openshift Services
-
-- Advanced Cluster Manager (Open Cluster Management)
-- GitOps (ArgoCD)
-- Dev Spaces (Eclipse Che)
-- Open Data Hub
-- SSO (Keycloak)
-- Serverless (Knative)
-- cert-manager
-- FreeIPA
-- alertmanager config
-- identity provider config
-
-## Apps
-
-- [spring-apiserver](https://github.com/joshgav/spring-apiserver)
-- [quarkus-super-heroes](https://github.com/quarkusio/quarkus-super-heroes)
-- [podtato-head](https://github.com/podtato-head/podtato-head)
+See [LICENSE.md](LICENSE.md).
