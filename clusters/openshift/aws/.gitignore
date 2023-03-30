@@ -1,0 +1,5 @@
+.env
+.kube
+.ssh
+_workdir
+/temp
