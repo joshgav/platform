@@ -3,10 +3,10 @@
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
+source ${root_dir}/lib/aws.sh
 
 ${this_dir}/deploy-operator.sh
 
-source ${root_dir}/lib/aws.sh
 echo "INFO: finding Route53 zone ID for ${OPENSHIFT_BASE_DOMAIN}"
 export ROUTE53_ZONE_ID=$(hosted_zone_id "${OPENSHIFT_BASE_DOMAIN}.")
 
