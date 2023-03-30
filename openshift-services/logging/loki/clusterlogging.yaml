@@ -11,5 +11,5 @@ spec:
       name: logging-loki
   collection:
     type: vector
-  visualization:
-    type: ocp-console 
+  # visualization:
+  #   type: ocp-console
