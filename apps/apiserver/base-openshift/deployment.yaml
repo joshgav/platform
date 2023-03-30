@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: spring-apiserver
   annotations:
     app.openshift.io/connects-to: >-
-      [{"apiVersion":"postgres-operator.crunchydata.com/v1beta1","kind":"PostgresCluster","name":"apiserver-dbcluster"}]
+      [{"apiVersion":"postgresql.k8s.enterprisedb.io/v1","kind":"Cluster","name":"apiserver-dbcluster"}]
     app.openshift.io/vcs-uri: 'https://github.com/joshgav/spring-apiserver'
     image.openshift.io/triggers: |-
       [
@@ -39,10 +39,16 @@ spec:
           envFrom:
             - prefix: PG_
               secretRef:
-                name: apiserver-dbcluster-pguser-apiserver
+                name: apiserver-dbcluster-superuser
           env:
             - name: HOME
               value: /opt/jboss
+            - name: PG_host
+              value: apiserver-dbcluster-rw
+            - name: PG_port
+              value: '5432'
+            - name: PG_dbname
+              value: postgres
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -67,6 +73,7 @@ spec:
           volumeMounts:
             - mountPath: /opt/config
               name: app-properties
+          resources: {}
       volumes:
         - name: app-properties
           configMap:

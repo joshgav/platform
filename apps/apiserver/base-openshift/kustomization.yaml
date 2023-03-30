@@ -1,6 +1,7 @@
 commonLabels:
   app: spring-apiserver
 resources:
+- pgdb.yaml
 - build.yaml
 - service.yaml
 - cm.yaml

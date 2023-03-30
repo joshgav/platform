@@ -1,0 +1,13 @@
+# upstream uses different Group
+# apiVersion: postgresql.cnpg.io/v1
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: Cluster
+metadata:
+  name: apiserver-dbcluster
+  labels:
+    app.kubernetes.io/name: apiserver
+    app.kubernetes.io/component: dbcluster
+spec:
+  instances: 1
+  storage:
+    size: 1Gi
