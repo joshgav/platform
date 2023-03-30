@@ -9,7 +9,10 @@ spec:
     openShiftOAuth: true
   ha:
     enabled: false
-  rbac: {}
+  rbac:
+    defaultPolicy: ""
+    policy: "g, system:cluster-admins, role:admin\n"
+    scopes: "[groups]"
   redis: {}
   repo: {}
   server:
