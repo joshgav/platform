@@ -1,0 +1,5 @@
+kubespray/
+aws.tfstate*
+
+!inventory/cluster/group_vars
+inventory/cluster
