@@ -36,3 +36,4 @@ spec:
               protocol: TCP
             - containerPort: 9779
               protocol: TCP
+          resources: {}
