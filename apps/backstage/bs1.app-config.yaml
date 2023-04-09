@@ -15,8 +15,8 @@ backend:
       port: 5432
       user: ${username}
       password: ${password}
-      # https://node-postgres.com/features/ssl
       # you can set the sslmode configuration option via the `PGSSLMODE` environment variable
+      # https://node-postgres.com/features/ssl
       # see https://www.postgresql.org/docs/current/libpq-ssl.html Table 33.1. SSL Mode Descriptions (e.g. require)
       ssl:
         ca: # if you have a CA file and want to verify it you can uncomment this section
@@ -65,9 +65,18 @@ proxy:
       # Authorization: 'Bearer <YOUR TOKEN>'
     changeOrigin: true
     secure: true
+  '/argocd/api':
+    target: https://openshift-gitops-server-openshift-gitops.${openshift_ingress_domain}/api/v1
+    changeOrigin: true
+    secure: true
+    pathRewrite:
+      '^/api/proxy/argocd/api': '/'
+    headers:
+      # inject token as env var from secret
+      Authorization: 'Bearer ${ARGOCD_AUTH_TOKEN}'
 
 techdocs:
-  builder: 'external'
+  builder: 'local'
   generator:
     runIn: 'local'
   publisher:
@@ -135,14 +144,3 @@ ocm:
   hub:
     name: local
     url: https://kubernetes.default.svc/
-
-
-argocd:
-  username: ${ARGOCD_USERNAME}
-  password: ${ARGOCD_PASSWORD}
-  appLocatorMethods:
-    - type: 'config'
-      instances:
-        - name: openshift-gitops
-          url: https://openshift-gitops-server-openshift-gitops.${openshift_ingress_domain}/
-          

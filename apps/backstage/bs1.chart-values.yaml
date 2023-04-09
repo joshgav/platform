@@ -37,6 +37,7 @@ backstage:
     # - ${bs_app_name}-backstage-pgcluster-app
     - ${bs_app_name}-backstage-pgcluster-superuser
     - github-token
+    - argocd-token
   extraEnvVars:
     - name: PGSSLMODE
       value: "require"

@@ -18,7 +18,15 @@ spec:
     kustomize: {}
   syncPolicy:
     automated: {}
+    syncOptions:
+      - "RespectIgnoreDifferences=true"
   info: []
+  ignoreDifferences:
+    - group: apps/v1
+      kind: Deployment
+      name: spring-apiserver
+      jqPathExpressions:
+        - '.spec.template.spec.containers[].image'
 ---
 apiVersion: v1
 kind: Namespace

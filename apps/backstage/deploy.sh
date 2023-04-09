@@ -21,7 +21,7 @@ if [[ "${REBUILD_IMAGE}" == "1" ]]; then
     pushd ${bs_app_name}
         yarn install
         yarn tsc
-        yarn build:all
+        yarn build
         yarn build-image
         docker tag backstage:latest quay.io/${quay_user_name}/${bs_app_name}-backstage:latest
         docker push quay.io/${quay_user_name}/${bs_app_name}-backstage:latest
@@ -40,7 +40,7 @@ echo "INFO: apply resources from ${this_dir}/base/*.yaml"
 for file in $(ls ${this_dir}/base/*.yaml); do
     lines=$(cat ${file} | awk '/^[^#].*$/ {print}' | wc -l)
     if [[ ${lines} > 0 ]]; then
-        cat ${file} | envsubst '${bs_app_name}' | kubectl apply -f -
+        cat ${file} | envsubst '${bs_app_name} ${ARGOCD_AUTH_TOKEN}' | kubectl apply -f -
     fi
 done
 
@@ -52,7 +52,7 @@ if [[ -e "${file_path}" ]]; then
     kubectl delete configmap ${bs_app_name}-backstage-app-config 2> /dev/null
 
     tmpfile=$(mktemp)
-    cat "${file_path}" | envsubst '${bs_app_name} ${quay_user_name} ${openshift_ingress_domain} ${ARGOCD_USERNAME} ${ARGOCD_PASSWORD}' > ${tmpfile}
+    cat "${file_path}" | envsubst '${bs_app_name} ${quay_user_name} ${openshift_ingress_domain}' > ${tmpfile}
     kubectl create configmap ${bs_app_name}-backstage-app-config \
         --from-file "$(basename ${file_path})=${tmpfile}"
 else
@@ -65,11 +65,17 @@ if [[ -e ${github_app_creds_path} ]]; then
     echo "INFO: applying github-app-credentials.yaml as a secret"
 
     kubectl delete secret github-app-credentials 2> /dev/null
-    kubectl create secret generic github-app-credentials --from-file=github-app-credentials.yaml
+    kubectl create secret generic github-app-credentials --from-file=${github_app_creds_path}
 fi
 
-oc create clusterrolebinding backstage-backend-k8s --clusterrole=backstage-k8s-plugin --serviceaccount=backstage:default
-oc create clusterrolebinding backstage-backend-ocm --clusterrole=backstage-ocm-plugin --serviceaccount=backstage:default
+oc get clusterrolebinding backstage-backend-k8s &> /dev/null
+if [[ $? != 0 ]]; then
+    oc create clusterrolebinding backstage-backend-k8s --clusterrole=backstage-k8s-plugin --serviceaccount=backstage:default
+fi
+oc get clusterrolebinding backstage-backend-ocm &> /dev/null
+if [[ $? != 0 ]]; then
+    oc create clusterrolebinding backstage-backend-ocm --clusterrole=backstage-ocm-plugin --serviceaccount=backstage:default
+fi
 
 echo ""
 echo "INFO: helm upgrade --install"
@@ -82,3 +88,6 @@ cat "${this_dir}/${bs_app_name}.chart-values.yaml" | \
 echo ""
 echo "INFO: Visit your Backstage instance at https://${bs_app_name}-backstage-backstage.${openshift_ingress_domain}/"
 echo ""
+
+echo "INFO: enable apiKey generation in ArgoCD"
+oc patch --type merge -n openshift-gitops argocd openshift-gitops --patch '{"spec": {"extraConfig": {"accounts.admin": "apiKey"}}}'
