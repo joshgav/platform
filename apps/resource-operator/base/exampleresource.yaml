@@ -3,4 +3,4 @@ kind: ExampleResource
 metadata:
   name: my-first-example
 spec:
-  exampleAttribute: my-first-attribute
+  # exampleAttribute: my-first-attribute

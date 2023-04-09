@@ -1,8 +1,11 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-root_dir=$(cd ${this_dir}/.. && pwd)
+root_dir=$(cd ${this_dir}/../.. && pwd)
+if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
+if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/install.sh
+
 install_operator_sdk
 
 namespace=podtatohead
@@ -10,10 +13,8 @@ operator_name=podtatohead-operator
 kubectl create namespace ${namespace} &> /dev/null
 kubectl config set-context --current --namespace ${namespace}
 
-repo_url=https://github.com/podtato-head/podtato-head.git
-pushd ${this_dir}
+repo_url=https://github.com/podtato-head/podtato-head
 git clone ${repo_url} ${this_dir}/podtatohead
-popd
 
 mkdir -p ${this_dir}/${operator_name}
 pushd ${this_dir}/${operator_name}
@@ -36,6 +37,4 @@ export VERSION=latest
 make docker-build
 make docker-push
 
-make deploy
-
-kubectl apply -f ${this_dir}/podtatoheadapp.yaml
+popd
