@@ -1,0 +1,10 @@
+site_name: Spring API Server Docs
+
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core
+
+repo_url: https://github.com/joshgav/spring-apiserver/
+edit_uri: blob/main/docs/
