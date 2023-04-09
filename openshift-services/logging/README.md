@@ -3,22 +3,6 @@
 ## For Lokistack and Vector
 
 - Provision an S3 bucket and specify its coordinates in `.env`
-
-- If using minio make sure the TLS cert for the minio tenant is recognized by the Lokistack.
-    - patch the clusterlogging spec:
-    ```yaml
-    spec:
-      storage:
-        tls:
-          caName: tenant0-tls
-    ```
-    - copy minio's CA cert to the openshift-logging namespace
-    ```bash
-    temp_file=$(mktemp)
-    oc get secret -n minio-tenant tenant0-tls -oyaml | \
-        jq -r '.data."public.crt" | @base64d' > ${temp_file}
-    oc create configmap tenant0-tls -n openshift-logging --from-file "service-ca.crt=${temp_file}"
-    ```
 - In `deploy.sh` set `logging_stack=loki`
 - Enable the console plugin in the OpenShift ClusterLogging resource.
 
