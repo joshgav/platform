@@ -1,8 +1,16 @@
-```go
-// add to api/v1alpha1/exampleresource_types.go:33
-ExampleAttribute string `json:"exampleAttribute,omitempty"`
+# Resource Operator
 
-// add to controllers/exampleresource_controller.go:52
+## Reconcile code
+
+Add to api/v1alpha1/exampleresource_types.go:33
+
+```go
+ExampleAttribute string `json:"exampleAttribute,omitempty"`
+```
+
+Add to controllers/exampleresource_controller.go:52
+
+```go
 log := log.FromContext(ctx, "namespace", req.Namespace, "name", req.Name)
 log.Info("Reconciling ExampleResource")
 

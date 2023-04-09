@@ -225,7 +225,7 @@ function install_kubebuilder {
 }
 
 function install_operator_sdk {
-    operator_sdk_ver=v1.22.0
+    operator_sdk_ver=v1.28.0
     download_url=https://github.com/operator-framework/operator-sdk/releases/download/${operator_sdk_ver}/operator-sdk_linux_amd64
     binary_name=operator-sdk
     install_binary ${download_url} ${binary_name}

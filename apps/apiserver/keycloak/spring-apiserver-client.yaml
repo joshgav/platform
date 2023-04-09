@@ -1,43 +1,45 @@
 apiVersion: keycloak.org/v1alpha1
 kind: KeycloakClient
 metadata:
-    name: spring-apiserver
-    labels:
-        app: spring-apiserver
-        component: apiserver
+  name: spring-apiserver
+  namespace: keycloak
+  labels:
+    app: spring-apiserver
+    component: apiserver
 spec:
-    realmSelector:
-        matchLabels:
-            app: app-keycloak
-            component: app-realm
-    client:
-        name: spring-apiserver
-        enabled: true
-        clientId: spring-apiserver
-        clientAuthenticatorType: client-secret
-        redirectUris:
-          - 'https://apiserver-app.apps.aws-ipi.sandbox60.opentlc.com/*'
-        standardFlowEnabled: true
-        implicitFlowEnabled: false
-        publicClient: false
-        protocol: openid-connect
-        protocolMappers:
-          - name: username
-            protocol: openid-connect
-            protocolMapper: oidc-usermodel-property-mapper
-            config:
-                "user.attribute": "username"
-                "claim.name": "preferred_username"
-                "jsonType.label": "String"
-                "userinfo.token.claim": "true"
-                "access.token.claim": "true"
-                "id.token.claim": "true"
-        defaultClientScopes:
-          - "web-origins"
-          - "address"
-          - "phone"
-          - "roles"
-          - "profile"
-          - "microprofile-jwt"
-          - "email"
-              
+  realmSelector:
+    matchLabels:
+      keycloak: main
+      realm: main
+  client:
+    name: spring-apiserver
+    enabled: true
+    clientId: spring-apiserver
+    clientAuthenticatorType: client-secret
+    baseUrl: 'https://apiserver-app.apps.ipi.aws.joshgav.com/'
+    redirectUris:
+    - 'https://apiserver-app.apps.ipi.aws.joshgav.com/*'
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    publicClient: false
+    protocol: openid-connect
+    protocolMappers:
+    - name: username
+      protocol: openid-connect
+      protocolMapper: oidc-usermodel-property-mapper
+      config:
+        "user.attribute": "username"
+        "claim.name": "preferred_username"
+        "jsonType.label": "String"
+        "userinfo.token.claim": "true"
+        "access.token.claim": "true"
+        "id.token.claim": "true"
+    defaultClientScopes:
+    - "web-origins"
+    - "address"
+    - "phone"
+    - "roles"
+    - "profile"
+    - "microprofile-jwt"
+    - "email"
+          

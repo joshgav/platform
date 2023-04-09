@@ -4,4 +4,4 @@ metadata:
     name: keycloak-group
 spec:
     targetNamespaces:
-      - ${KEYCLOAK_NAMESPACE}
+      - keycloak

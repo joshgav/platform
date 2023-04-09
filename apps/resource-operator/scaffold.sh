@@ -1,11 +1,14 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
-root_dir=$(cd ${this_dir}/.. && pwd)
+root_dir=$(cd ${this_dir}/../.. && pwd)
+if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
+if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/install.sh
+
 install_operator_sdk
 
-operator_name=example-resource-operator
+operator_name=resource-operator
 
 mkdir -p ${this_dir}/${operator_name}
 pushd ${this_dir}/${operator_name}
@@ -31,6 +34,5 @@ export IMG=${IMAGE_TAG_BASE}:latest
 export VERSION=latest
 make docker-build
 make docker-push
-make deploy
 
-kubectl apply -f ${this_dir}/exampleresource.yaml
+popd

@@ -11,8 +11,9 @@ export KEYCLOAK_NAMESPACE=${1:-keycloak}
 echo "INFO: install operator subscription for Keycloak"
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready "keycloak"
+
+export KEYCLOAK_USER_SECRET=${KEYCLOAK_USER_SECRET:-supersecret}
 apply_kustomize_dir ${this_dir}/local
-# apply_kustomize_dir ${this_dir}/msad
 
 ## verify keycloak is ready
 keycloak_status="false"

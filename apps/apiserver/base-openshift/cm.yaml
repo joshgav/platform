@@ -3,4 +3,16 @@ kind: ConfigMap
 metadata:
   name: spring-apiserver-app-properties
 data:
-  application.yaml: ''
+  application.yaml: |-
+    security:
+      oauth2:
+        client:
+          registration:
+            oidc:
+              provider: keycloak
+              scope: openid
+              client-secret: ${KEYCLOAK_CLIENT_SECRET}
+              client-id: ${KEYCLOAK_CLIENT_ID}
+          provider:
+            keycloak:
+              issuer-uri: ${KEYCLOAK_ISSUER_URI}
