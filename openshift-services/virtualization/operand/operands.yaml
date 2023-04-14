@@ -1,0 +1,71 @@
+---
+apiVersion: networkaddonsoperator.network.kubevirt.io/v1
+kind: NetworkAddonsConfig
+metadata:
+  name: cluster
+spec:
+  imagePullPolicy: IfNotPresent
+  kubeMacPool:
+    rangeEnd: FD:FF:FF:FF:FF:FF
+    rangeStart: 02:00:00:00:00:00
+  linuxBridge: {}
+  macvtap: {}
+  multus: {}
+  ovs: {}
+---
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  imagePullPolicy: Always
+---
+apiVersion: ssp.kubevirt.io/v1beta1
+kind: SSP
+metadata:
+  name: ssp-sample
+  namespace: kubevirt
+spec:
+  commonTemplates:
+    namespace: kubevirt
+  templateValidator:
+    replicas: 2
+---
+apiVersion: tektontasks.kubevirt.io/v1alpha1
+kind: TektonTasks
+metadata:
+  name: tektontasks-sample
+  namespace: kubevirt
+spec:
+  featureGates:
+    deployTektonTaskResources: true
+  pipelines:
+    namespace: kubevirt
+---    
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: CDI
+metadata:
+  name: cdi
+  namespace: cdi
+spec:
+  imagePullPolicy: IfNotPresent
+---
+apiVersion: hostpathprovisioner.kubevirt.io/v1beta1
+kind: HostPathProvisioner
+metadata:
+  name: hostpath-provisioner
+spec:
+  imagePullPolicy: IfNotPresent
+  storagePools:
+  - name: local
+    path: /var/hpvolumes
+    pvcTemplate:
+      accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Gi
+  workload:
+    nodeSelector:
+      "kubernetes.io/os": linux
