@@ -1,0 +1,61 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  name: ${infra_name}-metal-worker-us-east-1c
+  namespace: openshift-machine-api
+  labels:
+    machine.openshift.io/cluster-api-cluster: ${infra_name}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: ${infra_name}
+      machine.openshift.io/cluster-api-machineset: ${infra_name}-metal-worker-us-east-1c
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: ${infra_name}
+        machine.openshift.io/cluster-api-machineset: ${infra_name}-metal-worker-us-east-1c
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+    spec:
+      providerSpec:
+        value:
+          apiVersion: machine.openshift.io/v1beta1
+          kind: AWSMachineProviderConfig
+          metadata: {}
+          userDataSecret:
+            name: worker-user-data
+          placement:
+            availabilityZone: us-east-1c
+            region: us-east-1
+          credentialsSecret:
+            name: aws-cloud-credentials
+          instanceType: m6id.metal
+          blockDevices:
+            - ebs:
+                encrypted: true
+                iops: 0
+                kmsKey:
+                  arn: ''
+                volumeSize: 120
+                volumeType: gp3
+          securityGroups:
+            - filters:
+                - name: 'tag:Name'
+                  values:
+                    - ${infra_name}-worker-sg
+          tags:
+            - name: kubernetes.io/cluster/${infra_name}
+              value: owned
+          metadataServiceOptions: {}
+          deviceIndex: 0
+          ami:
+            id: ami-017fe5c9fac0d4064
+          subnet:
+            filters:
+              - name: 'tag:Name'
+                values:
+                  - ${infra_name}-private-us-east-1c
+          iamInstanceProfile:
+            id: ${infra_name}-worker-profile
