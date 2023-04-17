@@ -4,5 +4,5 @@ metadata:
   name: minio-root-creds
 type: Opaque
 stringData:
-  accesskey: UziH93R6TtIV6c0H
-  secretkey: tmFeAFmA94I0E1yXHHS9Wq6BKb2pXNli
+  accesskey: ${USER_ACCESS_KEY_ID}
+  secretkey: ${USER_SECRET_ACCESS_KEY}

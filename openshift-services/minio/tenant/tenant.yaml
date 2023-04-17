@@ -1,7 +1,8 @@
+# https://github.com/minio/operator/blob/master/docs/tenant_crd.adoc
 apiVersion: minio.min.io/v2
 kind: Tenant
 metadata:
-  name: tenant0
+  name: tenant-1
   labels:
     app: minio
 spec:
@@ -9,7 +10,7 @@ spec:
   credsSecret:
     name: minio-root-creds
   users:
-    - name: minio-user
+    - name: minio-tenant
   configuration:
     name: minio-tenant-config
   requestAutoCert: true
@@ -17,18 +18,12 @@ spec:
     bucketDNS: false
     domains: {}
   podManagementPolicy: Parallel
-  env: []
+  buckets:
+    - name: loki-data
   pools:
-    - servers: 4
-      name: pool-0
+    - name: pool-0
+      servers: 4
       volumesPerServer: 4
-      nodeSelector: {}
-      tolerations: []
-      affinity:
-        nodeAffinity: {}
-        podAffinity: {}
-        podAntiAffinity: {}
-      resources: {}
       volumeClaimTemplate:
         apiVersion: v1
         kind: persistentvolumeclaims

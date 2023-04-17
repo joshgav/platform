@@ -18,4 +18,5 @@
 
 - https://docs.openshift.com/container-platform/4.12/logging/cluster-logging.html
 - https://loki-operator.dev/
+- https://loki-operator.dev/docs/api.md/
 - https://github.com/grafana/loki/tree/main/operator

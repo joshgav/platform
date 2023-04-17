@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: minio-tenant-1
+resources:
+- namespace.yaml
+- tenant-config-secret.yaml
+- root-creds-secret.yaml
+- tenant-creds-secret.yaml
+- tenant.yaml
