@@ -28,9 +28,33 @@ rosa create ocm-role --admin --yes --mode=auto
 rosa create user-role        --yes --mode=auto
 # create OpenShift-related roles
 rosa create account-roles    --yes --mode=auto
-# create cluster
-rosa create cluster --sts --cluster-name "${cluster_name}" --mode=auto --yes --watch
-# create admin user
+
+rosa create oidc-config --managed --yes --mode=auto
+oidc_config_id=$(rosa list oidc-config -ojson | jq -r '.[0].id')
+
+## TODO: automate getting installer role ARN
+installer_role_arn='arn:aws:iam::115308582586:role/ManagedOpenShift-Installer-Role'
+operator_roles_prefix=${cluster_name}-abcd
+rosa create operator-roles --mode=auto --yes \
+    --hosted-cp \
+    --installer-role-arn "${installer_role_arn}" \
+    --oidc-config-id ${oidc_config_id} \
+    --prefix ${operator_roles_prefix}
+
+pushd ${this_dir}/tf
+terraform plan -out rosa.plan -var aws_region=${AWS_REGION} -var cluster_name=${cluster_name}
+terraform apply rosa.plan
+public_subnet_id=$(terraform output -raw cluster-public-subnet)
+private_subnet_id=$(terraform output -raw cluster-private-subnet)
+popd
+
+rosa create cluster --cluster-name "${cluster_name}" --mode=auto --yes \
+    --sts \
+    --hosted-cp \
+    --operator-roles-prefix ${operator_roles_prefix} \
+    --subnet-ids "${public_subnet_id},${private_subnet_id}" \
+    --oidc-config-id ${oidc_config_id}
+
 rosa create admin --cluster "${cluster_name}" --yes
 
 cluster_json=$(rosa list clusters --output json | jq -r ".[] | select( .name | match(\"${cluster_name}\") )")
