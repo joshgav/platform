@@ -1,8 +1,8 @@
 # schema: https://github.com/openshift/installer/blob/master/pkg/types/installconfig.go
 apiVersion: v1
 metadata:
-  name: ${CLUSTER_NAME}
-baseDomain: ${BASE_DOMAIN}
+  name: ${OPENSHIFT_CLUSTER_NAME}
+baseDomain: ${OPENSHIFT_BASE_DOMAIN}
 controlPlane:
   architecture: amd64
   hyperthreading: Enabled
@@ -20,7 +20,7 @@ compute:
     aws:
       defaultMachinePlatform:
         type: m6i.4xlarge
-  replicas: 5
+  replicas: 3
 networking:
   networkType: OVNKubernetes
   clusterNetwork:
