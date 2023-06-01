@@ -1,7 +1,7 @@
 commonAnnotations:
   app.openshift.io/connects-to: >-
-    [{"apiVersion":"postgresql.k8s.enterprisedb.io/v1","kind":"Cluster","name":"${bs_app_name}-backstage-pgcluster"}]
-  app.openshift.io/vcs-uri: 'https://github.com/joshgav/backstage1'
+    [{"apiVersion":"postgresql.cnpg.io/v1","kind":"Cluster","name":"${bs_app_name}-backstage-pgcluster"}]
+  app.openshift.io/vcs-uri: 'https://github.com/joshgav/bs1'
 backstage:
   image:
     registry: quay.io

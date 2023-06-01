@@ -144,3 +144,6 @@ ocm:
   hub:
     name: local
     url: https://kubernetes.default.svc/
+
+argocd:
+  baseUrl: https://openshift-gitops-server-openshift-gitops.${openshift_ingress_domain}/

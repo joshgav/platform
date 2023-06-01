@@ -4,11 +4,10 @@ metadata:
   name: spring-apiserver
   description: A basic API server in Spring.
   annotations:
-    backstage.io/kubernetes-namespace: app
+    backstage.io/kubernetes-namespace: spring-apiserver
     backstage.io/kubernetes-label-selector: app=spring-apiserver
     backstage.io/techdocs-ref: dir:.
-    argocd/app-name: app-apiserver
-    github.com/project-slug: joshgav/spring-apiserver
+    argocd/app-name: spring-apiserver
     quay.io/repository-slug: joshgav/spring-apiserver
 spec:
   type: service

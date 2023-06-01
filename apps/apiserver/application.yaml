@@ -31,4 +31,4 @@ spec:
       kind: Deployment
       name: spring-apiserver
       jqPathExpressions:
-        - '.spec.template.spec.containers[].image'
+        - '.spec.template.spec.containers[0].image'
