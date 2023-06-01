@@ -15,7 +15,6 @@ oc adm policy -n ${namespace} add-scc-to-user --serviceaccount console-sa nonroo
 
 # deploy tenant
 tenant_namespace=minio-tenant-1
-ensure_namespace ${tenant_namespace}
-oc config set-context --current --namespace ${tenant_namespace}
+ensure_namespace ${tenant_namespace} true
 oc adm policy -n ${tenant_namespace} add-scc-to-user --serviceaccount default nonroot-v2
 apply_kustomize_dir ${this_dir}/tenant
