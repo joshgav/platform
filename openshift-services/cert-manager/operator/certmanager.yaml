@@ -11,7 +11,7 @@ spec:
     controller:
       args:
         - "--v=2"
-        - "--cluster-resource-namespace=openshift-cert-manager"
+        - "--cluster-resource-namespace=cert-manager"
         - "--leader-election-namespace=kube-system"
         - "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"
         - "--dns01-recursive-nameservers-only"
