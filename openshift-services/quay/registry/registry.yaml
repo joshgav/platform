@@ -12,8 +12,6 @@ spec:
         managed: true
       - kind: redis
         managed: true
-      - kind: horizontalpodautoscaler
-        managed: true
       - kind: route
         managed: true
       - kind: mirror
@@ -26,3 +24,5 @@ spec:
         managed: true
       - kind: clairpostgres
         managed: true
+      - kind: horizontalpodautoscaler
+        managed: false
