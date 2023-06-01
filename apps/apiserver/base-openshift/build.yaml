@@ -16,7 +16,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        namespace: app
+        namespace: spring-apiserver
         name: 's2i-openjdk-17:latest'
   source:
     type: Git

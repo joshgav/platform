@@ -1,6 +1,6 @@
 # upstream uses different Group
 # apiVersion: postgresql.cnpg.io/v1
-apiVersion: postgresql.k8s.enterprisedb.io/v1
+apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: apiserver-dbcluster

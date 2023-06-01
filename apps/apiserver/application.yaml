@@ -1,14 +1,19 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spring-apiserver
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-apiserver
+  name: spring-apiserver
   namespace: ${argocd_namespace}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: argo-app
+    namespace: spring-apiserver
     server: https://kubernetes.default.svc
   project: default
   source:
@@ -27,8 +32,3 @@ spec:
       name: spring-apiserver
       jqPathExpressions:
         - '.spec.template.spec.containers[].image'
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: argo-app
