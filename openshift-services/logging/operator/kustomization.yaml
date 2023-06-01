@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
 - namespaces.yaml
 - operatorgroups.yaml
-- elasticsearch-operator.yaml
+# - elasticsearch-operator.yaml
 - lokistack-operator.yaml
 - logging-operator.yaml

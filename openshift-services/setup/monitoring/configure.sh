@@ -1,12 +1,8 @@
 #! /usr/bin/env bash
 
-kubectl apply -f - <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cluster-monitoring-config
-  namespace: openshift-monitoring
-data:
-  config.yaml: |
-    enableUserWorkload: true
-EOF
+this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+root_dir=$(cd ${this_dir}/../../.. && pwd)
+if [[ -e "${root_dir}/.env" ]]; then source "${root_dir}/.env"; fi
+if [[ -e "${this_dir}/.env" ]]; then source "${this_dir}/.env"; fi
+
+kustomize build ${this_dir}/configuration | oc apply -f -
