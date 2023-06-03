@@ -1,0 +1,11 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+    name: mta-operator
+spec:
+    name: mta-operator
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+    channel: stable-v6.1
+    installPlanApproval: Automatic
