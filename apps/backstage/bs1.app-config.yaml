@@ -111,7 +111,7 @@ catalog:
       rules:
         - allow: [User, Group]
     - type: url
-      target: https://github.com/joshgav/devenv/blob/main/apps/apiserver/catalog-info.yaml
+      target: https://github.com/joshgav/spring-apiserver/blob/main/backstage-catalog-info.yaml
     # Janus (Red Hat) templates
     - type: url
       target: https://github.com/janus-idp/software-templates/blob/main/showcase-templates.yaml
