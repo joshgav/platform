@@ -6,33 +6,49 @@ if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 cluster_name=${CLUSTER_NAME:-rosa1}
 
+function create_cluster () {
+    local cluster_name=${1}
+
+    role_prefix=${cluster_name}
+
+    echo "INFO: create ocm-role --admin"
+    rosa create ocm-role --admin --yes --mode=auto
+
+    echo "INFO: create user-role"
+    rosa create user-role        --yes --mode=auto
+
+    echo "INFO: create account-roles"
+    rosa create account-roles --prefix ${role_prefix} --yes --mode=auto
+
+    echo "INFO: create cluster"
+    rosa create cluster --sts --cluster-name "${cluster_name}" --mode=auto --yes --watch
+}
+
 echo "INFO: Verify login to AWS"
 aws sts get-caller-identity
 
 echo "INFO: Verify login to RH OCM"
-# rosa login --token="${REDHAT_ACCOUNT_TOKEN}"
+rosa login --env production \
+    --token="${REDHAT_ACCOUNT_TOKEN}"
 rosa whoami
 
 echo "INFO: check for existing cluster named ${cluster_name}"
 cluster_json=$(rosa list clusters --output json | jq -r ".[] | select( .name | match(\"${cluster_name}\") )")
 if [[ -n ${cluster_json} ]]; then
-    echo "WARNING: found existing cluster named ${cluster_name}, exiting"
-    exit 3
+    echo "WARNING: found existing cluster named ${cluster_name}, skipping 'create' commands"
 else
     echo "INFO: cluster not found, creating now"
+    create_cluster "${cluster_name}"
 fi
 
-# bind RHOCM to current AWS account
-rosa create ocm-role --admin --yes --mode=auto
-# bind RHOCM user to current AWS account
-rosa create user-role        --yes --mode=auto
-# create OpenShift-related roles
-rosa create account-roles    --yes --mode=auto
-# create cluster
-rosa create cluster --sts --cluster-name "${cluster_name}" --mode=auto --yes --watch
-# create admin user
-rosa create admin --cluster "${cluster_name}" --yes
+if [[ -n "${RECREATE_CLUSTER_ADMIN}" ]]; then
+    echo "INFO: resetting admin user"
+    # OR'ed with true so as not to exit on error if admin has not yet been created
+    rosa delete admin --cluster "${cluster_name}" --yes || true
+    rosa create admin --cluster "${cluster_name}" --yes
+fi
 
+echo "INFO: getting cluster info"
 cluster_json=$(rosa list clusters --output json | jq -r ".[] | select( .name | match(\"${cluster_name}\") )")
 
 api_url=$(echo "${cluster_json}" | jq -r '.api.url')
