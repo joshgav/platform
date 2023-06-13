@@ -46,6 +46,8 @@ if [[ -n "${RECREATE_CLUSTER_ADMIN}" ]]; then
     # OR'ed with true so as not to exit on error if admin has not yet been created
     rosa delete admin --cluster "${cluster_name}" --yes || true
     rosa create admin --cluster "${cluster_name}" --yes
+else
+    echo "INFO: set RECREATE_CLUSTER_ADMIN=1 to reset cluster admin password"
 fi
 
 echo "INFO: getting cluster info"
