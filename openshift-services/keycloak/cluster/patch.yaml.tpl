@@ -2,7 +2,7 @@
     "op": "add",
     "path": "/spec/identityProviders/-",
     "value": {
-        "name": "keycloak",
+        "name": "${cluster_identity_provider_name}",
         "mappingMethod": "claim",
         "type": "OpenID",
         "openID": {

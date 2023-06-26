@@ -1,19 +1,19 @@
 apiVersion: keycloak.org/v1alpha1
 kind: KeycloakRealm
 metadata:
-  name: cluster
+  name: ${cluster_keycloak_realm_name}
   labels:
-    keycloak: cluster
-    realm: cluster
+    keycloak: ${cluster_keycloak_name}
+    realm: ${cluster_keycloak_realm_name}
 spec:
   instanceSelector:
     matchLabels:
-      keycloak: cluster
+      keycloak: ${cluster_keycloak_name}
   realm:
-    id: cluster
-    realm: cluster
+    id: ${cluster_keycloak_realm_name}
+    realm: ${cluster_keycloak_realm_name}
+    displayName: ${cluster_keycloak_realm_name}
     enabled: true
-    displayName: cluster
     identityProviders:
       - alias: github
         providerId: github
@@ -31,4 +31,4 @@ spec:
     roles:
       realm:
         - name: github-users
-          containerId: "cluster"
+          containerId: ${cluster_keycloak_realm_name}
