@@ -5,13 +5,17 @@ root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
+export openshift_ingress_domain=$(oc get ingresses.config.openshift.io cluster -ojson | jq -r .spec.domain)
+
 # RHSSO operator can only target a single namespace
 export KEYCLOAK_NAMESPACE=${1:-keycloak}
 
-echo "INFO: install operator subscription for Keycloak"
+echo "INFO: install operator subscription for Keycloak in namespace ${KEYCLOAK_NAMESPACE}"
+ensure_namespace ${KEYCLOAK_NAMESPACE} true
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready "keycloak"
 
+echo "INFO: install Keycloak instance in namespace ${KEYCLOAK_NAMESPACE}"
 export KEYCLOAK_USER_SECRET=${KEYCLOAK_USER_SECRET:-supersecret}
 apply_kustomize_dir ${this_dir}/local
 
