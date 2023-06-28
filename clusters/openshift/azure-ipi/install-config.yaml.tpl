@@ -5,10 +5,12 @@ metadata:
 baseDomain: ${OPENSHIFT_BASE_DOMAIN}
 platform:
   azure:
-    baseDomainResourceGroupName: ${AZURE_DNS_GROUP_NAME}
-    networkResourceGroupName: ${AZURE_GROUP_NAME}
     resourceGroupName: ${AZURE_GROUP_NAME}
+    baseDomainResourceGroupName: ${AZURE_GROUP_NAME_DNS}
+    # networkResourceGroupName: ${AZURE_GROUP_NAME}
     region: ${AZURE_LOCATION}
+    # _not_ a misspelling - the 'b' is small
+    outboundType: Loadbalancer
 pullSecret: '${OPENSHIFT_PULL_SECRET}'
 sshKey: '${SSH_PUBLIC_KEY}'
 publish: External

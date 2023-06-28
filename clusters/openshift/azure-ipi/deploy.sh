@@ -5,25 +5,12 @@ root_dir=$(cd ${this_dir}/../../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 
-az ad signed-in-user show &> /dev/null
-if [[ $? != 0 ]]; then
-    echo "[WARNING]: init script cannot be run as a service principal"
-else
-    source ${this_dir}/init.sh
-fi
-
-az group show --name ${azure_group_name} -o none 2> /dev/null
-if [[ $? == 3 ]]; then
-    echo "[INFO] creating resource group ${azure_group_name}"
-    az group create --location "${azure_location}" --name ${azure_group_name} --output table
-fi
-
 ssh_key_path=${root_dir}/.ssh
 mkdir -p "${ssh_key_path}"
-
 if [[ ! -e "${ssh_key_path}/id_rsa" ]]; then
     ssh-keygen -t rsa -b 4096 -C "user@openshift" -f "${ssh_key_path}/id_rsa" -N ''
 fi
+export SSH_PUBLIC_KEY="$(cat ${ssh_key_path}/id_rsa.pub)"
 
 # set up workdir
 workdir=${this_dir}/_workdir
@@ -39,7 +26,6 @@ else
     mkdir -p "${workdir}"
 fi
 
-export SSH_PUBLIC_KEY="$(cat ${ssh_key_path}/id_rsa.pub)"
 cat ${this_dir}/install-config.yaml.tpl | envsubst 1> ${workdir}/install-config.yaml
 
 openshift-install create cluster --dir ${workdir} --log-level debug
