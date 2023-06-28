@@ -2,7 +2,8 @@
 
 ### Prerequisites
 
-- Azure account (aka subscription) with Owner access (TODO: is Contributor sufficient?)
+- Azure account (aka subscription) with permission to create a service account
+  with 'Contributor' and 'User Access Administrator' privileged (tenant) roles.
 - DNS zone for OpenShift base domain in Azure (see [this doc](https://docs.openshift.com/container-platform/4.12/installing/installing_azure/installing-azure-account.html#installation-azure-network-config_installing-azure-account))
 - Ensure sufficient resource quotas in your target Azure region, particularly
 for vCPUs. You can do this in the Azure portal [here](https://portal.azure.com/#view/Microsoft_Azure_Capacity/QuotaMenuBlade/~/myQuotas).
@@ -21,10 +22,11 @@ To destroy the cluster, run `openshift-install destroy cluster --dir ./_workdir/
 
 ## Notes
 
+- A tenant in Azure is related to Azure's directory, Azure Active Directory. A tenant can be associated with many subscriptions.
+- A subscription is the top-level container in Azure Resource Manager. Billing is applied to subscriptions. A subscription can contain many resource groups. A subscription can also be part of a management group, which is a container of subscriptions (introduced _after_ subscriptions).
 - This process is based on the docs here:
   - Prerequisites: <https://docs.openshift.com/container-platform/4.12/installing/installing_azure/installing-azure-account.html>
   - Installation: <https://docs.openshift.com/container-platform/4.12/installing/installing_azure/installing-azure-default.html>
-- `deploy.sh` calls `init.sh` but it's best to call `init.sh` first on its own to be sure a service principal is ready for use
 - Commands to delete the service principal created by `init.sh`:
 
   ```bash
