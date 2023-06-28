@@ -4,8 +4,28 @@ Install QuayRegistry operator and custom resource type, then deploy a registry.
 
 Requires ObjectBucketClaim resource type in cluster (via [Noobaa](../noobaa/)).
 
+If using noobaa on its own (i.e., not as part of ODF) modify the created
+ObjectBucketClaim `.spec.storageClassName` to `noobaa.noobaa.io` (instead of
+`openshift-storage.noobaa.io`), as follows.
+
+```yaml
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: registry-quay-datastore
+  namespace: quay
+spec:
+  additionalConfig:
+    bucketclass: noobaa-default-bucket-class
+  bucketName: ''
+  generateBucketName: quay-datastore
+  storageClassName: noobaa.noobaa.io
+```
+
 ## Notes
 
+- To configure short names: https://docs.openshift.com/container-platform/4.10/openshift_images/image-configuration.html#images-configuration-shortname_image-configuration
+- To update the global pull secret: https://docs.openshift.com/container-platform/4.10/openshift_images/managing_images/using-image-pull-secrets.html#images-update-global-pull-secret_using-image-pull-secrets
 - Use the special "config editor" route to update Quay config in a web form.
 - For "super user" access in the web portal, create a new account via the main Quay route/site and add that account as a "super user" in Quay config.
 - TODO: automate creating a user account and adding it as a super user.
