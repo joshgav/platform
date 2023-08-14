@@ -3,4 +3,9 @@ apiVersion: operator.open-cluster-management.io/v1
 kind: MultiClusterHub
 metadata:
   name: multiclusterhub
-spec: {}
+spec:
+  availabilityConfig: High
+  overrides:
+    components:
+    - name: hypershift-preview
+      enabled: true
