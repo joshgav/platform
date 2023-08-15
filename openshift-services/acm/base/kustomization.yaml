@@ -1,5 +1,4 @@
+namespace: open-cluster-management
 resources:
 - hub.yaml
-- clusterset.yaml
-
-namespace: open-cluster-management
+# - clusterset.yaml
