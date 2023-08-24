@@ -1,0 +1,13 @@
+apiVersion: platform.stackrox.io/v1alpha1
+kind: Central
+metadata:
+  name: stackrox-central-services
+  namespace: rhacs-operator
+spec:
+  central:
+    exposure:
+      route:
+        enabled: true
+    persistence:
+        persistentVolumeClaim:
+        size: 100GB
