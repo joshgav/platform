@@ -1,0 +1,161 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-acs-secured-cluster
+  namespace: stackrox-managed
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-namespaces
+        spec:
+          remediationAction: inform
+          severity: high
+          namespaceSelector:
+            include:
+            - stackrox
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: stackrox
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: rhacs-operator
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: rhacs-operator-group
+                  namespace: rhacs-operator
+                spec: {}
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-operator
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: Subscription
+                metadata:
+                  name: rhacs-operator
+                  namespace: rhacs-operator
+                spec:
+                  channel: stable
+                  installPlanApproval: Automatic
+                  name: rhacs-operator
+                  source: redhat-operators
+                  sourceNamespace: openshift-marketplace
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-secrets
+        spec:
+          remediationAction: inform
+          severity: high
+          namespaceSelector:
+            include:
+            - stackrox
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                type: Opaque
+                metadata:
+                  name: admission-control-tls
+                  namespace: stackrox
+                data:
+                  admission-control-cert.pem: '{{hub fromSecret "" "admission-control-tls" "admission-control-cert.pem" hub}}'
+                  admission-control-key.pem: '{{hub fromSecret "" "admission-control-tls" "admission-control-key.pem" hub}}'
+                  ca.pem: '{{hub fromSecret "" "admission-control-tls" "ca.pem" hub}}'
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                type: Opaque
+                metadata:
+                  name: collector-tls
+                  namespace: stackrox
+                data:
+                  collector-cert.pem: '{{hub fromSecret "" "collector-tls" "collector-cert.pem" hub}}'
+                  collector-key.pem: '{{hub fromSecret "" "collector-tls" "collector-key.pem" hub}}'
+                  ca.pem: '{{hub fromSecret "" "collector-tls" "ca.pem" hub}}'
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                type: Opaque
+                metadata:
+                  name: sensor-tls
+                  namespace: stackrox
+                data:
+                  sensor-cert.pem: '{{hub fromSecret "" "sensor-tls" "sensor-cert.pem" hub}}'
+                  sensor-key.pem: '{{hub fromSecret "" "sensor-tls" "sensor-key.pem" hub}}'
+                  ca.pem: '{{hub fromSecret "" "sensor-tls" "ca.pem" hub}}'
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: platform.stackrox.io/v1alpha1
+                kind: SecuredCluster
+                metadata:
+                  name: stackrox-secured-cluster-services
+                  namespace: stackrox
+                spec:
+                  clusterName: |
+                    {{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}
+                  centralEndpoint: |
+                    central-stackrox.{{hub (lookup "config.openshift.io/v1" "Ingress" "" "cluster").spec.domain hub}}:443
+                  perNode:
+                    collector:
+                      collection: EBPF
+                      imageFlavor: Regular
+                    taintToleration: TolerateTaints
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-acs-secured-cluster
+  namespace: stackrox-managed
+placementRef:
+  name: placement-acs-secured-cluster
+  kind: Placement
+  apiGroup: cluster.open-cluster-management.io
+subjects:
+- name: policy-acs-secured-cluster
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: placement-acs-secured-cluster
+  namespace: stackrox-managed
+spec:
+  clusterSets:
+  - global
+  predicates: []
