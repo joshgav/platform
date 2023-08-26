@@ -1,12 +1,5 @@
 # OpenShift Logging Subsystem
 
-## For Lokistack and Vector
-
-- Provision an S3 bucket and specify its URL, access key ID and secret in `.env`.
-- In `deploy.sh` set `logging_stack=loki` then run `./deploy.sh`
-- Copy TLS secret from `minio-tenant-1` tenant namespace, secret `tenant-1-tls` to a ConfigMap in `openshift-logging` namespace named `tenant-1-tls` as key name `tls.crt`.
-- Enable the console plugin in the OpenShift ClusterLogging resource.
-
 ## For ELK
 
 - In `deploy.sh` set `logging_stack=elk`
