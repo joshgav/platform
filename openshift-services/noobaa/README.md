@@ -6,8 +6,14 @@ It also provides an S3 API to consumers.
 
 ## Usage
 
-1. Install or update the `noobaa` CLI by using commands in `[install.sh](./install.sh)`
-1. Run `deploy.sh`, which will install the noobaa operator, create a PV-backed BackingStore and override the default BucketClass to use it.
+1. Install `noobaa` CLI with `install-cli.sh`.
+1. Run `deploy.sh`. It does the following:
+    - installs the noobaa operator
+    - configures the default `noobaa` resource
+    - creates a 1TB PVC-backed BackingStore as the default backing store
+    - creates a default bucket class
+
+Upgrade to the latest images using the `upgrade.sh` script.
 
 ## Tips
 
@@ -21,4 +27,3 @@ export AWS_ENDPOINT_URL=$(oc get noobaas noobaa -ojson | jq -r '.status.services
 aws s3 --endpoint-url "${AWS_ENDPOINT_URL}" ls
 ```
 
-- Upgrading Noobaa: <https://github.com/noobaa/noobaa-operator/issues/171#issuecomment-847759757>

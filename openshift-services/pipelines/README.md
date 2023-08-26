@@ -1,5 +1,7 @@
 ## OpenShift Pipelines
 
+- Add a repository 
+
 ## Resources
 
 - Pipelines as Code

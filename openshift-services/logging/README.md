@@ -1,8 +1,12 @@
 # OpenShift Logging Subsystem
 
+## Usage
+
+1. Requires [noobaa](../noobaa/) in the cluster.
+1. Run `./deploy.sh`
+
 ## For ELK
 
-- In `deploy.sh` set `logging_stack=elk`
 - After install you must configure indices in Kibana as documented here: <https://docs.openshift.com/container-platform/4.12/logging/cluster-logging-deploying.html#cluster-logging-visualizer-indices_cluster-logging-deploying>, illustrations follow:
 
     ![Kibana Create Index](./assets/kibana-create-index-01.png)
