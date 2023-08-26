@@ -9,5 +9,5 @@ spec:
   placementPolicy:
     tiers:
     - backingStores:
-      - noobaa-pv
+      - noobaa-default-backing-store
       placement: Spread

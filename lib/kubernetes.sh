@@ -187,3 +187,10 @@ function ensure_helm_repo {
     fi
     helm repo add --force-update "${name}" "${url}"
 }
+
+# get_cluster_name determines the cluster name part of the ingress domain by stripping
+#                  "apps." from the start and the baseDomain from the end of the ingress domain
+function get_cluster_name {
+    oc get ingresses.config.openshift.io cluster -ojson | jq -r '.spec.domain' | \
+        sed 's/^apps\.//' | sed "s/\.${OPENSHIFT_BASE_DOMAIN}//"
+}
