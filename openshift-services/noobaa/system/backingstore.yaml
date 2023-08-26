@@ -1,15 +1,15 @@
 apiVersion: noobaa.io/v1alpha1
 kind: BackingStore
 metadata:
-  name: noobaa-pv
+  name: noobaa-default-backing-store
   namespace: noobaa
   finalizers:
   - noobaa.io/finalizer
 spec:
+  type: pv-pool
   pvPool:
     numVolumes: 10
     resources:
       requests:
-        storage: 40Gi
+        storage: 100Gi
     storageClass: gp3-csi
-  type: pv-pool

@@ -14,10 +14,14 @@ while [[ ${ready} != 0 ]]; do
     if [[ ${ready} != 0 ]]; then sleep 2; else echo "INFO: CRD ready"; fi
 done
 
-echo "INFO: awaiting readiness of operator"
-kubectl wait --timeout=90s --for=condition=Available deployment.apps cert-manager \
-    --namespace cert-manager
-echo "INFO: operator ready"
+ready=1
+while [[ ${ready} != 0 ]]; do
+    echo "INFO: awaiting readiness of operator"
+    kubectl wait --timeout=90s --for=condition=Available deployment.apps cert-manager \
+        --namespace cert-manager
+    ready=$?
+    if [[ ${ready} != 0 ]]; then sleep 2; else echo "INFO: operator ready"; fi
+done
 
 echo "INFO: configure default certmanager"
 kubectl apply -f ${this_dir}/operator/certmanager.yaml

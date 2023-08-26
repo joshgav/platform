@@ -3,12 +3,17 @@
 this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
 root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
+source ${root_dir}/lib/kubernetes.sh
 source ${root_dir}/lib/aws.sh
 
 ${this_dir}/deploy-operator.sh
 
+export OPENSHIFT_CLUSTER_NAME=$(get_cluster_name)
+echo "INFO: setting up cert-manager for domain ${OPENSHIFT_CLUSTER_NAME}.${OPENSHIFT_BASE_DOMAIN}"
+
 echo "INFO: finding Route53 zone ID for ${OPENSHIFT_BASE_DOMAIN}"
 export ROUTE53_ZONE_ID=$(hosted_zone_id "${OPENSHIFT_BASE_DOMAIN}.")
+echo "INFO: using zone ID ${ROUTE53_ZONE_ID}"
 
 echo "INFO: prerender manifests"
 for file in $(dir ${this_dir}/aws/*.yaml.tpl); do 
