@@ -7,5 +7,5 @@ spec:
     name: ansible-automation-platform-operator
     source: redhat-operators
     sourceNamespace: openshift-marketplace
-    channel: stable-2.3-cluster-scoped
+    channel: stable-2.4-cluster-scoped
     installPlanApproval: Automatic

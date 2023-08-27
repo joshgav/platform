@@ -2,7 +2,7 @@
 
 ## Use
 
-- Create an S3 bucket and set its access key ID and secret, endpoint and name in `.env`. (Required for Hub.)
+- Depends on [noobaa](../noobaa/)
 - Run `deploy.sh` to deploy operators and operands.
 
 ## Resources
