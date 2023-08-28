@@ -16,3 +16,9 @@ echo "INFO: install acm operator"
 create_subscription ${operator_name} ${operator_namespace}
 
 kustomize build ${this_dir}/base | oc apply -f -
+
+oc get argocds.argoproj.io -n openshift-gitops openshift-gitops &> /dev/null
+if [[ $? == 0 ]]; then
+    echo "INFO: binding ACM to hub cluster's ArgoCD instance"
+    kustomize build ${this_dir}/argocd | oc apply -f -
+fi
