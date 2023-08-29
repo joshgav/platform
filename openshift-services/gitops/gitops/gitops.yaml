@@ -4,20 +4,26 @@ metadata:
   name: openshift-gitops
   namespace: openshift-gitops
 spec:
-  controller: {}
-  dex:
-    openShiftOAuth: true
+  extraConfig:
+    # allows admins to generate API keys
+    accounts.admin: apiKey
+  controller:
+    appSync: 60s
   ha:
     enabled: false
+  monitoring:
+    enabled: true
   rbac:
-    defaultPolicy: ""
+    defaultPolicy: "read-only"
     policy: "g, system:cluster-admins, role:admin\n"
     scopes: "[groups]"
-  redis: {}
-  repo: {}
   server:
     route:
       enabled: true
       tls:
         termination: reencrypt
         insecureEdgeTerminationPolicy: Redirect
+  sso:
+    provider: dex
+    dex:
+      openShiftOAuth: true
