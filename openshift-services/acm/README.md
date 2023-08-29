@@ -3,6 +3,9 @@
 - Deploy ACM using `./deploy-acm.sh`
 - Deploy a cluster with a hosted control planes using `./deploy-hcp-cluster.sh`
 
+## ArgoCD Integration
+- https://argocd-applicationset.readthedocs.io/en/stable/Generators-Cluster-Decision-Resource/
+
 ## Resources
 - Docs: https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/clusters/index#hosted-control-planes-intro
 - Control plane: https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/clusters/index#hosting-service-cluster-configure-aws

@@ -1,26 +1,15 @@
 # Quay
 
-Install QuayRegistry operator and custom resource type, then deploy a registry.
+Installs QuayRegistry operator and custom resource type, then deploys a registry.
 
 Requires ObjectBucketClaim resource type in cluster (via [Noobaa](../noobaa/)).
 
-If using noobaa on its own (i.e., not as part of ODF) modify the created
-ObjectBucketClaim `.spec.storageClassName` to `noobaa.noobaa.io` (instead of
-`openshift-storage.noobaa.io`), as follows.
-
-```yaml
-apiVersion: objectbucket.io/v1alpha1
-kind: ObjectBucketClaim
-metadata:
-  name: registry-quay-datastore
-  namespace: quay
-spec:
-  additionalConfig:
-    bucketclass: noobaa-default-bucket-class
-  bucketName: ''
-  generateBucketName: quay-datastore
-  storageClassName: noobaa.noobaa.io
-```
+This directory deploys object storage manually; i.e., `managed: false` is set on
+the `objectstorage` component. It uses Noobaa alone rather than OCS/ODF. The
+main difference is that the `storageClassName` in the ObjectBucketClaim is
+`noobaa.noobaa.io` rather than `openshift-storage.noobaa.io`. Because object
+storage is configured manually the config must also be set manually to include
+bucket metadata and secrets.
 
 ## Notes
 
@@ -33,3 +22,4 @@ spec:
 ## Resources
 
 - https://github.com/quay/quay-operator
+- Quay configuration: <https://docs.projectquay.io/deploy_quay_on_openshift_op_tng.html>
