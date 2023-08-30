@@ -2,6 +2,7 @@
 
 - Deploy ACM using `./deploy-acm.sh`
 - Deploy a cluster with a hosted control planes using `./deploy-hcp-cluster.sh`
+- Deploy MultiCluster Observability using `./deploy-observability.sh`. It requires [noobaa](../noobaa/).
 
 ## ArgoCD Integration
 - https://argocd-applicationset.readthedocs.io/en/stable/Generators-Cluster-Decision-Resource/
