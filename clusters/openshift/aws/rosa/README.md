@@ -1,6 +1,12 @@
 # Red Hat OpenShift on AWS (ROSA)
 
-Provision [Red Hat OpenShift Service on AWS (ROSA)](https://aws.amazon.com/rosa/) instances.
+Provision [Red Hat OpenShift Service on AWS (ROSA)](https://console.aws.amazon.com/rosa/home) instances.
+
+Enable in AWS at <https://console.aws.amazon.com/rosa/home#/get-started>
+
+Enable in Red Hat at <https://console.redhat.com/connect/aws>
+
+Follow guide at <https://docs.aws.amazon.com/ROSA/latest/userguide/getting-started-hcp.html>
 
 Manage clusters at <https://console.redhat.com/openshift>.
 
