@@ -6,13 +6,17 @@ if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 cluster_name=${CLUSTER_NAME:-rosa1}
 
-echo "INFO: deploying VPC using Terraform"
-${this_dir}/deploy-vpc.sh
+# echo "INFO: deploying VPC using Terraform"
+# ${this_dir}/deploy-vpc.sh
+# pushd ${this_dir}/tf
+# export SUBNET_IDS=$(terraform output -raw cluster-subnets-string)
+# popd
 
-pushd ${this_dir}/tf
-export SUBNET_IDS=$(terraform output -raw cluster-subnets-string)
-popd
-echo "INFO: Subnet IDs as deployed by Terraform: ${SUBNET_IDS}"
+echo "INFO: getting subnet IDs by tag:Name"
+subnet_public=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-public" --query "Subnets[0].SubnetId" --output text)
+subnet_private=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-private" --query "Subnets[0].SubnetId" --output text)
+export SUBNET_IDS="${subnet_public},${subnet_private}"
+echo "INFO: Subnet IDs: ${SUBNET_IDS}"
 
 echo "INFO: Verify login to AWS"
 aws sts get-caller-identity
@@ -24,8 +28,8 @@ fi
 # https://console.redhat.com/openshift/token/rosa/
 echo "INFO: Verify login to RH OCM"
 # re `--env` see https://github.com/openshift/rosa/blob/master/pkg/ocm/config.go
-# rosa login --env production --token="${REDHAT_ACCOUNT_TOKEN}"
-rosa login --env staging --token="${REDHAT_ACCOUNT_TOKEN}"
+# rosa login --env staging --token="${REDHAT_ACCOUNT_TOKEN}"
+rosa login --env production --token="${REDHAT_ACCOUNT_TOKEN}"
 if [[ $? != 0 ]]; then
     echo "ERROR: invalid Red Hat credentials; could not call RH Console APIs"
     exit 2
@@ -50,6 +54,7 @@ if [[ "null" == "${oidc_config_id}" ]]; then
     oidc_config_id=$(rosa list oidc-config -ojson | jq -r '.[0].id')
 fi
 echo "INFO: using oidc-config with ID ${oidc_config_id}"
+
 
 installer_role=$(rosa list account-roles --output json | jq -r '.[] | select(.RoleType == "Installer")')
 installer_role_arn=$(echo "${installer_role}" | jq -r '.RoleARN' | grep HCP)
