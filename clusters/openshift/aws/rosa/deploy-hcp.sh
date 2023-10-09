@@ -6,6 +6,12 @@ if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 cluster_name=${CLUSTER_NAME:-rosa1}
 
+# # check instance types
+# rosa list instances-types
+#
+# aws ec2 describe-instance-type-offerings --location-type availability-zone \
+#     --filters "Name=location,Values=${aws_az}" --region ${aws_region} --output text
+
 # echo "INFO: deploying VPC using Terraform"
 # ${this_dir}/deploy-vpc-tf.sh
 # pushd ${this_dir}/tf
@@ -16,9 +22,9 @@ echo "INFO: deploy VPC via AWS CLI"
 ${this_dir}/deploy-vpc-cli.sh
 
 echo "INFO: getting subnet IDs by tag:Name"
-subnet_public=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-public" --query "Subnets[0].SubnetId" --output text)
-subnet_private=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-private" --query "Subnets[0].SubnetId" --output text)
-export SUBNET_IDS="${subnet_public},${subnet_private}"
+subnets_public=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-public" --query "Subnets[].SubnetId" --output json)
+subnets_private=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-private" --query "Subnets[].SubnetId" --output json)
+export SUBNET_IDS=$(echo "${subnets_public}" | jq -r ". + ${subnets_private} | join(\",\")")
 echo "INFO: Subnet IDs: ${SUBNET_IDS}"
 
 echo "INFO: Verify login to AWS"
@@ -48,7 +54,7 @@ else
     echo "INFO: cluster not found, creating now"
 fi
 
-rosa create account-roles --hosted-cp --force-policy-creation --prefix ManagedOpenShift --yes
+rosa create account-roles --hosted-cp --force-policy-creation --prefix ManagedOpenShift --yes --mode=auto --interactive=false
 
 oidc_config_id=$(rosa list oidc-config -ojson | jq -r '.[0].id')
 if [[ "null" == "${oidc_config_id}" ]]; then
@@ -71,12 +77,12 @@ rosa create operator-roles --hosted-cp --mode=auto --yes \
 # instance_type=m5.xlarge
 instance_type=m6i.4xlarge
 rosa create cluster --cluster-name "${cluster_name}" --mode=auto --yes --watch \
-    --sts \
-    --hosted-cp \
+    --sts --hosted-cp \
     --operator-roles-prefix ${role_prefix} \
+    --oidc-config-id ${oidc_config_id} \
     --compute-machine-type "${instance_type}" \
     --subnet-ids "${SUBNET_IDS}" \
-    --oidc-config-id ${oidc_config_id}
+    --enable-autoscaling --min-replicas 3 --max-replicas 180
 
 rosa create admin --cluster "${cluster_name}" --yes
 

@@ -4,6 +4,9 @@ Expects to run on AWS IPI.
 
 Deploys a MachineSet using a `metal` instance type in AWS and configures VMs to run only on those machines.
 
+## Container Disks
+- https://quay.io/organization/containerdisks
+
 ## Windows
 
 Some initial attempts to get Windows VMs working.
