@@ -70,3 +70,8 @@ hypershift create cluster aws \
     --secret-creds ${aws_secret_name} \
     --region ${bucket_region} \
     --wait
+
+# hypershift destroy cluster aws \
+#   --name hcp \
+#   --namespace ${cluster_namespace} \
+#   --secret-creds ${aws_secret_name}
