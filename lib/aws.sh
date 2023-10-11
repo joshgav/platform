@@ -41,3 +41,14 @@ function subnet_id () {
     aws ec2 describe-subnets --filter "Name=tag:Name,Values=${subnet_name}" --output json | \
         jq -r '.Subnets[0].SubnetId'
 }
+
+function default_vpc_exists () {
+    local region=${1}
+
+    exists=$(false)
+
+    vpc_id=$(aws ec2 describe-vpcs --region ${region} --output json | jq -r '.Vpcs[] | select(.IsDefault == true) | .VpcId')
+    if [[ -n "${vpc_id}" ]]; then exists=$(true); fi
+
+    return ${exists}
+}

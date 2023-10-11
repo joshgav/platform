@@ -1,0 +1,27 @@
+apiVersion: meta.pkg.crossplane.io/v1alpha1
+kind: Configuration
+metadata:
+  name: configuration-rds
+  annotations:
+    meta.crossplane.io/maintainer: The Getting Started Organization <support@example.com>
+    meta.crossplane.io/source: github.com/upbound/configuration-rds
+    meta.crossplane.io/license: Apache-2.0
+    meta.crossplane.io/description: |
+      This AWS starter configuration offers PostgreSQL as a service backed by
+      RDS.
+    meta.crossplane.io/readme: |
+      This Configuration bundles an Upbound Cloud extension and an API
+      definition. The API will allow control planes to provision fully
+      configured Amazon Relational Database Service (RDS) instances, composed
+      using cloud service primitives from the [Upbound Official AWS
+      Provider](https://marketplace.upbound.io/providers/upbound/provider-aws).
+      The extension enables a hosted portal in Upbound Cloud for interacting
+      with your control plane’s APIs.
+spec:
+  crossplane:
+    version: ">=v1.12.0"
+  dependsOn:
+    - provider: xpkg.upbound.io/upbound/provider-family-aws
+      version: ">=v0.37.0"
+    - provider: xpkg.upbound.io/upbound/provider-aws-rds
+      version: ">=v0.37.0"

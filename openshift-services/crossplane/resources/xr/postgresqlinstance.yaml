@@ -1,0 +1,9 @@
+apiVersion: database.example.com/v1alpha1
+kind: PostgreSQLInstance
+metadata:
+  name: my-db
+spec:
+  parameters:
+    region: west
+    size: small
+    storage: 20

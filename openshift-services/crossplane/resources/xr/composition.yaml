@@ -1,0 +1,70 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xpostgresqlinstances.aws.database.example.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: database.example.com/v1alpha1
+    kind: XPostgreSQLInstance
+  resources:
+    - name: rdsinstance
+      base:
+        apiVersion: rds.aws.crossplane.io/v1alpha1
+        kind: DBInstance
+        spec:
+          providerConfigRef:
+            name: default
+          forProvider:
+            region: us-east-1
+            instanceClass: db.t3.micro
+            username: adminuser
+            engine: postgres
+            engineVersion: "15"
+            skipFinalSnapshot: true
+            publiclyAccessible: false
+            autoGeneratePassword: true
+            passwordSecretRef:
+              namespace: crossplane-system
+              key: password
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-postgresql"
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.forProvider.passwordSecretRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-input"
+        - fromFieldPath: "spec.parameters.region"
+          toFieldPath: "spec.forProvider.region"
+          transforms:
+          - type: map
+            map:
+              east: us-east-1
+              west: us-west-2
+        - fromFieldPath: "spec.parameters.size"
+          toFieldPath: "spec.forProvider.instanceClass"
+          transforms:
+          - type: map
+            map:
+              small: db.t3.small
+              medium: db.t3.medium
+              large: db.t3.large
+        - fromFieldPath: "spec.parameters.storage"
+          toFieldPath: "spec.forProvider.allocatedStorage"
+      connectionDetails:
+        - fromFieldPath: "status.atProvider.endpoint"
+          name: endpoint
+        - fromFieldPath: "status.atProvider.address"
+          name: host
+        - fromFieldPath: "spec.forProvider.username"
+          name: username
+        - fromConnectionSecretKey: "attribute.password"
+          name: password
