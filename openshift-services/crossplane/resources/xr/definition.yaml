@@ -1,0 +1,63 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xpostgresqlinstances.database.example.com
+spec:
+  group: database.example.com
+  names:
+    kind: XPostgreSQLInstance
+    plural: xpostgresqlinstances
+  claimNames:
+    kind: PostgreSQLInstance
+    plural: postgresqlinstances
+  connectionSecretKeys:
+    - username
+    - password
+    - endpoint
+    - host
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            description: |
+              The specification for how this PostgreSQLInstance should be
+              deployed.
+            properties:
+              parameters:
+                type: object
+                description: |
+                  The parameters indicating how this PostgreSQLInstance should
+                  be configured.
+                properties:
+                  region:
+                    type: string
+                    enum:
+                      - east
+                      - west
+                    description: |
+                      The geographic region in which this PostgreSQLInstance
+                      should be deployed.
+                  size:
+                    type: string
+                    enum:
+                      - small
+                      - medium
+                      - large
+                    description: |
+                      The machine size for this PostgreSQLInstance.
+                  storage:
+                    type: integer
+                    description: |
+                      The storage size for this PostgreSQLInstance in GB.
+                required:
+                  - region
+                  - size
+                  - storage
+            required:
+              - parameters
