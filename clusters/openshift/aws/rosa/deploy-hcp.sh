@@ -4,7 +4,12 @@ this_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 root_dir=$(cd ${this_dir}/../../../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
+
 cluster_name=${CLUSTER_NAME:-rosa1}
+echo "INFO: creating cluster named ${cluster_name} in region ${AWS_REGION}"
+
+# instance_type=m5.xlarge
+instance_type=m6i.4xlarge
 
 # # check instance types
 # rosa list instances-types
@@ -74,15 +79,13 @@ rosa create operator-roles --hosted-cp --mode=auto --yes \
     --oidc-config-id ${oidc_config_id} \
     --prefix ${role_prefix}
 
-# instance_type=m5.xlarge
-instance_type=m6i.4xlarge
 rosa create cluster --cluster-name "${cluster_name}" --mode=auto --yes --watch \
     --sts --hosted-cp \
     --operator-roles-prefix ${role_prefix} \
     --oidc-config-id ${oidc_config_id} \
     --compute-machine-type "${instance_type}" \
     --subnet-ids "${SUBNET_IDS}" \
-    --enable-autoscaling --min-replicas 3 --max-replicas 180
+    --enable-autoscaling --min-replicas 3 --max-replicas 120
 
 rosa create admin --cluster "${cluster_name}" --yes
 
