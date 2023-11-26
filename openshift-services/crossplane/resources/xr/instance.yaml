@@ -1,0 +1,9 @@
+apiVersion: databases.joshgav.com/v1alpha1
+kind: PostgreSQLInstanceClaim
+metadata:
+  name: composite
+spec:
+  parameters:
+    region: east
+    size: small
+    storage: 20

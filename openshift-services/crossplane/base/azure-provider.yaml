@@ -3,4 +3,4 @@ kind: Provider
 metadata:
   name: provider-azure
 spec:
-  package: docker.io/crossplanecontrib/provider-azure:master
+  package: xpkg.upbound.io/upbound/provider-azure:v0.38.2

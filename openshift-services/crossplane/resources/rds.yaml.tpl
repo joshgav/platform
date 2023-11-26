@@ -1,62 +1,61 @@
-apiVersion: rds.aws.crossplane.io/v1alpha1
-kind: DBInstance
+apiVersion: rds.aws.upbound.io/v1beta1
+kind: Instance
 metadata:
-  name: example-dbinstance
+  name: simple
   namespace: ${target_namespace}
 spec:
   providerConfigRef:
     name: default
+  writeConnectionSecretToRef:
+    name: dbinstance-simple-connection
+    namespace: ${target_namespace}
   forProvider:
-    region: us-west-2
     allocatedStorage: 20
+    allowMajorVersionUpgrade: true
     autoMinorVersionUpgrade: true
-    autogeneratePassword: true
+    applyImmediately: true
+    autoGeneratePassword: true
     backupRetentionPeriod: 14
-    dbInstanceClass: db.t3.micro # needs to support engine and -version (see AWS Docs: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#Concepts.DBInstanceClass.Support)
+    backupWindow: "7:00-8:00"
     dbName: apiserver
+    deleteAutomatedBackups: false
     engine: postgres
-    engineVersion: "15.2"
-    allowMajorVersionUpgrade: true # unset per default (Note: supported dbInstanceClass and dbParameterGroup with correct dbParameterGroupFamily needed, before majorVersion upgrade possible; applyImmediately matters)
-    masterUsername: adminuser
-    masterUserPasswordSecretRef:
-      key: password
-      name: example-dbinstance
+    engineVersion: "15"
+    instanceClass: db.t3.micro
+    maintenanceWindow: "Sat:8:00-Sat:11:00"
+    parameterGroupName: simple
+    passwordSecretRef:
+      name: rdsinstance-simple-master-password
       namespace: ${target_namespace}
-    preferredBackupWindow: "7:00-8:00"
-    preferredMaintenanceWindow: "Sat:8:00-Sat:11:00"
+      key: password
     publiclyAccessible: false
+    region: ${AWS_REGION}
     skipFinalSnapshot: true
     storageEncrypted: false
-    storageType: gp2
-    dbParameterGroupName: example-dbparametergroup
-    applyImmediately: true
-    deleteAutomatedBackups: false # default is true
-  writeConnectionSecretToRef:
-    name: example-dbinstance-out
-    namespace: ${target_namespace}
+    storageType: gp3
+    username: adminuser
 ---
-apiVersion: rds.aws.crossplane.io/v1alpha1
-kind: DBParameterGroup
+apiVersion: rds.aws.upbound.io/v1beta1
+kind: ParameterGroup
 metadata:
-  name: example-dbparametergroup
+  name: simple
   namespace: ${target_namespace}
 spec:
   providerConfigRef:
     name: default
   forProvider:
-    region: us-west-2
-    dbParameterGroupFamilySelector:
-      engine: postgres
-    description: example
-    parameters:
-      - parameterName: application_name
-        parameterValue: "example"
+    description: simple
+    region: ${AWS_REGION}
+    family: postgres15
+    parameter:
+      - name: application_name
+        value: "simple"
         applyMethod: immediate
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: example-dbinstance
+  name: rdsinstance-simple-master-password
   namespace: ${target_namespace}
 type: Opaque
 stringData:

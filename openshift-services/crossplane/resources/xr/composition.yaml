@@ -1,22 +1,21 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xpostgresqlinstances.aws.database.example.com
+  name: xpostgresqlinstances.aws.databases.joshgav.com
 spec:
-  writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: database.example.com/v1alpha1
+    apiVersion: databases.joshgav.com/v1alpha1
     kind: XPostgreSQLInstance
+  writeConnectionSecretsToNamespace: crossplane-system
   resources:
     - name: rdsinstance
       base:
-        apiVersion: rds.aws.crossplane.io/v1alpha1
-        kind: DBInstance
+        apiVersion: rds.aws.upbound.io/v1beta1
+        kind: Instance
         spec:
-          providerConfigRef:
-            name: default
           forProvider:
-            region: us-east-1
+            applyImmediately: true
+            region: ${AWS_REGION}
             instanceClass: db.t3.micro
             username: adminuser
             engine: postgres
@@ -35,13 +34,13 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-postgresql"
+                fmt: "%s-connection"
         - fromFieldPath: "metadata.uid"
           toFieldPath: "spec.forProvider.passwordSecretRef.name"
           transforms:
             - type: string
               string:
-                fmt: "%s-input"
+                fmt: "%s-master-password"
         - fromFieldPath: "spec.parameters.region"
           toFieldPath: "spec.forProvider.region"
           transforms:

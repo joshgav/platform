@@ -45,10 +45,10 @@ function subnet_id () {
 function default_vpc_exists () {
     local region=${1}
 
-    exists=$(false)
+    exists=1
 
     vpc_id=$(aws ec2 describe-vpcs --region ${region} --output json | jq -r '.Vpcs[] | select(.IsDefault == true) | .VpcId')
-    if [[ -n "${vpc_id}" ]]; then exists=$(true); fi
+    if [[ -n "${vpc_id}" ]]; then exists=0; fi
 
     return ${exists}
 }

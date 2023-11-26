@@ -7,6 +7,9 @@ if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 source ${root_dir}/lib/aws.sh
 
+export target_namespace=crossplane-system
+ensure_namespace ${target_namespace} true
+
 if ! default_vpc_exists ${AWS_REGION}; then
     echo "INFO: creating default VPC in region ${AWS_REGION}"
     aws ec2 create-default-vpc
@@ -14,15 +17,13 @@ else
     echo "INFO: using existing default VPC in region ${AWS_REGION}"
 fi
 
-export target_namespace=crossplane-system
 if [[ -n "${DESTROY}" ]]; then
     kubectl_action=delete
 else
     kubectl_action=apply
 fi
 
-cat ${this_dir}/resources/rds.yaml.tpl | envsubst '${target_namespace} ${AWS_REGION}' | kubectl ${kubectl_action} -f -
-
-# kubectl ${kubectl_action} -f ${this_dir}/resources/xr/definition.yaml
-# kubectl ${kubectl_action} -f ${this_dir}/resources/xr/composition.yaml
-# kubectl ${kubectl_action} -n ${CROSSPLANE_SYSTEM_NAMESPACE} -f ${this_dir}/resources/xr/postgresqlinstance.yaml
+echo "INFO: about to ${kubectl_action} RDS instance"
+kubectl ${kubectl_action} -f ${this_dir}/resources/xr/xrd.yaml
+kubectl ${kubectl_action} -f ${this_dir}/resources/xr/composition.yaml
+kubectl ${kubectl_action} -f ${this_dir}/resources/xr/instance.yaml
