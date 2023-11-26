@@ -1,4 +1,5 @@
 .env
+_local.env
 .kube
 .ssh
 _workdir

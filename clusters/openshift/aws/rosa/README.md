@@ -13,29 +13,20 @@ Manage clusters at <https://console.redhat.com/openshift>.
 ## Deploy ROSA cluster
 
 1. Install [AWS CLI][], [rosa CLI][] and [jq](https://stedolan.github.io/jq/).
-1. Set AWS access key secrets [as environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html) or login.
-1. Get a token for Red Hat's cloud console from <https://console.redhat.com/openshift/token/rosa/> and login with `rosa login --token="ey..."`.
-1. For a ROSA/Classic cluster run `./deploy.sh`; for a ROSA/HCP cluster run `./deploy-hcp.sh`.
+1. Set AWS access key secrets
+   - [as environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
+   - or in `.env`
+1. Get a token for Red Hat's cloud console from <https://console.redhat.com/openshift/token/rosa/> and
+   - login with `rosa login --token="ey..."`
+   - or set in `.env`
+1. Create the cluster:
+   - for a ROSA/Classic cluster run `./deploy-classic.sh <cluster_name> <aws_region>`, e.g. `./deploy-classic.sh rosa1 us-east-1`
+   - for a ROSA/HCP cluster run `./deploy-hcp.sh <cluster_name> <aws_region>`, e.g. `./deploy-hcp.sh rosa2 eu-central-1`
 
-Be sure to note the cluster-admin password printed at the end. Put it in the `.env` file in this dir.
+Be sure to note the cluster-admin password printed at the end.
 
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 [rosa CLI]: https://console.redhat.com/openshift/downloads#tool-rosa
-
-## Use cluster
-
-`deploy.sh` will provision IAM roles and a cluster; and publish API and Console
-URLs and username and password to stdout. Use the URLs and credentials to login
-with the `oc` CLI as follows:
-
-```bash
-source .env && \
-   oc login "${CLUSTER_API_URL}" --username cluster-admin --password "${CLUSTER_ADMIN_PASSWORD}"
-
-## for example:
-oc login https://api.rosa1.n9km.p1.openshiftapps.com:6443 \
-   --username cluster-admin --password HRppn-5IKNZ-oZHQh-XbbQ2
-```
 
 ## Info
 
@@ -45,3 +36,18 @@ oc login https://api.rosa1.n9km.p1.openshiftapps.com:6443 \
 - HCP Quick start: https://docs.openshift.com/rosa/rosa_hcp/rosa-hcp-sts-creating-a-cluster-quickly.html
 - HCP: https://docs.openshift.com/container-platform/4.13/hosted_control_planes/index.html
 - Terraform for VPC: https://github.com/openshift-cs/terraform-vpc-example
+- Check instance types:
+   ```bash
+   rosa list instances-types
+
+   aws ec2 describe-instance-type-offerings --location-type availability-zone \
+      --filters "Name=location,Values=${aws_az}" --region ${aws_region} --output text
+   ```
+- Deploy VPC and subnets using Terraform:
+   ```bash
+   echo "INFO: deploying VPC using Terraform"
+   ${this_dir}/deploy-vpc-tf.sh
+   pushd ${this_dir}/tf
+   export SUBNET_IDS=$(terraform output -raw cluster-subnets-string)
+   popd
+   ```

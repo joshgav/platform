@@ -5,6 +5,9 @@ root_dir=$(cd ${this_dir}/../../../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 
+export cluster_name=${1:-${CLUSTER_NAME}}
+export AWS_REGION=${2:-${AWS_REGION}}
+
 function reconcile_vpc {
     local vpc_cidr=${1:-'10.0.0.0/16'}
     local cluster_name=${2:-${cluster_name}}
@@ -23,9 +26,8 @@ function reconcile_vpc {
 function reconcile_az {
     local subnet1_cidr=${1:-'10.0.0.0/24'}
     local subnet2_cidr=${2:-'10.0.1.0/24'}
-    local aws_region=${3:-'us-west-2'}
-    local aws_az=${4:-'us-west-2a'}
-    local cluster_name=${5:-${cluster_name}}
+    local aws_az=${3:-'us-west-2a'}
+    local cluster_name=${4:-${cluster_name}}
 
     subnet1_id=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-public" "Name=availability-zone,Values=${aws_az}" --query "Subnets[0].SubnetId" --output text)
     if [[ "${subnet1_id}" == "None" ]]; then
@@ -101,14 +103,12 @@ function reconcile_az {
     echo "INFO: using routetable2 ID ${routetable2_id}"
 }
 
-cluster_name=${CLUSTER_NAME}
 vpc_cidr='10.0.0.0/16'
 
 declare -A azs_map
-aws_region=${AWS_REGION:-us-west-2}
-az1=${aws_region}a
-az2=${aws_region}b
-az3=${aws_region}c
+az1=${AWS_REGION}a
+az2=${AWS_REGION}b
+az3=${AWS_REGION}c
 azs_map=(
     ["${az1}"]='10.0.0.0/24 10.0.1.0/24'
     ["${az2}"]='10.0.2.0/24 10.0.3.0/24'
@@ -122,6 +122,6 @@ for aws_az in ${az1} ${az2} ${az3}; do
         subnet1_cidr=$(echo ${subnet} | awk '{print $1}')
         subnet2_cidr=$(echo ${subnet} | awk '{print $2}')
     done
-    echo "INFO: reconcile_az ${subnet1_cidr} ${subnet2_cidr} ${aws_region} ${aws_az} ${cluster_name}"
-    reconcile_az ${subnet1_cidr} ${subnet2_cidr} ${aws_region} ${aws_az} ${cluster_name}
+    echo "INFO: reconcile_az ${subnet1_cidr} ${subnet2_cidr} ${aws_az} ${cluster_name}"
+    reconcile_az ${subnet1_cidr} ${subnet2_cidr} ${aws_az} ${cluster_name}
 done
