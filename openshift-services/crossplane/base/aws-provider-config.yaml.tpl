@@ -11,7 +11,7 @@ type: Opaque
 data:
   credentials: '${aws_creds_encoded}'
 ---
-apiVersion: aws.crossplane.io/v1beta1
+apiVersion: aws.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: default

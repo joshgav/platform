@@ -3,4 +3,4 @@ kind: Provider
 metadata:
   name: provider-aws
 spec:
-  package: docker.io/crossplanecontrib/provider-aws:master
+  package: xpkg.upbound.io/upbound/provider-aws:v0.44.0

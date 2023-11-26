@@ -10,7 +10,7 @@ stringData:
   credentials: |
     ${azure_creds}
 ---
-apiVersion: azure.crossplane.io/v1beta1
+apiVersion: azure.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: default
