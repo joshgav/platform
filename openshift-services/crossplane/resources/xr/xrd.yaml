@@ -1,15 +1,15 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xpostgresqlinstances.database.example.com
+  name: xpostgresqlinstances.databases.joshgav.com
 spec:
-  group: database.example.com
+  group: databases.joshgav.com
   names:
     kind: XPostgreSQLInstance
     plural: xpostgresqlinstances
   claimNames:
-    kind: PostgreSQLInstance
-    plural: postgresqlinstances
+    kind: PostgreSQLInstanceClaim
+    plural: postgresqlinstanceclaims
   connectionSecretKeys:
     - username
     - password
@@ -25,36 +25,28 @@ spec:
         properties:
           spec:
             type: object
-            description: |
-              The specification for how this PostgreSQLInstance should be
-              deployed.
+            description: How this PostgresQL instance should be deployed.
             properties:
               parameters:
                 type: object
-                description: |
-                  The parameters indicating how this PostgreSQLInstance should
-                  be configured.
+                description: The parameters indicating how this PostgreSQLInstance should be configured.
                 properties:
                   region:
                     type: string
                     enum:
                       - east
                       - west
-                    description: |
-                      The geographic region in which this PostgreSQLInstance
-                      should be deployed.
+                    description: The geographic region in which this PostgreSQLInstance should be deployed.
                   size:
                     type: string
                     enum:
                       - small
                       - medium
                       - large
-                    description: |
-                      The machine size for this PostgreSQLInstance.
+                    description: The machine size for this PostgreSQLInstance.
                   storage:
                     type: integer
-                    description: |
-                      The storage size for this PostgreSQLInstance in GB.
+                    description: The storage size for this PostgreSQLInstance in GB.
                 required:
                   - region
                   - size

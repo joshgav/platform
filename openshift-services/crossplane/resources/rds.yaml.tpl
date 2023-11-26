@@ -20,10 +20,9 @@ spec:
     dbName: apiserver
     deleteAutomatedBackups: false
     engine: postgres
-    engineVersion: "15.2"
+    engineVersion: "15"
     instanceClass: db.t3.micro
     maintenanceWindow: "Sat:8:00-Sat:11:00"
-    # manageMasterUserPassword: true
     parameterGroupName: simple
     passwordSecretRef:
       name: rdsinstance-simple-master-password
