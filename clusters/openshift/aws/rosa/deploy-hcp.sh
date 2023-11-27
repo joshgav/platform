@@ -51,8 +51,7 @@ function create_cluster () {
         --oidc-config-id ${oidc_config_id} \
         --compute-machine-type "${instance_type}" \
         --subnet-ids "${SUBNET_IDS}" \
-        --enable-autoscaling --min-replicas 3 --max-replicas 36 \
-        --create-admin-user
+        --enable-autoscaling --min-replicas 3 --max-replicas 36
 }
 
 if [[ -n ${cluster_json} ]]; then

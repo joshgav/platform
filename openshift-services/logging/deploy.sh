@@ -6,15 +6,13 @@ if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
 if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
+namespace=openshift-logging
+ensure_namespace ${namespace} true
+
 echo "INFO: installing required operators"
 apply_kustomize_dir ${this_dir}/operators
 await_resource_ready "clusterlogforwarders"
 await_resource_ready "lokistacks"
-
-oc config set-context --current --namespace openshift-logging
-
-# for legacy stack use this instead:
-# apply_kustomize_dir ${this_dir}/legacy
 
 export S3_BUCKET_NAME=${S3_BUCKET_NAME:-loki-data}
 apply_kustomize_dir ${this_dir}/loki-prep
