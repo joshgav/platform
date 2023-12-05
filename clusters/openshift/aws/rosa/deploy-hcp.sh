@@ -41,6 +41,11 @@ function create_cluster () {
         --oidc-config-id ${oidc_config_id} \
         --prefix ${cluster_name}
 
+    rosa create ocm-role --admin --prefix ${cluster_name} --yes --mode=auto
+    rosa list ocm-roles  --output json | jq -r '.[0].RoleARN'
+    rosa link ocm-role --role-arn ${role_arn} --yes
+    billing_account=$(aws sts get-caller-identity --output json | jq -r '.Account')
+
     echo "INFO: create cluster"
     rosa create cluster --cluster-name "${cluster_name}" --mode=auto --yes --watch \
         --sts --hosted-cp --region ${AWS_REGION} \
@@ -48,6 +53,7 @@ function create_cluster () {
         --worker-iam-role ${worker_role_arn} \
         --support-role-arn ${support_role_arn} \
         --operator-roles-prefix ${cluster_name} \
+        --billing-account ${billing_account} \
         --oidc-config-id ${oidc_config_id} \
         --compute-machine-type "${instance_type}" \
         --subnet-ids "${SUBNET_IDS}" \

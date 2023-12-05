@@ -10,6 +10,6 @@ apply_kustomize_dir ${this_dir}/operator
 await_resource_ready "hyperconverged"
 
 export infra_name=$(oc get infrastructures.config.openshift.io cluster --output json | jq -r '.status.infrastructureName')
-cat ${this_dir}/operand/machineset.yaml | envsubst '${infra_name}' | kubectl apply -f -
+cat ${this_dir}/operand/machineset.yaml | envsubst '${infra_name} ${AWS_REGION}' | kubectl apply -f -
 
 kubectl apply -f ${this_dir}/operand/hyperconverged.yaml

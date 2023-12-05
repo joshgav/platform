@@ -1,7 +1,7 @@
 apiVersion: machine.openshift.io/v1beta1
 kind: MachineSet
 metadata:
-  name: ${infra_name}-metal-worker-us-east-1c
+  name: ${infra_name}-metal-worker-${AWS_REGION}c
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: ${infra_name}
@@ -10,12 +10,12 @@ spec:
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: ${infra_name}
-      machine.openshift.io/cluster-api-machineset: ${infra_name}-metal-worker-us-east-1c
+      machine.openshift.io/cluster-api-machineset: ${infra_name}-metal-worker-${AWS_REGION}c
   template:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: ${infra_name}
-        machine.openshift.io/cluster-api-machineset: ${infra_name}-metal-worker-us-east-1c
+        machine.openshift.io/cluster-api-machineset: ${infra_name}-metal-worker-${AWS_REGION}c
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
     spec:
@@ -27,8 +27,8 @@ spec:
           userDataSecret:
             name: worker-user-data
           placement:
-            availabilityZone: us-east-1c
-            region: us-east-1
+            availabilityZone: ${AWS_REGION}c
+            region: ${AWS_REGION}
           credentialsSecret:
             name: aws-cloud-credentials
           instanceType: m6id.metal
@@ -51,11 +51,11 @@ spec:
           metadataServiceOptions: {}
           deviceIndex: 0
           ami:
-            id: ami-017fe5c9fac0d4064
+            id: ami-00d973a79002d742b
           subnet:
             filters:
               - name: 'tag:Name'
                 values:
-                  - ${infra_name}-private-us-east-1c
+                  - ${infra_name}-private-${AWS_REGION}c
           iamInstanceProfile:
             id: ${infra_name}-worker-profile
