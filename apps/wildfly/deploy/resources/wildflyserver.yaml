@@ -1,0 +1,7 @@
+apiVersion: wildfly.org/v1alpha1
+kind: WildFlyServer
+metadata:
+  name: wildfly-quickstart
+spec:
+  applicationImage: helloworld:latest
+  replicas: 1
