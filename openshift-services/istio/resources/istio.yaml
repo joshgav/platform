@@ -3,7 +3,8 @@ kind: Istio
 metadata:
   name: istio-default
 spec:
-  version: v1.20.0
+  version: latest
+  # version: v1.20.1
   values:
     pilot:
       env:
