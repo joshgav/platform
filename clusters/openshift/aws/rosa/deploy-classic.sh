@@ -1,7 +1,9 @@
 #! /usr/bin/env bash
 
 this_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
-source ${this_dir}/init.sh
+root_dir=$(cd ${this_dir}/../../../.. && pwd)
+if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
+if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 
 function create_cluster () {
     local cluster_name=${1}
@@ -31,14 +33,30 @@ function create_cluster () {
         --create-admin-user
 }
 
-if [[ -n ${cluster_json} ]]; then
-    echo "WARNING: found existing cluster named ${cluster_name}, skipping 'create' commands"
-else
-    echo "INFO: cluster not found, creating now"
-    create_cluster "${cluster_name}"
-    echo "INFO: updating cluster info"
-    export cluster_json=$(rosa list clusters --output json | jq -r ".[] | select( .name | match(\"${cluster_name}\") )")
-    echo -e "INFO: updated cluster info:\n$(echo ${cluster_json} | jq)"
+echo "INFO: creating cluster named ${CLUSTER_NAME} in region ${AWS_REGION}"
+
+echo "INFO: Verify login to AWS"
+aws sts get-caller-identity &> /dev/null
+if [[ $? != 0 ]]; then
+    echo "ERROR: invalid AWS credentials; could not call AWS APIs"
+    exit 2
 fi
 
-${this_dir}/status.sh ${cluster_name} ${AWS_REGION}
+# get a token at https://console.redhat.com/openshift/token/rosa/
+echo "INFO: Verifying login to RH OCM"
+rosa login --token="${REDHAT_ACCOUNT_TOKEN}" &> /dev/null
+if [[ $? != 0 ]]; then
+    echo "ERROR: invalid Red Hat credentials; could not call RH OCM APIs"
+    exit 2
+fi
+
+export cluster_json=$(rosa list clusters --output json | jq -r ".[] | select( .name | match(\"${CLUSTER_NAME}\") )")
+if [[ -n ${cluster_json} ]]; then
+    echo "WARNING: found existing cluster named ${CLUSTER_NAME}, skipping 'create' commands"
+else
+    echo "INFO: cluster not found, creating now"
+    create_cluster "${CLUSTER_NAME}"
+    echo "INFO: updating cluster info"
+    export cluster_json=$(rosa list clusters --output json | jq -r ".[] | select( .name | match(\"${CLUSTER_NAME}\") )")
+    echo -e "INFO: updated cluster info:\n$(echo ${cluster_json} | jq)"
+fi

@@ -1,5 +1,12 @@
 #! /usr/bin/env bash
 
+## use this to get created subnets:
+# echo "INFO: getting subnet IDs by tag:Name"
+# subnets_public=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-public" --query "Subnets[].SubnetId" --output json)
+# subnets_private=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-private" --query "Subnets[].SubnetId" --output json)
+# export SUBNET_IDS=$(echo "${subnets_public}" | jq -r ". + ${subnets_private} | join(\",\")")
+# echo "INFO: Subnet IDs: ${SUBNET_IDS}"
+
 this_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 root_dir=$(cd ${this_dir}/../../../.. && pwd)
 if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
@@ -26,7 +33,7 @@ function reconcile_vpc {
 function reconcile_az {
     local subnet1_cidr=${1:-'10.0.0.0/24'}
     local subnet2_cidr=${2:-'10.0.1.0/24'}
-    local aws_az=${3:-'us-west-2a'}
+    local aws_az=${3:-'us-east-2a'}
     local cluster_name=${4:-${cluster_name}}
 
     subnet1_id=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${cluster_name}-public" "Name=availability-zone,Values=${aws_az}" --query "Subnets[0].SubnetId" --output text)
