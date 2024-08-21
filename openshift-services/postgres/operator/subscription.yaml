@@ -1,0 +1,11 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+    name: cloudnative-pg
+spec:
+    name: cloudnative-pg
+    source: certified-operators
+    sourceNamespace: openshift-marketplace
+    channel: stable-v1
+    installPlanApproval: Automatic
