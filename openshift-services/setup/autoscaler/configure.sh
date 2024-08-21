@@ -10,8 +10,14 @@ base_machineset_name=${infra_name}-worker-${AWS_REGION}
 
 oc apply -f ${this_dir}/cluster-autoscaler.yaml
 
-for zone_id in "a" "b" "c"; do
-    export MACHINESET_NAME=${base_machineset_name}${zone_id}
+# for zone_id in "a" "b" "c"; do
+#     export MACHINESET_NAME=${base_machineset_name}${zone_id}
+#     echo "INFO: creating MachineAutoscaler for MachineSet ${MACHINESET_NAME}"
+#     cat ${this_dir}/machine-autoscaler.yaml.tpl | envsubst | oc apply -f -
+# done
+
+for MACHINESET_NAME in $(oc get machinesets.machine.openshift.io -n openshift-machine-api -o json | jq -r '.items[].metadata.name'); do
+    export MACHINESET_NAME
     echo "INFO: creating MachineAutoscaler for MachineSet ${MACHINESET_NAME}"
     cat ${this_dir}/machine-autoscaler.yaml.tpl | envsubst | oc apply -f -
 done
