@@ -8,6 +8,7 @@ Provision OpenShift clusters. Allow installer to provision infrastructure.
 1. Set AWS access key secrets [as environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html) in `.env`.
 1. Get a pull secret for Red Hat's container registries from <https://console.redhat.com/openshift/downloads#tool-pull-secret>. Set this as `OPENSHIFT_PULL_SECRET` in `.env`.
 1. Set up a subdomain in AWS (see [docs](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingNewSubdomain.html)). Set its name as `BASE_DOMAIN` in `.env`.
+  - See [create-dns-delegation.sh](./create-dns-delegation.sh) for some hints.
 1. Set `CLUSTER_NAME` and `AWS_REGION` in `.env` or rely on defaults.
 1. Review cluster config in `install-config.yaml.tpl`.
 1. Run `deploy.sh` to install cluster.
