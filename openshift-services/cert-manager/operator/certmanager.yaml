@@ -6,12 +6,8 @@ metadata:
   name: cluster
 spec:
   managementState: "Managed"
-  # see https://github.com/openshift/cert-manager-operator#using-unsupported-config-overrides-options
-  unsupportedConfigOverrides:
-    controller:
-      args:
-        - "--v=2"
-        - "--cluster-resource-namespace=cert-manager"
-        - "--leader-election-namespace=kube-system"
-        - "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"
-        - "--dns01-recursive-nameservers-only"
+  controllerConfig:
+    overrideArgs:
+      - "--v=2"
+      - "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"
+      - "--dns01-recursive-nameservers-only"
