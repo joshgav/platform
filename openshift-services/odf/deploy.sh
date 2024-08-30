@@ -7,7 +7,7 @@ source ${root_dir}/lib/kubernetes.sh
 
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready storagesystems
-
-apply_kustomize_dir ${this_dir}/storage
 await_resource_ready storageclusters
 await_resource_ready objectbucketclaims
+
+apply_kustomize_dir ${this_dir}/storage

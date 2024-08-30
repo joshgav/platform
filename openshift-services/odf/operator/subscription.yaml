@@ -7,5 +7,5 @@ spec:
     name: odf-operator
     source: redhat-operators
     sourceNamespace: openshift-marketplace
-    channel: stable-4.12
+    channel: stable-4.16
     installPlanApproval: Automatic
