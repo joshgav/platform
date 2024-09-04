@@ -1,10 +1,12 @@
 # OpenShift Virtualization
 
+- Docs: <https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/virtualization>
+
 Expects to run on AWS IPI. For ROSA, create a Node Pool with `metal` instance
 types using the [rosa CLI](https://github.com/openshift/rosa).
 
-`./deploy.sh` Deploys a MachineSet using a `metal` instance type in AWS and
-configures VMs to run only on those machines.
+`./create-machinesets.sh` deploys MachineSets using a `metal` instance type in
+AWS. See `./operand/machineset-example.yaml` for an example.
 
 ## Windows
 
