@@ -1,0 +1,2 @@
+[vm_host]
+equinix.joshgav.com ansible_connection=ssh

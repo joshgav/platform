@@ -1,0 +1,6 @@
+server=/{{ network_domain }}/{{ network_cidr | ansible.utils.next_nth_usable(1) }}
+address=/{{ network_domain }}/{{ network_cidr | ansible.utils.next_nth_usable(10) }}
+dhcp-range={{ network_cidr | ansible.utils.next_nth_usable(100) }}, {{ network_cidr | ansible.utils.next_nth_usable(150) }}
+# dhcp-host={{ bootstrap_mac }},{{ network_cidr | ansible.utils.next_nth_usable(10) }}
+# interface={{ bridge_name }}
+# bind-interfaces

@@ -1,0 +1,39 @@
+- name: This play configures dnsmasq for NetworkManager
+  hosts: vm_host
+  become: true
+  vars_files:
+    - vars/netman-dnsmasq.vars.yml
+  tasks:
+    - name: Ensure NM configuration directory exists
+      ansible.builtin.file:
+        path: /etc/NetworkManager/conf.d
+        state: directory
+        mode: "0755"
+
+    - name: Ensure NM dnsmasq directory exists
+      ansible.builtin.file:
+        path: /etc/NetworkManager/dnsmasq.d
+        state: directory
+        mode: "0755"
+
+    - name: Configure NetworkManager for local DNS
+      ansible.builtin.template:
+        src: templates/00-use_dnsmasq.conf.j2
+        dest: /etc/NetworkManager/conf.d/00-use_dnsmasq.conf
+        mode: "0755"
+      notify:
+        - Restart NetworkManager
+
+    - name: Configure NetworkManager for libvirt network
+      ansible.builtin.template:
+        src: templates/01-netman_dnsmasq.conf.j2
+        dest: /etc/NetworkManager/dnsmasq.d/01-{{ network_name }}_dnsmasq.conf
+        mode: "0755"
+      notify:
+        - Restart NetworkManager
+
+  handlers:
+    - name: Restart NetworkManager
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted

@@ -1,0 +1,5 @@
+network_name: sno1-net
+network_domain: equinix.joshgav.com
+network_cidr: 192.168.122.0/24
+bootstrap_mac: 52:54:00:ee:42:e1
+bridge_name: virbr0
