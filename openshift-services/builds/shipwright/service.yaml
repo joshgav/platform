@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: shipwright-build-controller-metrics
+  namespace: openshift-builds
+  labels:
+    name: shipwright-build-controller-metrics
+spec:
+  type: ClusterIP
+  selector:
+    name: shipwright-build
+  ports:
+    - name: metrics-port
+      protocol: TCP
+      port: 8383
+      targetPort: metrics-port

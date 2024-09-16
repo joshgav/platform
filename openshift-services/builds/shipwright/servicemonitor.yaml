@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: openshift-builds-monitor
+  namespace: openshift-builds
+spec:
+  endpoints:
+    - interval: 10s
+      port: metrics-port
+      path: /metrics
+      scheme: http
+  jobLabel: name
+  namespaceSelector:
+    matchNames:
+      - openshift-builds
+  selector:
+    matchLabels:
+      name: shipwright-build-controller-metrics

@@ -8,4 +8,6 @@ source ${root_dir}/lib/kubernetes.sh
 kustomize build ${this_dir}/operator | oc apply -f -
 await_resource_ready shipwrightbuild
 
+exit
+
 kustomize build ${this_dir}/shipwright | oc apply -f -

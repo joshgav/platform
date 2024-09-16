@@ -1,0 +1,21 @@
+apiVersion: shipwright.io/v1beta1
+kind: Build
+metadata:
+  name: sample-go-app
+  namespace: openshift-builds
+spec:
+  source:
+    type: Git
+    git:
+      url: https://github.com/shipwright-io/sample-go
+    contextDir: docker-build
+  strategy:
+    name: buildah
+    kind: ClusterBuildStrategy
+  paramValues:
+  - name: dockerfile
+    value: Dockerfile
+  output:
+    # image: image-registry.openshift-image-registry.svc:5000/openshift-builds/sample-go-app
+    image: default-route-openshift-image-registry.apps.ipi.aws.joshgav.com/openshift-builds/sample-go-app
+    pushSecret: internal-push-secret
