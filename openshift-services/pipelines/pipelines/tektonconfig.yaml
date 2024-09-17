@@ -17,6 +17,8 @@ spec:
             value: "true"
           - name: communityClusterTasks
             value: "true"
+          - name: resolverTasks
+            value: "true"
     pruner:
         keep: 100
         resources:

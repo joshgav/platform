@@ -1,0 +1,79 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: example-pipeline
+  namespace: default
+spec:
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: 'https://github.com/shipwright-io/sample-go'
+        - name: revision
+          value: ''
+        - name: refspec
+          value: ''
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '1'
+        - name: sslVerify
+          value: 'true'
+        - name: crtFileName
+          value: ca-bundle.crt
+        - name: subdirectory
+          value: ''
+        - name: sparseCheckoutDirectories
+          value: ''
+        - name: deleteExisting
+          value: 'true'
+        - name: httpProxy
+          value: ''
+        - name: httpsProxy
+          value: ''
+        - name: noProxy
+          value: ''
+        - name: verbose
+          value: 'true'
+        - name: gitInitImage
+          value: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:681dc67d2aa1dbecbf65ecd229c8b181dae533bf14b07543c1aeead36aed2198'
+        - name: userHome
+          value: /home/git
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: project
+    - name: buildah
+      params:
+        - name: IMAGE
+          value: 'registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/pipelines-go-sample:latest'
+        - name: BUILDER_IMAGE
+          value: 'registry.redhat.io/rhel8/buildah@sha256:aac6629389db17e99894c5bee0da01d4c8065d11d8c6f6e1602f9484290baa70'
+        - name: STORAGE_DRIVER
+          value: vfs
+        - name: DOCKERFILE
+          value: ./Dockerfile
+        - name: CONTEXT
+          value: docker-build
+        - name: TLSVERIFY
+          value: 'true'
+        - name: FORMAT
+          value: oci
+        - name: BUILD_EXTRA_ARGS
+          value: ''
+        - name: PUSH_EXTRA_ARGS
+          value: ''
+        - name: SKIP_PUSH
+          value: 'false'
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: project
+  workspaces:
+    - name: project

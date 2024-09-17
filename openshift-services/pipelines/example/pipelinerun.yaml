@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: new-pipeline-run03
+  namespace: default
+  finalizers:
+    - chains.tekton.dev/pipelinerun
+  labels:
+    tekton.dev/pipeline: new-pipeline
+spec:
+  pipelineRef:
+    name: new-pipeline
+  taskRunTemplate:
+    serviceAccountName: pipeline
+    podTemplate:
+      securityContext:
+        # git-clone task requires this fsGroup
+        fsGroup: 65532
+  timeouts:
+    pipeline: 1h0m0s
+  workspaces:
+    - name: project
+      volumeClaimTemplate:
+        metadata:
+          creationTimestamp: null
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: gp3-csi
+          volumeMode: Filesystem
