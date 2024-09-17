@@ -1,5 +1,12 @@
 # Quay
 
+## Resources
+
+- https://docs.redhat.com/en/documentation/red_hat_quay
+- https://github.com/quay/quay-operator
+
+## Notes
+
 Installs QuayRegistry operator and custom resource type, then deploys a registry.
 
 Requires ObjectBucketClaim resource type in cluster (via [Noobaa](../noobaa/)).
@@ -13,6 +20,7 @@ bucket metadata and secrets.
 
 ## Notes
 
+- To find the current secret with custom config: `oc get quayregistries registry -ojson | jq '.spec.configBundleSecret'`
 - To configure short names: https://docs.openshift.com/container-platform/4.10/openshift_images/image-configuration.html#images-configuration-shortname_image-configuration
 - To update the global pull secret: https://docs.openshift.com/container-platform/4.10/openshift_images/managing_images/using-image-pull-secrets.html#images-update-global-pull-secret_using-image-pull-secrets
 - Use the special "config editor" route to update Quay config in a web form.
@@ -21,5 +29,4 @@ bucket metadata and secrets.
 
 ## Resources
 
-- https://github.com/quay/quay-operator
 - Quay configuration: <https://docs.projectquay.io/deploy_quay_on_openshift_op_tng.html>

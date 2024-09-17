@@ -22,17 +22,6 @@ stringData:
     - 2w
     TEAM_RESYNC_STALE_TIME: 60m
     TESTING: false
-    DISTRIBUTED_STORAGE_CONFIG:
-      default:
-      - RHOCSStorage
-      - access_key: ${S3_ACCESS_KEY_ID}
-        bucket_name: ${S3_BUCKET_NAME}
-        secret_key: ${S3_SECRET_ACCESS_KEY}
-        hostname: ${S3_ENDPOINT_URL}
-        is_secure: true
-        port: 443
-        storage_path: /datastorage/registry
-    DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: ["default"]
-    DISTRIBUTED_STORAGE_PREFERENCE: ["default"]
     SUPER_USERS:
     - joshgav
+    - quayadmin

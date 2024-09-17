@@ -3,12 +3,12 @@ kind: QuayRegistry
 metadata:
     name: registry
 spec:
-    configBundleSecret: init-config-bundle
+    # configBundleSecret: init-config-bundle
     components:
     - kind: objectstorage
-      managed: false
+      managed: true
     - kind: horizontalpodautoscaler
-      managed: false
+      managed: true
     - kind: clair
       managed: true
     - kind: postgres

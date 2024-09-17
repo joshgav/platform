@@ -7,5 +7,5 @@ spec:
     name: quay-operator
     source: redhat-operators
     sourceNamespace: openshift-marketplace
-    channel: stable-3.8
+    channel: stable-3.12
     installPlanApproval: Automatic
