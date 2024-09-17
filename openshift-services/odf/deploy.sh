@@ -10,4 +10,6 @@ await_resource_ready storagesystems
 await_resource_ready storageclusters
 await_resource_ready objectbucketclaims
 
+exit
+
 apply_kustomize_dir ${this_dir}/storage
