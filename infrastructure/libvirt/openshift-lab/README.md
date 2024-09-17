@@ -4,6 +4,7 @@
 
 - https://github.com/kubealex/libvirt-k8s-provisioner
 - https://computingforgeeks.com/how-to-deploy-openshift-container-platform-on-kvm/
+- https://github.com/redhatci/ansible-collection-redhatci-ocp
 
 ## Notes
 
@@ -26,7 +27,7 @@ Install KVM and libvirt:
 ```bash
 sudo dnf install qemu-kvm libvirt virt-install virt-viewer
 for drv in qemu network nodedev nwfilter secret storage interface; do
-    sudo systemctl start virt${drv}d{,-ro,-admin}.socket
+    sudo systemctl enable --now virt${drv}d{,-ro,-admin}.socket
 done
 ```
 
@@ -158,5 +159,21 @@ Masquerade rules for traffic outbound from the VM are already created by libvirt
 
 ```bash
 nft insert rule ip filter LIBVIRT_FWI tcp dport 443 accept
-nft add rule ip nat PREROUTING iifname "bond0" tcp dport 443 dnat to 192.168.122.10
+nft insert rule ip filter LIBVIRT_FWI tcp dport 6443 accept
+nft add chain ip nat PREROUTING { type nat hook prerouting priority -100 \; }
+nft add rule ip nat PREROUTING iifname "bond0" tcp dport 443 dnat to 192.168.126.10
+nft add rule ip nat PREROUTING iifname "bond0" tcp dport 6443 dnat to 192.168.126.10
 ```
+
+It is not supported to redirect traffic from a different port to 6443 for the
+api endpoint, but it is possible, see
+<https://access.redhat.com/solutions/4665121>. Be sure to change kubeconfig or
+the `oc login --server` parameter to the redirected port.
+
+```bash
+nft add rule ip nat PREROUTING iifname "bond0" tcp dport 10443 dnat to 192.168.126.10:6443
+```
+
+It is possible to change the port the router listens on, see
+<https://access.redhat.com/solutions/6784921>, but internal redirects (e.g., for
+OAuth login) won't include the port in the URL.
