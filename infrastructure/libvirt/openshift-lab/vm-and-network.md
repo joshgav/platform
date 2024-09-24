@@ -1,4 +1,4 @@
-## OpenShift Lab Notes
+## Create Network and VM
 
 ## Resources
 
@@ -98,7 +98,8 @@ Add to `/etc/NetworkManager/dnsmasq.d/00-use_internal_dns.conf`:
 Consider if a different filename is needed if another network already exists.
 
 ```
-server=/api.sno1.equinix.joshgav.com/192.168.126.10
+address=/api.sno1.equinix.joshgav.com/192.168.126.10
+address=/apps.sno1.equinix.joshgav.com/192.168.126.10
 ```
 
 Restart NetworkManager: `sudo systemctl restart NetworkManager`
