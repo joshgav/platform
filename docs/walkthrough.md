@@ -4,10 +4,10 @@ This is a walkthrough of how to prepare a cluster and various capabilities, then
 
 ## Base capabilities
 1. Install OpenShift to AWS via IPI ([link](../clusters/openshift/aws/ipi/))
-1. Configure machine autoscalers ([link](../openshift-services/setup/autoscaler/))
 1. Install cert-manager and replace ingress certs with trusted ones ([link](../openshift-services/cert-manager/))
 1. (Optional) Configure user authentication via Google OIDC ([link](../openshift-services/setup/oidc-google/))
 1. (Optional) Configure user authentication via Keycloak and GitHub OIDC ([link](../openshift-services/keycloak/deploy-cluster-iam.sh))
+1. Configure machine autoscalers ([link](../openshift-services/setup/autoscaler/))
 1. Install noobaa operator and system ([link](../openshift-services/noobaa/))
 
 ## Observability capabilities

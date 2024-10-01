@@ -8,9 +8,9 @@ metadata:
   labels:
     app: noobaa
 spec:
+  type: pv-pool
   pvPool:
     numVolumes: 1
     resources:
       requests:
         storage: 50Gi
-  type: pv-pool

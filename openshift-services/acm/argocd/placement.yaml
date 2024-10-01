@@ -12,3 +12,13 @@ spec:
           operator: "In"
           values:
           - OpenShift
+
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: sno-clusterset-placement
+  namespace: openshift-gitops
+spec:
+  clusterSets:
+    - sno-clusterset

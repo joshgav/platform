@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: httpd-appset
+  namespace: openshift-gitops
+spec:
+  generators:
+  - clusterDecisionResource:
+      configMapRef: acm-placement
+      labelSelector:
+        matchLabels:
+          cluster.open-cluster-management.io/placement: sno-clusterset-placement
+      requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: 'httpd-app-{{name}}'
+    spec:
+      destination:
+        namespace: httpd
+        server: "{{server}}"
+      project: default
+      source:
+        path: httpd
+        repoURL: https://github.com/joshgav/applications
+        targetRevision: main
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

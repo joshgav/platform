@@ -1,0 +1,22 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: quay-aws-joshgav-com
+  namespace: quay
+spec:
+  secretName: quay-aws-joshgav-com-keypair
+  commonName: registry-quay-quay.apps.ipi.aws.joshgav.com
+  dnsNames:
+  - quay.aws.joshgav.com
+  - registry-quay-quay.apps.ipi.aws.joshgav.com
+  subject:
+    organizationalUnits:
+    - kubernetes
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: acme
+    kind: ClusterIssuer
+    group: cert-manager.io

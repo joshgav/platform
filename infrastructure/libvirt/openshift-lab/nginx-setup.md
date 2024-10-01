@@ -23,32 +23,21 @@ semanage port -a -t http_port_t -p tcp 6443
 ### Create a CA
 
 ```bash
-openssl genrsa -out myCA.key -des3 2048
-
 CA_NAME=ca.joshgav.com
-CA_FILE_BASE_NAME=myCA
+
+## generate the private key
+openssl genrsa -out ${CA_NAME}.key -des3 2048
+
+## create and self-sign the corresponding public key as a CA
 openssl req -x509 -new -subj "/CN=${CA_NAME}" \
-    -key ${CA_FILE_BASE_NAME}.key -sha256 -days 36500 -out ${CA_FILE_BASE_NAME}.crt \
+    -key ${CA_NAME}.key -sha256 -days 36500 -out ${CA_NAME}.crt \
     --addext "basicConstraints=critical,CA:TRUE"
 ```
 
-### Create a server key and certificate with SANs
+### Create a server certificate
 
-Note: Wildcard SANs seem to only go one level deep, so additional domains should be added for OpenShift `apps...` domains.
-
-```bash
-SERVER_NAME=equinix.joshgav.com
-CA_FILE_BASE_NAME=myCA
-
-openssl genrsa -out ${SERVER_NAME}.key 2048
-openssl req -new -subj "/CN=*.${SERVER_NAME}" \
-    -key ${SERVER_NAME}.key -out ${SERVER_NAME}.csr \
-    -addext "subjectAltName=DNS.0:${SERVER_NAME},DNS.1:*.${SERVER_NAME}" \
-    -addext 'extendedKeyUsage=serverAuth,clientAuth'
-openssl x509 -req -days 36500 -CA ${CA_FILE_BASE_NAME}.crt -CAkey ${CA_FILE_BASE_NAME}.key \
-    -in ${SERVER_NAME}.csr -out ${SERVER_NAME}.crt \
-    -extfile ${SERVER_NAME}.cnf
-```
+Note: Wildcard SANs seem to only go one level deep, so additional domains should
+be added for OpenShift `apps...` domains.
 
 Contents of equinix.joshgav.com.cnf:
 
@@ -59,9 +48,28 @@ extendedKeyUsage   = serverAuth,clientAuth
 [alt_names]
 DNS.1   = equinix.joshgav.com
 DNS.2   = *.equinix.joshgav.com
+DNS.3   = api.sno1.equinix.joshgav.com
+DNS.4   = *.apps.sno1.equinix.joshgav.com
 ```
 
-### Copy files to:
+```bash
+SERVER_NAME=equinix.joshgav.com
+CA_NAME=ca.joshgav.com
+
+## generate the private key
+openssl genrsa -out ${SERVER_NAME}.key 2048
+## generate a pubkey and CSR for the server cert
+openssl req -new -subj "/CN=${SERVER_NAME}" \
+    -key ${SERVER_NAME}.key -out ${SERVER_NAME}.csr \
+    -addext "subjectAltName=DNS.0:${SERVER_NAME},DNS.1:*.${SERVER_NAME}" \
+    -addext 'extendedKeyUsage=serverAuth,clientAuth'
+## approve/sign the server cert with the CA cert
+openssl x509 -req -days 36500 -CA ${CA_NAME}.crt -CAkey ${CA_NAME}.key \
+    -in ${SERVER_NAME}.csr -out ${SERVER_NAME}.crt \
+    -extfile ${SERVER_NAME}.cnf
+```
+
+### Copy files to http host:
 
 ```
 /usr/share/nginx/pki/equinix.joshgav.com.crt
@@ -79,84 +87,74 @@ Copy CA (second cert) to `/usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.ca.
 ### `server` block for direct TLS
 
 ```
-   server {
-       listen       443 ssl;
-       listen       [::]:443 ssl;
-       server_name  equinix.joshgav.com;
-       root         /usr/share/nginx/html;
+server {
+    listen       443 ssl;
+    listen       [::]:443 ssl;
+    server_name  equinix.joshgav.com;
+    root         /usr/share/nginx/html;
 
-       ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
-       ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
-       ssl_session_cache shared:SSL:1m;
-       ssl_session_timeout  10m;
-       ssl_ciphers PROFILE=SYSTEM;
-       ssl_prefer_server_ciphers on;
+    ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
+    ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_prefer_server_ciphers on;
 
-       # Load configuration files for the default server block.
-       include /etc/nginx/default.d/*.conf;
+    error_page 404 /404.html;
+    location = /404.html {
+    }
 
-       error_page 404 /404.html;
-       location = /404.html {
-       }
-
-       error_page 500 502 503 504 /50x.html;
-       location = /50x.html {
-       }
-   }
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+    }
+}
 ```
 
 ### server block for proxied TLS + SNI for apps
 
 ```
-   server {
-       listen       443 ssl;
-       listen       [::]:443 ssl;
-       server_name  *.apps.sno1.equinix.joshgav.com;
+server {
+    listen       443 ssl;
+    listen       [::]:443 ssl;
+    server_name  *.apps.sno1.equinix.joshgav.com;
 
-       ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
-       ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
-       ssl_session_cache shared:SSL:1m;
-       ssl_session_timeout  10m;
-       ssl_prefer_server_ciphers on;
+    ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
+    ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_prefer_server_ciphers on;
 
-       # Load configuration files for the default server block.
-       include /etc/nginx/default.d/*.conf;
-
-       location / {
-           proxy_set_header Host $http_host;
-           proxy_ssl_server_name on;
-           proxy_ssl_name $http_host;
-           proxy_pass https://192.168.126.10:443;
-           proxy_ssl_trusted_certificate /usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.ca.crt;
-           proxy_http_version 1.1;
-       }
-   }
+    location / {
+        proxy_set_header Host $http_host;
+        proxy_ssl_server_name on;
+        proxy_ssl_name $http_host;
+        proxy_pass https://192.168.126.10:443;
+        proxy_ssl_trusted_certificate /usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.ca.crt;
+        proxy_http_version 1.1;
+    }
+}
 ```
 
 ### server block for proxied TLS + SNI for API
 
 ```
-   server {
-       listen       6443 ssl;
-       listen       [::]:6443 ssl;
-       server_name  api.sno1.equinix.joshgav.com;
+server {
+    listen       6443 ssl;
+    listen       [::]:6443 ssl;
+    server_name  api.sno1.equinix.joshgav.com;
 
-       ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
-       ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
-       ssl_session_cache shared:SSL:1m;
-       ssl_session_timeout  10m;
-       ssl_prefer_server_ciphers on;
+    ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
+    ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_prefer_server_ciphers on;
 
-       # Load configuration files for the default server block.
-       include /etc/nginx/default.d/*.conf;
-
-       location / {
-           proxy_set_header Host $http_host;
-           proxy_ssl_server_name on;
-           proxy_ssl_name $http_host;
-           proxy_pass https://192.168.126.10:6443;
-           proxy_ssl_trusted_certificate /usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.ca.crt;
-           proxy_http_version 1.1;
-       }
-   }
+    location / {
+        proxy_set_header Host $http_host;
+        proxy_ssl_server_name on;
+        proxy_ssl_name $http_host;
+        proxy_pass https://192.168.126.10:6443;
+        proxy_ssl_trusted_certificate /usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.ca.crt;
+        proxy_http_version 1.1;
+    }
+}
 ```
