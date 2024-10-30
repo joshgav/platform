@@ -1,0 +1,32 @@
+# see https://docs.openshift.com/container-platform/4.17/observability/otel/otel-installing.html#otel-creating-required-RBAC-resources-automatically_install-otel
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: generate-processors-rbac
+rules:
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  - clusterroles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: generate-processors-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: generate-processors-rbac
+subjects:
+- kind: ServiceAccount
+  name: opentelemetry-operator-controller-manager
+  namespace: openshift-opentelemetry-operator

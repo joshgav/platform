@@ -1,0 +1,26 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: default-instance
+spec:
+  storageSize: 10Gi
+  storage:
+    secret:
+      name: tempostack-bucket-secret
+      type: s3
+    tls:
+      enabled: true
+      caName: openshift-service-ca.crt
+  template:
+    queryFrontend:
+      jaegerQuery:
+        enabled: true
+        ingress:
+          route:
+            termination: edge
+          type: route
+  resources:
+    total:
+      limits:
+        memory: 2Gi
+        cpu: 2000m
