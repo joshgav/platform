@@ -1,2 +1,4 @@
 # ignore rendered files
 cert-openshift-default.yaml
+cert-openshift-apiserver.yaml
+apiserver_patch.yaml

@@ -8,7 +8,7 @@ source ${root_dir}/lib/aws.sh
 
 ${this_dir}/deploy-operator.sh
 
-export OPENSHIFT_CLUSTER_NAME=$(get_cluster_name)
+# export OPENSHIFT_CLUSTER_NAME=$(get_cluster_name)
 echo "INFO: setting up cert-manager for domain ${OPENSHIFT_CLUSTER_NAME}.${OPENSHIFT_BASE_DOMAIN}"
 
 echo "INFO: finding Route53 zone ID for ${OPENSHIFT_BASE_DOMAIN}"
@@ -34,3 +34,6 @@ kustomize build ${this_dir}/openshift | oc apply -f -
 kubectl patch --type=merge ingresscontrollers.operator.openshift.io default \
     --namespace openshift-ingress-operator \
     --patch-file ${this_dir}/openshift/ingresscontroller_patch.yaml
+
+kubectl patch --type=merge apiservers.config.openshift.io cluster \
+    --patch-file ${this_dir}/openshift/apiserver_patch.yaml
