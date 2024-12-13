@@ -10,6 +10,4 @@ echo "INFO: install operator subscription"
 kustomize build ${this_dir}/operator | oc apply -f -
 await_resource_ready "tektonconfig"
 
-exit
-
 kustomize build ${this_dir}/pipelines | oc apply -f -
