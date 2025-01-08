@@ -1,13 +1,5 @@
 ## Create Network and VM
 
-## Resources
-
-- https://github.com/kubealex/libvirt-k8s-provisioner
-- https://computingforgeeks.com/how-to-deploy-openshift-container-platform-on-kvm/
-- https://github.com/redhatci/ansible-collection-redhatci-ocp
-
-## Notes
-
 ### Configure External DNS
 
 Create A records in Route53:
@@ -112,22 +104,15 @@ nslookup api.sno1.equinix.joshgav.com
 
 ### Create Agent ISO
 
-Copy [agent-config.yaml](./agent-config.template.yaml) and [install-config.yaml](./install-config.template.yaml) into `_workdir` and adjust values.
-
-Ensure MAC address matches that configured for the VMs
-
-Ensure rendezvous IP reflects correct IP address
-
-Ensure machine network matches libvirt network
-
-Download openshift-install and oc from <https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/>
-
-- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-client-linux.tar.gz
-- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-install-linux.tar.gz
-
-Create an ISO with `openshift-install agent create image --dir _workdir`
-
-Copy ISO to a root-accessible location, e.g. `sudo cp ./_workdir/agent.x86_64.iso /opt/`.
+- Copy [agent-config.yaml](./agent-config.template.yaml) and [install-config.yaml](./install-config.template.yaml) into `_workdir` and adjust values.
+- Ensure MAC address matches that configured for the VMs
+- Ensure rendezvous IP reflects correct IP address
+- Ensure machine network matches libvirt network
+- Download openshift-install and oc from <https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/>
+  - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-client-linux.tar.gz
+  - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-install-linux.tar.gz
+- Create an ISO with `openshift-install agent create image --dir _workdir`
+- Copy ISO to a root-accessible location, e.g. `sudo cp ./_workdir/agent.x86_64.iso /opt/`.
 
 ### Create VM
 
@@ -136,45 +121,48 @@ Create a VM that boots with an agent-install ISO.
 Set network name and static MAC address to match a static entry in DHCP server.
 
 ```bash
+export VM_NAME=master0
+export VM_RAM='16384'
+export VM_CPU='8'
+export VM_NETWORK=sno1
+export VM_MAC="52:54:00:ee:42:e1"
+export VM_DISK_NAME=master0
+export VM_DISK_SIZE=120
+export VM_DISK_POOL=default
+export VM_DISK_PATH=/var/lib/libvirt/images
+
+export VIRSH_DEFAULT_CONNECT_URI=qemu:///system
+
 virt-install \
     --noautoconsole \
     --connect qemu:///system \
-    --name "master0" \
-    --memory "16384" \
-    --vcpus "8" \
+    --name "${VM_NAME}" \
+    --memory "${VM_RAM}" \
+    --vcpus "${VM_CPU}" \
     --cdrom /opt/agent.x86_64.iso \
-    --network "network=sno1,mac=52:54:00:ee:42:e1" \
-    --disk size=120 \
+    --network "network=${VM_NETWORK},mac=${VM_MAC}" \
+    --disk size=${VM_DISK_SIZE} \
     --boot hd,cdrom \
+    --events on_reboot=restart \
     --os-variant rhel9.4
+
+sudo virsh destroy ${VM_NAME} && sudo virsh undefine ${VM_NAME}
+rm /var/lib/libvirt/images/master0.qcow2
 ```
+
+### Connect to VM:
 
 Check status and wait for install with `openshift-install agent wait-for install-complete --dir _workdir`.
 
+```
+ssh -i .ssh/id_rsa core@192.168.126.10
+journalctl --follow
+```
+
 To remove a VM: `sudo virsh destroy master0 && sudo virsh undefine master0`
 
-### Forward Internet traffic to cluster
+## Resources
 
-Forward traffic from host on public Internet to VM.
-Masquerade rules for traffic outbound from the VM are already created by libvirt.
-
-```bash
-nft insert rule ip filter LIBVIRT_FWI tcp dport 443 accept
-nft insert rule ip filter LIBVIRT_FWI tcp dport 6443 accept
-nft add chain ip nat PREROUTING { type nat hook prerouting priority -100 \; }
-nft add rule ip nat PREROUTING iifname "bond0" tcp dport 443 dnat to 192.168.126.10
-nft add rule ip nat PREROUTING iifname "bond0" tcp dport 6443 dnat to 192.168.126.10
-```
-
-It is not supported to redirect traffic from a different port to 6443 for the
-api endpoint, but it is possible, see
-<https://access.redhat.com/solutions/4665121>. Be sure to change kubeconfig or
-the `oc login --server` parameter to the redirected port.
-
-```bash
-nft add rule ip nat PREROUTING iifname "bond0" tcp dport 10443 dnat to 192.168.126.10:6443
-```
-
-It is possible to change the port the router listens on, see
-<https://access.redhat.com/solutions/6784921>, but internal redirects (e.g., for
-OAuth login) won't include the port in the URL.
+- https://github.com/kubealex/libvirt-k8s-provisioner
+- https://computingforgeeks.com/how-to-deploy-openshift-container-platform-on-kvm/
+- https://github.com/redhatci/ansible-collection-redhatci-ocp

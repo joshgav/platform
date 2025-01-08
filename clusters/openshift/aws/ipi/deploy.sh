@@ -15,6 +15,9 @@ fi
 echo "INFO: aws sts get-caller-identity"
 aws sts get-caller-identity
 
+echo "Cluster name: ${OPENSHIFT_CLUSTER_NAME}"
+echo "Root dir: ${root_dir}"
+
 # set up workdir
 workdir=${this_dir}/_workdir
 if [[ -e ${workdir} && -z "${RESUME}" && -z "${OVERWRITE}" ]]; then
