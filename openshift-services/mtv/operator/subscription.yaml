@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: mtv-operator
+  namespace: openshift-mtv
+spec:
+  name: mtv-operator
+  sourceNamespace: openshift-marketplace
+  source: redhat-operators
+  channel: release-v2.7
+  installPlanApproval: Automatic
