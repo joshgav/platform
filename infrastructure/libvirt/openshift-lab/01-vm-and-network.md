@@ -114,6 +114,35 @@ nslookup api.sno1.equinix.joshgav.com
 - Create an ISO with `openshift-install agent create image --dir _workdir`
 - Copy ISO to a root-accessible location, e.g. `sudo cp ./_workdir/agent.x86_64.iso /opt/`.
 
+### Mount disk
+
+Create a partition on a block device:
+
+```bash
+sudo parted /dev/sda
+mklabel msdos
+mkpart primary 4MiB -1s
+print
+quit
+mkfs.ext4 /dev/sda1
+```
+
+Create a libvirt pool:
+
+```bash
+sudo mkdir /var/lib/libvirt/cluster-images
+sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
+```
+
+Mount the partition to the dir:
+
+```bash
+sudo blkid /dev/sda1
+echo 'UUID=66677417-8f8c-402d-9a31-75a71f56d62c /var/lib/libvirt/cluster-images ext4 defaults 0 2' >> /etc/fstab
+sudo systemctl daemon-reload
+sudo mount /var/lib/libvirt/cluster-images/
+```
+
 ### Create VM
 
 Create a VM that boots with an agent-install ISO.
@@ -128,8 +157,8 @@ export VM_NETWORK=sno1
 export VM_MAC="52:54:00:ee:42:e1"
 export VM_DISK_NAME=master0
 export VM_DISK_SIZE=120
-export VM_DISK_POOL=default
-export VM_DISK_PATH=/var/lib/libvirt/images
+export VM_DISK_POOL=cluster
+export VM_DISK_PATH=/var/lib/libvirt/cluster-images
 
 export VIRSH_DEFAULT_CONNECT_URI=qemu:///system
 
@@ -141,13 +170,17 @@ virt-install \
     --vcpus "${VM_CPU}" \
     --cdrom /opt/agent.x86_64.iso \
     --network "network=${VM_NETWORK},mac=${VM_MAC}" \
-    --disk size=${VM_DISK_SIZE} \
+    --disk "size=${VM_DISK_SIZE},pool=${VM_POOL_NAME}" \
     --boot hd,cdrom \
     --events on_reboot=restart \
     --os-variant rhel9.4
+```
 
+To remove the VM:
+
+```bash
 sudo virsh destroy ${VM_NAME} && sudo virsh undefine ${VM_NAME}
-rm /var/lib/libvirt/images/master0.qcow2
+rm /var/lib/libvirt/cluster-images/master0.qcow2
 ```
 
 ### Connect to VM:

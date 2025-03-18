@@ -1,0 +1,35 @@
+<network>
+  <name>mno2</name>
+  <forward mode='nat'/>
+  <bridge name='virbr2' stp='on' delay='0'/>
+  <mtu size='1500'/>
+  <mac address='52:54:00:e0:8d:ff'/>
+  <domain name='mno2.equinix.joshgav.com' localOnly='yes'/>
+  <dns enable='yes'>
+    <host ip="192.168.136.98">
+      <hostname>api.mno2.equinix.joshgav.com</hostname>
+      <hostname>api-int.mno2.equinix.joshgav.com</hostname>
+    </host>
+    <host ip="192.168.136.99">
+      <hostname>*.apps.mno2.equinix.joshgav.com</hostname>
+    </host>
+    <host ip='192.168.136.10'>
+      <hostname>master0.mno2.equinix.joshgav.com</hostname>
+    </host>
+    <host ip='192.168.136.11'>
+      <hostname>master1.mno2.equinix.joshgav.com</hostname>
+    </host>
+    <host ip='192.168.136.12'>
+      <hostname>master2.mno2.equinix.joshgav.com</hostname>
+    </host>
+    <forwarder addr="8.8.8.8"/>
+  </dns>
+  <ip family='ipv4' address='192.168.136.1' prefix='24' localPtr="yes">
+    <dhcp>
+      <range start='192.168.136.101' end='192.168.136.200'/>
+      <host ip='192.168.136.10' name='master0' mac='52:54:01:ee:42:e0' />
+      <host ip='192.168.136.11' name='master1' mac='52:54:01:ee:42:e1' />
+      <host ip='192.168.136.12' name='master2' mac='52:54:01:ee:42:e2' />
+    </dhcp>
+  </ip>
+</network>

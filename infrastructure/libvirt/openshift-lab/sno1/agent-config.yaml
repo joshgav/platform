@@ -1,0 +1,15 @@
+# agent-config.yaml
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: sno1
+rendezvousIP: 192.168.126.10
+additionalNTPSources:
+- 0.rhel.pool.ntp.org
+- 1.rhel.pool.ntp.org
+hosts:
+- hostname: master0
+  role: master
+  interfaces:
+  - name: eno1
+    macAddress: 52:54:00:ee:42:e1

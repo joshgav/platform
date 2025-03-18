@@ -67,7 +67,6 @@ openssl genrsa -out ${SERVER_NAME}.key 2048
 ## generate a pubkey and CSR for the server cert
 openssl req -new -subj "/CN=${SERVER_NAME}" \
     -key ${SERVER_NAME}.key -out ${SERVER_NAME}.csr \
-    -addext "subjectAltName=DNS.0:${SERVER_NAME},DNS.1:*.${SERVER_NAME}" \
     -addext 'extendedKeyUsage=serverAuth,clientAuth'
 ## approve/sign the server cert with the CA cert
 openssl x509 -req -days 36500 -CA ${CA_NAME}.crt -CAkey ${CA_NAME}.key \
