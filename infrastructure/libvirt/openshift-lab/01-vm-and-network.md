@@ -127,20 +127,21 @@ quit
 mkfs.ext4 /dev/sda1
 ```
 
-Create a libvirt pool:
-
-```bash
-sudo mkdir /var/lib/libvirt/cluster-images
-sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
-```
-
 Mount the partition to the dir:
 
 ```bash
 sudo blkid /dev/sda1
+echo 'UUID=d044579e-11eb-4bc2-a70d-17365a48f636 /var/lib/libvirt/cluster-images ext4 defaults 0 2' >> /etc/fstab
 echo 'UUID=66677417-8f8c-402d-9a31-75a71f56d62c /var/lib/libvirt/cluster-images ext4 defaults 0 2' >> /etc/fstab
 sudo systemctl daemon-reload
+sudo mkdir /var/lib/libvirt/cluster-images
 sudo mount /var/lib/libvirt/cluster-images/
+```
+
+Create a libvirt pool:
+
+```bash
+sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
 ```
 
 ### Create VM

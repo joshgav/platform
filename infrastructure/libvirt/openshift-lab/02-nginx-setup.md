@@ -24,7 +24,7 @@ systemctl enable nginx
 systemctl start nginx
 ```
 
-Test connectivity by navigating to <http://equinix.joshgav.com/>.
+Test connectivity by navigating to <http://equinix.joshgav.com/> (no HTTPS).
 
 ### Create a CA
 
@@ -94,6 +94,10 @@ Copy server certificate followed by CA certificate into files to be referenced f
 ```
 openssl s_client -connect api.sno1.equinix.joshgav.com:6443 \
     -servername api.sno1.equinix.joshgav.com \
+    -showcerts
+
+openssl s_client -connect api.mno2.equinix2.joshgav.com:6443 \
+    -servername api.mno3.equinix2.joshgav.com \
     -showcerts
 
 openssl s_client -connect console-openshift-console.apps.sno1.equinix.joshgav.com:443 \
