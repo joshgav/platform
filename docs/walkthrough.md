@@ -8,7 +8,7 @@ This is a walkthrough of how to prepare a cluster and various capabilities, then
 1. (Optional) Configure user authentication via Google OIDC ([link](../openshift-services/setup/oidc-google/))
 1. (Optional) Configure user authentication via Keycloak and GitHub OIDC ([link](../openshift-services/keycloak/deploy-cluster-iam.sh))
 1. Configure machine autoscalers ([link](../openshift-services/setup/autoscaler/))
-1. Install noobaa operator and system ([link](../openshift-services/noobaa/))
+1. Install ODF operator and noobaa (object storage) ([link](../openshift-services/odf))
 
 ## Observability capabilities
 1. Configure AlertManager to forward events to Slack ([link](../openshift-services/setup/alertmanager/))

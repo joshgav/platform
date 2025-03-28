@@ -15,6 +15,8 @@ stringData:
     FEATURE_DIRECT_LOGIN: true
     FEATURE_MAILING: false
     FEATURE_UI_V2: true
+    FEATURE_UI_V2_REPO_SETTINGS: true
+    FEATURE_AUTO_PRUNE: true
     REGISTRY_TITLE: Red Hat Quay
     REGISTRY_TITLE_SHORT: Red Hat Quay
     SETUP_COMPLETE: true
@@ -25,3 +27,7 @@ stringData:
     SUPER_USERS:
     - joshgav
     - quayadmin
+    SERVER_HOSTNAME: ${quay_server_name}
+data:
+  ssl.cert: ${quay_tls_crt_b64}
+  ssl.key: ${quay_tls_key_b64}

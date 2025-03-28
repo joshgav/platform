@@ -1,8 +1,9 @@
 # OpenShift Data Foundation (ODF)
 
-Deploy with `deploy.sh`.
-
-Create and use a bucket as in `test.sh`.
+- Deploy full ODF with `./deploy-odf.sh`
+- Deploy just the operator with `./deploy-operator.sh`
+- Deploy the operator and Noobaa with `./deploy-noobaa.sh`
+- Test creating and using a bucket with `./test.sh` 
 
 ## Notes
 
@@ -24,7 +25,6 @@ oc label nodes --all "cluster.ocs.openshift.io/openshift-storage="
 ## Resources
 
 - https://docs.redhat.com/en/documentation/red_hat_openshift_data_foundation/4.16
-
 - https://www.redhat.com/sysadmin/finding-block-and-file1
 - https://red-hat-storage.github.io/ocs-training/training/index.html
 - https://github.com/rook/rook/blob/master/design/ceph/resource-constraints.md

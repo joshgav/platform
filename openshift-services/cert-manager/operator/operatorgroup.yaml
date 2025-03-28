@@ -4,5 +4,4 @@ metadata:
     name: openshift-cert-manager-operator
     namespace: cert-manager-operator
 spec:
-    targetNamespaces:
-    - cert-manager-operator
+    targetNamespaces: []

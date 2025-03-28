@@ -12,7 +12,7 @@ compute:
 - architecture: amd64
   hyperthreading: Enabled
   name: worker
-  replicas: 3
+  replicas: 2
 networking:
   networkType: OVNKubernetes
   clusterNetwork:
@@ -26,7 +26,7 @@ platform:
   aws:
     region: ${AWS_REGION}
     defaultMachinePlatform:
-      type: m6i.2xlarge
+      type: m7i-flex.2xlarge
 publish: External
 pullSecret: '${OPENSHIFT_PULL_SECRET}'
 sshKey: '${SSH_PUBLIC_KEY}'

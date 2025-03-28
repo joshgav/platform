@@ -5,11 +5,6 @@ root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
-apply_kustomize_dir ${this_dir}/operator
-await_resource_ready storagesystems
-await_resource_ready storageclusters
-await_resource_ready objectbucketclaims
-
-exit
+${this_dir}/deploy-operator.sh
 
 apply_kustomize_dir ${this_dir}/storage

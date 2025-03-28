@@ -1,32 +1,17 @@
 # Quay
 
-## Resources
-
-- https://docs.redhat.com/en/documentation/red_hat_quay
-- https://github.com/quay/quay-operator
+Installs QuayRegistry operator then deploys a registry.
 
 ## Notes
 
-Installs QuayRegistry operator and custom resource type, then deploys a registry.
+### Alternate Hostname with TLS
 
-Requires ObjectBucketClaim resource type in cluster (via [Noobaa](../noobaa/)).
-
-This directory deploys object storage manually; i.e., `managed: false` is set on
-the `objectstorage` component. It uses Noobaa alone rather than OCS/ODF. The
-main difference is that the `storageClassName` in the ObjectBucketClaim is
-`noobaa.noobaa.io` rather than `openshift-storage.noobaa.io`. Because object
-storage is configured manually the config must also be set manually to include
-bucket metadata and secrets.
-
-## Notes
-
-### Alternate Hostname
-
-- Docs: <https://docs.redhat.com/en/documentation/red_hat_quay/3.13/html/deploying_the_red_hat_quay_operator_on_openshift_container_platform/configuring-traffic-ingress>
-- Generate a certificate with "SAN: quay.aws.joshgav.com" and add it to the config bundle
-    - See registry/certificate.yaml for an example certificate request
-    - After the certificate is set from Let's Encrypt, grab the cert and key from the secret and put them with the config bundle as described here: https://docs.redhat.com/en/documentation/red_hat_quay/3.12/html/deploying_the_red_hat_quay_operator_on_openshift_container_platform/configuring-traffic-ingress#creating-config-bundle-secret-tls-cert-key-pair
-- Add `SERVER_NAME: quay.aws.joshgav.com` to config-bundle to change the advertised name in the Web UI
+- Docs:
+    - <https://docs.redhat.com/en/documentation/red_hat_quay/3.13/html/deploying_the_red_hat_quay_operator_on_openshift_container_platform/configuring-traffic-ingress>
+    - <https://docs.redhat.com/en/documentation/red_hat_quay/3.13/html/deploying_the_red_hat_quay_operator_on_openshift_container_platform/operator-custom-ssl-certs-config-bundle>
+- Generate a certificate with "SAN: quay.aws.joshgav.com" and add it to the config bundle. See registry/certificate.yaml.tpl for an example certificate request.
+- After the certificate is ready grab the cert and key from the secret and put them with the config bundle.
+- Add `SERVER_HOSTNAME: quay.aws.joshgav.com` to config-bundle to change the advertised name in the Web UI
     - This also changes the host name in the route!
 
 ### Config
@@ -40,4 +25,6 @@ bucket metadata and secrets.
 
 ## Resources
 
-- Quay configuration: <https://docs.projectquay.io/deploy_quay_on_openshift_op_tng.html>
+- Quay configuration: <https://docs.projectquay.io/config_quay.html>
+- https://docs.redhat.com/en/documentation/red_hat_quay
+- https://github.com/quay/quay-operator
