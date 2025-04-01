@@ -7,22 +7,27 @@ spec:
   extraConfig:
     # allows admins to generate API keys
     accounts.admin: apiKey
-  controller:
-    appSync: 60s
   ha:
     enabled: false
   monitoring:
     enabled: true
   rbac:
-    defaultPolicy: "read-only"
-    policy: "g, system:cluster-admins, role:admin\n"
+    defaultPolicy: "role:admin"
+    policy: |
+      g, system:cluster-admins, role:admin
     scopes: "[groups]"
   server:
     route:
       enabled: true
-      tls:
-        termination: reencrypt
-        insecureEdgeTerminationPolicy: Redirect
+  controller:
+    appSync: 60s
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4Gi
+      requests:
+        cpu: "500m"
+        memory: 1Gi
   sso:
     provider: dex
     dex:

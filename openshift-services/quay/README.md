@@ -13,6 +13,7 @@ Installs QuayRegistry operator then deploys a registry.
 - After the certificate is ready grab the cert and key from the secret and put them with the config bundle.
 - Add `SERVER_HOSTNAME: quay.aws.joshgav.com` to config-bundle to change the advertised name in the Web UI
     - This also changes the host name in the route!
+- Also, don't forget to add a record for the hostname to DNS!
 
 ### Config
 

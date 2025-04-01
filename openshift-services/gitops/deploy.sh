@@ -8,7 +8,4 @@ source ${root_dir}/lib/kubernetes.sh
 kustomize build ${this_dir}/operator | oc apply -f -
 await_resource_ready argocd
 
-oc adm policy add-cluster-role-to-user cluster-admin -n openshift-gitops \
-    --serviceaccount openshift-gitops-argocd-application-controller
-
 kustomize build ${this_dir}/gitops | oc apply -f -
