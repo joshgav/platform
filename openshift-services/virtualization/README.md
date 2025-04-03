@@ -8,28 +8,10 @@ types using the [rosa CLI](https://github.com/openshift/rosa).
 `./create-machinesets.sh` deploys MachineSets using a `metal` instance type in
 AWS. See `./operand/machineset-example.yaml` for an example.
 
-## Windows
+## Nested Virtualization
 
-Some info related to running Windows images.
-
-- Get Windows Server 2022 images: <https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2022>
-- Kubevirt template for Win2k22: <https://github.com/kubevirt/common-templates/blob/master/templates/windows2k22.tpl.yaml>
-- Blog post on creating an image for Win2k19: <https://cloud.redhat.com/blog/creating-a-windows-base-image-for-openshift>
-    - Related git repo: <https://github.com/RHsyseng/cnv-integration/tree/main/blogs/windows-unattended>
-- Another post: <https://palant.info/2023/02/13/automating-windows-installation-in-a-vm/>
-- Convert a VHD to QCOW2
-  ```bash
-  qemu-img convert win2022.vhd -O qcow2 win2022.qcow2
-  ```
-- Upload an image
-  ```bash
-  virtctl image-upload dv win2022-dv \
-      --namespace openshift-virtualization-os-images \
-      --uploadproxy-url=https://cdi-uploadproxy-openshift-cnv.apps.ipi.aws.joshgav.com/ \
-      --size=10Gi \
-      --image-path=/home/joshgav/tmp/win2022.qcow2 \
-      --force-bind
-  ```
+- see <https://access.redhat.com/solutions/6692341>
+- set defaultCPUModel: <https://docs.redhat.com/en/documentation/openshift_container_platform/4.13/html/virtualization/virtual-machines#virt-configuring-default-cpu-model>
 
 ## Other tips
 - An invalid `storageprofile` may be created for the Noobaa storageclass. If so
