@@ -13,8 +13,6 @@ setsebool -P httpd_can_network_connect 1
 semanage port -a -t http_port_t -p tcp 6443
 ```
 
-Follow these instructions: <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/deploying_web_servers_and_reverse_proxies/setting-up-and-configuring-nginx_deploying-web-servers-and-reverse-proxies>
-
 ```
 dnf module list nginx
 dnf module enable nginx:1.24
@@ -191,11 +189,3 @@ server {
     }
 }
 ```
-
-### Resources
-
-- https://nginx.org/en/docs/http/ngx_http_proxy_module.html
-- https://nginx.org/en/docs/http/ngx_http_core_module.html
-- https://nginx.org/en/docs/http/ngx_http_ssl_module.html
-- https://docs.nginx.com/nginx/admin-guide/security-controls/securing-http-traffic-upstream
-- https://reinout.vanrees.org/weblog/2017/05/02/https-behind-proxy.html

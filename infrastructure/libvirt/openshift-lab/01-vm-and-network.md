@@ -114,9 +114,9 @@ nslookup api.sno1.equinix.joshgav.com
 - Create an ISO with `openshift-install agent create image --dir _workdir`
 - Copy ISO to a root-accessible location, e.g. `sudo cp ./_workdir/agent.x86_64.iso /opt/`.
 
-### Mount disk
+### Root Disks
 
-Create a partition on a block device:
+Create a partition on a block device on the host:
 
 ```bash
 sudo parted /dev/sda
@@ -124,24 +124,103 @@ mklabel msdos
 mkpart primary 4MiB -1s
 print
 quit
-mkfs.ext4 /dev/sda1
+sudo mkfs.ext4 /dev/sda1
 ```
 
-Mount the partition to the dir:
+Mount the partition to a dir for use by libvirt:
 
 ```bash
+# grab UUID for new partition
 sudo blkid /dev/sda1
+# set params for partition in host fstab
 echo 'UUID=d044579e-11eb-4bc2-a70d-17365a48f636 /var/lib/libvirt/cluster-images ext4 defaults 0 2' >> /etc/fstab
-echo 'UUID=66677417-8f8c-402d-9a31-75a71f56d62c /var/lib/libvirt/cluster-images ext4 defaults 0 2' >> /etc/fstab
 sudo systemctl daemon-reload
+# create dir and mount new partition there
 sudo mkdir /var/lib/libvirt/cluster-images
-sudo mount /var/lib/libvirt/cluster-images/
+sudo mount /var/lib/libvirt/cluster-images
 ```
 
-Create a libvirt pool:
+Create a libvirt pool to specify for VMs:
 
 ```bash
 sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
+```
+
+### Disks for PV/PVCs
+
+Create a partition on a block device on the host:
+
+```bash
+sudo parted /dev/sdb
+mklabel msdos
+mkpart primary 4MiB -1s
+print
+quit
+sudo mkfs.ext4 /dev/sdb1
+```
+
+Mount the partition to a path on the host for libvirt use:
+
+```bash
+sudo blkid /dev/sdb1
+sudo su
+echo 'UUID=4018757d-ad2b-4cc1-8ea6-6ea602eddcd4 /var/lib/libvirt/cluster-pvcs ext4 defaults 0 2' >> /etc/fstab
+sudo systemctl daemon-reload
+sudo mkdir /var/lib/libvirt/cluster-pvcs
+sudo mount /var/lib/libvirt/cluster-pvcs
+```
+
+Create a libvirt pool for VMs:
+
+```bash
+sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
+sudo virsh pool-create-as --name cluster-pvcs --type dir --target /var/lib/libvirt/cluster-pvcs
+```
+
+You can specify the pool as a source for a disk for a new VM, or you can create volumes and attach them to running VMs.
+
+Example of how to attach a disk to a running VM:
+
+```bash
+VM_NAME=master0
+PVC_POOL_NAME=cluster-pvcs
+PVC_VOLUME_CAPACITY=120GiB
+
+sudo virsh vol-create-as --name ${VM_NAME}-pvc.qcow2 \
+  --pool ${PVC_POOL_NAME} \
+  --capacity ${PVC_VOLUME_CAPACITY} \
+  --format qcow2
+
+sudo virsh attach-disk --domain ${VM_NAME} \
+  --source "/var/lib/libvirt/cluster-pvcs/${VM_NAME}-pvc.qcow2" \
+  --target vdb --targetbus virtio \
+  --driver qemu --subdriver qcow2 \
+  --type disk --sourcetype file \
+  --live --persistent
+```
+
+Now install the LVMO operator and create a LVMCluster resource.
+
+Example LVMCluster:
+
+```yaml
+apiVersion: lvm.topolvm.io/v1alpha1
+kind: LVMCluster
+metadata:
+  name: lvmcluster
+  namespace: openshift-storage
+spec:
+  storage:
+    deviceClasses:
+    - name: vg1
+      default: true
+      fstype: ext4
+      deviceSelector:
+        paths:
+        - /dev/vdb
+      thinPoolConfig:
+        name: thin-pool-1
+        overprovisionRatio: 10
 ```
 
 ### Create VM
@@ -156,10 +235,9 @@ export VM_RAM='16384'
 export VM_CPU='8'
 export VM_NETWORK=sno1
 export VM_MAC="52:54:00:ee:42:e1"
-export VM_DISK_NAME=master0
 export VM_DISK_SIZE=120
-export VM_DISK_POOL=cluster
-export VM_DISK_PATH=/var/lib/libvirt/cluster-images
+export VM_POOL_NAME=cluster
+export PVC_POOL_NAME=cluster-pvcs
 
 export VIRSH_DEFAULT_CONNECT_URI=qemu:///system
 
@@ -172,6 +250,7 @@ virt-install \
     --cdrom /opt/agent.x86_64.iso \
     --network "network=${VM_NETWORK},mac=${VM_MAC}" \
     --disk "size=${VM_DISK_SIZE},pool=${VM_POOL_NAME}" \
+    --disk "size=${VM_DISK_SIZE},pool=${PVC_POOL_NAME}" \
     --boot hd,cdrom \
     --events on_reboot=restart \
     --os-variant rhel9.4
@@ -194,9 +273,3 @@ journalctl --follow
 ```
 
 To remove a VM: `sudo virsh destroy master0 && sudo virsh undefine master0`
-
-## Resources
-
-- https://github.com/kubealex/libvirt-k8s-provisioner
-- https://computingforgeeks.com/how-to-deploy-openshift-container-platform-on-kvm/
-- https://github.com/redhatci/ansible-collection-redhatci-ocp
