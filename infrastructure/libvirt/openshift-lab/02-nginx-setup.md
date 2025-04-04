@@ -189,3 +189,29 @@ server {
     }
 }
 ```
+
+### for websocket support
+
+Derived from <https://nginx.org/en/docs/http/websocket.html>.
+
+Add this to `/etc/nginx/nginx.conf`:
+
+```conf
+http {
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        '' close;
+    }
+}
+```
+
+And add this to each `server` entry added above:
+
+```
+server {
+    location / {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    }
+}
+```
