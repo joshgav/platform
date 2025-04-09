@@ -3,7 +3,7 @@ apiVersion: v1beta1
 kind: AgentConfig
 metadata:
   name: sno1
-rendezvousIP: 192.168.126.10
+rendezvousIP: 192.168.136.10
 additionalNTPSources:
 - 0.rhel.pool.ntp.org
 - 1.rhel.pool.ntp.org

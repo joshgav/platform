@@ -2,14 +2,15 @@
 
 ### Configure External DNS
 
-Create A records in Route53:
+Create A records in DNS provider (e.g., Route53).
 
-```
+```text
+cluster_name=mno2
 # not required, just for easy access
-equinix.joshgav.com                ${HOST_IP}
+openshift.joshgav.com                           ${HOST_IP}
 # for external OpenShift access
-api.sno1.equinix.joshgav.com       ${HOST_IP}
-*.apps.sno1.equinix.joshgav.com    ${HOST_IP}
+api.${cluster_name}.openshift.joshgav.com       ${HOST_IP}
+*.apps.${cluster_name}.openshift.joshgav.com    ${HOST_IP}
 ```
 
 ### Install tools on host (hypervisor)
@@ -38,9 +39,11 @@ Perhaps adjust the following to account for other co-hosted networks:
 
 - bridge name/number from `virbr1`
 - bridge MAC address from `52:54:00:e0:8d:fe`
-- base network CIDR from `192.168.126.0/24`
+- base network CIDR from `192.168.136.0/24`
 - static MAC addresses for VMs - must match agent-config.yaml and vm.xml
-- OpenShift cluster name
+- OpenShift cluster name, e.g. `mno2`
+
+Example for a SNO cluster:
 
 ```xml
 <network>
@@ -49,20 +52,20 @@ Perhaps adjust the following to account for other co-hosted networks:
   <bridge name='virbr1' stp='on' delay='0'/>
   <mtu size='1500'/>
   <mac address='52:54:00:e0:8d:fe'/>
-  <domain name='${OPENSHIFT_CLUSTER_NAME}.equinix.joshgav.com' localOnly='yes'/>
+  <domain name='${OPENSHIFT_CLUSTER_NAME}.openshift.joshgav.com' localOnly='yes'/>
   <dns enable='yes'>
-    <host ip='192.168.126.10'>
-      <hostname>api.${OPENSHIFT_CLUSTER_NAME}.equinix.joshgav.com</hostname>
-      <hostname>api-int.${OPENSHIFT_CLUSTER_NAME}.equinix.joshgav.com</hostname>
-      <hostname>master0.${OPENSHIFT_CLUSTER_NAME}.equinix.joshgav.com</hostname>
-      <hostname>*.apps.${OPENSHIFT_CLUSTER_NAME}.equinix.joshgav.com</hostname>
+    <host ip='192.168.136.10'>
+      <hostname>api.${OPENSHIFT_CLUSTER_NAME}.openshift.joshgav.com</hostname>
+      <hostname>api-int.${OPENSHIFT_CLUSTER_NAME}.openshift.joshgav.com</hostname>
+      <hostname>master0.${OPENSHIFT_CLUSTER_NAME}.openshift.joshgav.com</hostname>
+      <hostname>*.apps.${OPENSHIFT_CLUSTER_NAME}.openshift.joshgav.com</hostname>
     </host>
     <forwarder addr="8.8.8.8"/>
   </dns>
-  <ip family='ipv4' address='192.168.126.1' prefix='24' localPtr="yes">
+  <ip family='ipv4' address='192.168.136.1' prefix='24' localPtr="yes">
     <dhcp>
-      <range start='192.168.126.100' end='192.168.126.200'/>
-      <host ip='192.168.126.10' name='master0' mac='52:54:00:ee:42:e1' />
+      <range start='192.168.136.100' end='192.168.136.200'/>
+      <host ip='192.168.136.10' name='master0' mac='52:54:00:ee:42:e1' />
     </dhcp>
   </ip>
 </network>
@@ -71,9 +74,10 @@ Perhaps adjust the following to account for other co-hosted networks:
 Copy the XML into a file named `net.xml` and run:
 
 ```bash
+OPENSHIFT_CLUSTER_NAME=mno2
 sudo virsh net-define net.xml
-sudo virsh net-start sno1
-sudo virsh net-autostart sno1
+sudo virsh net-start ${OPENSHIFT_CLUSTER_NAME}
+sudo virsh net-autostart ${OPENSHIFT_CLUSTER_NAME}
 ```
 
 Route traffic from the hypervisor host to the OpenShift VMs. This enables kubectl/oc commands to work from hypervisor.
@@ -89,9 +93,11 @@ Add to `/etc/NetworkManager/dnsmasq.d/00-use_internal_dns.conf`:
 
 Consider if a different filename is needed if another network already exists.
 
+This example uses custom VIPs for load balancers.
+
 ```
-address=/api.sno1.equinix.joshgav.com/192.168.126.10
-address=/apps.sno1.equinix.joshgav.com/192.168.126.10
+address=/api.mno2.openshift.joshgav.com/192.168.136.98
+address=/apps.mno2.openshift.joshgav.com/192.168.136.99
 ```
 
 Restart NetworkManager: `sudo systemctl restart NetworkManager`
@@ -99,41 +105,43 @@ Restart NetworkManager: `sudo systemctl restart NetworkManager`
 Test that internal address is returned by default:
 
 ```bash
-nslookup api.sno1.equinix.joshgav.com
+nslookup api.mno2.openshift.joshgav.com
 ```
 
 ### Create Agent ISO
 
-- Copy [agent-config.yaml](./agent-config.template.yaml) and [install-config.yaml](./install-config.template.yaml) into `_workdir` and adjust values.
+- Download [openshift-install](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-install-linux.tar.gz)
+- Copy [agent-config.yaml](./agent-config.template.yaml) and [install-config.yaml](./install-config.template.yaml) into `workdir` and adjust values.
 - Ensure MAC address matches that configured for the VMs
 - Ensure rendezvous IP reflects correct IP address
 - Ensure machine network matches libvirt network
 - Download openshift-install and oc from <https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/>
   - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-client-linux.tar.gz
   - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/fast/openshift-install-linux.tar.gz
-- Create an ISO with `openshift-install agent create image --dir _workdir`
-- Copy ISO to a root-accessible location, e.g. `sudo cp ./_workdir/agent.x86_64.iso /opt/`.
+- Create an ISO with `openshift-install agent create image --dir workdir`
+- Copy ISO to a root-accessible location, e.g. `sudo cp ./workdir/agent.x86_64.iso /opt/`.
 
 ### Root Disks
 
 Create a partition on a block device on the host:
 
 ```bash
-sudo parted /dev/sda
+sudo parted /dev/vdb
 mklabel msdos
 mkpart primary 4MiB -1s
 print
 quit
-sudo mkfs.ext4 /dev/sda1
+sudo mkfs.ext4 /dev/vdb1
 ```
 
 Mount the partition to a dir for use by libvirt:
 
 ```bash
 # grab UUID for new partition
-sudo blkid /dev/sda1
+sudo blkid /dev/vdb1
 # set params for partition in host fstab
-echo 'UUID=d044579e-11eb-4bc2-a70d-17365a48f636 /var/lib/libvirt/cluster-images ext4 defaults 0 2' >> /etc/fstab
+UUID=7b86686b-6d10-47a2-9ad0-69b0ab9121c3
+echo "UUID=${UUID} /var/lib/libvirt/cluster-images ext4 defaults 0 2" >> /etc/fstab
 sudo systemctl daemon-reload
 # create dir and mount new partition there
 sudo mkdir /var/lib/libvirt/cluster-images
@@ -143,7 +151,7 @@ sudo mount /var/lib/libvirt/cluster-images
 Create a libvirt pool to specify for VMs:
 
 ```bash
-sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
+sudo virsh pool-create-as --name cluster-images --type dir --target /var/lib/libvirt/cluster-images
 ```
 
 ### Disks for PV/PVCs
@@ -173,7 +181,6 @@ sudo mount /var/lib/libvirt/cluster-pvcs
 Create a libvirt pool for VMs:
 
 ```bash
-sudo virsh pool-create-as --name cluster --type dir --target /var/lib/libvirt/cluster-images
 sudo virsh pool-create-as --name cluster-pvcs --type dir --target /var/lib/libvirt/cluster-pvcs
 ```
 
@@ -260,15 +267,15 @@ To remove the VM:
 
 ```bash
 sudo virsh destroy ${VM_NAME} && sudo virsh undefine ${VM_NAME}
-rm /var/lib/libvirt/cluster-images/master0.qcow2
+sudo rm -f /var/lib/libvirt/cluster-images/${VM_NAME}.qcow2
 ```
 
 ### Connect to VM:
 
-Check status and wait for install with `openshift-install agent wait-for install-complete --dir _workdir`.
+Check status and wait for install with `openshift-install agent wait-for install-complete --dir workdir`.
 
 ```
-ssh -i .ssh/id_rsa core@192.168.126.10
+ssh -i .ssh/id_rsa core@192.168.136.10
 journalctl --follow
 ```
 

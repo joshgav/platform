@@ -22,7 +22,7 @@ systemctl enable nginx
 systemctl start nginx
 ```
 
-Test connectivity by navigating to <http://equinix.joshgav.com/> (no HTTPS).
+Test connectivity by navigating to <http://openshift.joshgav.com/> (no HTTPS).
 
 ### Create a CA
 
@@ -43,21 +43,23 @@ openssl req -x509 -new -subj "/CN=${CA_NAME}" \
 Note: Wildcard SANs seem to only go one level deep, so additional domains should
 be added for OpenShift `apps...` domains.
 
-Contents of equinix.joshgav.com.cnf:
+Contents of openshift.joshgav.com.cnf:
 
 ```text
 subjectAltName     = @alt_names
 extendedKeyUsage   = serverAuth,clientAuth
 
 [alt_names]
-DNS.1   = equinix.joshgav.com
-DNS.2   = *.equinix.joshgav.com
-DNS.3   = api.sno1.equinix.joshgav.com
-DNS.4   = *.apps.sno1.equinix.joshgav.com
+DNS.0   = openshift.joshgav.com
+DNS.1   = *.openshift.joshgav.com
+DNS.2   = api.sno1.openshift.joshgav.com
+DNS.3   = *.apps.sno1.openshift.joshgav.com
+DNS.4   = api.mno2.openshift.joshgav.com
+DNS.5   = *.apps.mno2.openshift.joshgav.com
 ```
 
 ```bash
-SERVER_NAME=equinix.joshgav.com
+SERVER_NAME=openshift.joshgav.com
 CA_NAME=ca.joshgav.com
 
 ## generate the private key
@@ -81,8 +83,11 @@ openssl x509 -in path/to/cert.crt -text
 ### Copy files to http host:
 
 ```
-/usr/share/nginx/pki/equinix.joshgav.com.crt
-/usr/share/nginx/pki/equinix.joshgav.com.key
+sudo mkdir /usr/share/nginx/pki
+sudo touch /usr/share/nginx/pki/openshift.joshgav.com.{crt,key}
+## be sure to add CA cert after host cert:
+sudoedit /usr/share/nginx/pki/openshift.joshgav.com.crt
+sudoedit /usr/share/nginx/pki/openshift.joshgav.com.key
 ```
 
 ### Retrive CA cert from cluster
@@ -90,22 +95,18 @@ openssl x509 -in path/to/cert.crt -text
 Copy server certificate followed by CA certificate into files to be referenced from `nginx.conf` files.
 
 ```
-openssl s_client -connect api.sno1.equinix.joshgav.com:6443 \
-    -servername api.sno1.equinix.joshgav.com \
+openssl s_client -connect api.mno2.openshift.joshgav.com:6443 \
+    -servername api.mno2.openshift.joshgav.com \
     -showcerts
 
-openssl s_client -connect api.mno2.equinix2.joshgav.com:6443 \
-    -servername api.mno3.equinix2.joshgav.com \
-    -showcerts
-
-openssl s_client -connect console-openshift-console.apps.sno1.equinix.joshgav.com:443 \
-    -servername console-openshift-console.apps.sno1.equinix.joshgav.com \
+openssl s_client -connect console-openshift-console.apps.mno2.openshift.joshgav.com:443 \
+    -servername console-openshift-console.apps.mno2.openshift.joshgav.com \
     -showcerts
 ```
 
 ```
-/usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.crt
-/usr/share/nginx/pki/api.sno1.equinix.joshgav.com.crt
+/usr/share/nginx/pki/apps.mno2.openshift.joshgav.com.crt
+/usr/share/nginx/pki/api.mno2.openshift.joshgav.com.crt
 ```
 
 ### `server` block for direct TLS
@@ -121,11 +122,11 @@ After modifying files, be sure to restart nginx: `systemctl restart nginx.servic
 server {
     listen       443 ssl;
     listen       [::]:443 ssl;
-    server_name  equinix.joshgav.com;
+    server_name  openshift.joshgav.com;
     root         /usr/share/nginx/html;
 
-    ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
-    ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
+    ssl_certificate "/usr/share/nginx/pki/openshift.joshgav.com.crt";
+    ssl_certificate_key "/usr/share/nginx/pki/openshift.joshgav.com.key";
     ssl_session_cache shared:SSL:1m;
     ssl_session_timeout  10m;
     ssl_prefer_server_ciphers on;
@@ -146,10 +147,10 @@ server {
 server {
     listen       443 ssl;
     listen       [::]:443 ssl;
-    server_name  *.apps.sno1.equinix.joshgav.com;
+    server_name  *.apps.mno2.openshift.joshgav.com;
 
-    ssl_certificate "/usr/share/nginx/pki/equinix.joshgav.com.crt";
-    ssl_certificate_key "/usr/share/nginx/pki/equinix.joshgav.com.key";
+    ssl_certificate "/usr/share/nginx/pki/openshift.joshgav.com.crt";
+    ssl_certificate_key "/usr/share/nginx/pki/openshift.joshgav.com.key";
     ssl_session_cache shared:SSL:1m;
     ssl_session_timeout  10m;
     ssl_prefer_server_ciphers on;
@@ -158,8 +159,8 @@ server {
         proxy_set_header Host $http_host;
         proxy_ssl_server_name on;
         proxy_ssl_name $http_host;
-        proxy_pass https://192.168.126.10:443;
-        proxy_ssl_trusted_certificate /usr/share/nginx/pki/apps.sno1.equinix.joshgav.com.crt;
+        proxy_pass https://192.168.136.99:443;
+        proxy_ssl_trusted_certificate /usr/share/nginx/pki/apps.mno2.openshift.joshgav.com.crt;
         proxy_http_version 1.1;
     }
 }
@@ -183,7 +184,7 @@ server {
         proxy_set_header Host $http_host;
         proxy_ssl_server_name on;
         proxy_ssl_name $http_host;
-        proxy_pass https://192.168.126.10:6443;
+        proxy_pass https://192.168.136.98:6443;
         proxy_ssl_trusted_certificate /usr/share/nginx/pki/api.sno1.equinix.joshgav.com.crt;
         proxy_http_version 1.1;
     }

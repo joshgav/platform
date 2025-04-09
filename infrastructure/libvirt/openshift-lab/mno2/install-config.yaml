@@ -3,7 +3,7 @@
 apiVersion: v1
 metadata:
   name: mno2
-baseDomain: equinix.joshgav.com
+baseDomain: openshift.joshgav.com
 controlPlane:
   architecture: amd64
   hyperthreading: Enabled
@@ -33,5 +33,5 @@ platform:
     ingressVIPs:
     - 192.168.136.99
 publish: External
-pullSecret: '${OPENSHIFT_PULL_SECRET}'
-sshKey: '${SSH_PUBLIC_KEY}'
+pullSecret: ''
+sshKey: ''

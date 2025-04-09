@@ -1,0 +1,10 @@
+[{
+    "name": "master0",
+    "macAddress": "52:54:01:ee:42:e0"
+},{
+    "name": "master1",
+    "macAddress": "52:54:01:ee:42:e1"
+},{
+    "name": "master2",
+    "macAddress": "52:54:01:ee:42:e2"
+}]

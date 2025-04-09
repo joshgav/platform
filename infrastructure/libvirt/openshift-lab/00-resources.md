@@ -4,6 +4,11 @@
 - https://computingforgeeks.com/how-to-deploy-openshift-container-platform-on-kvm/
 - https://github.com/redhatci/ansible-collection-redhatci-ocp
 
+## Virtual BMC
+
+- https://github.com/openshift-metal3/fakefish
+- https://github.com/openstack/sushy-tools
+
 ## network
 
 - https://docs.fedoraproject.org/en-US/fedora-server/administration/dnsmasq/

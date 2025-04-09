@@ -3,7 +3,7 @@
 apiVersion: v1
 metadata:
   name: sno1
-baseDomain: equinix.joshgav.com
+baseDomain: openshift.joshgav.com
 controlPlane:
   architecture: amd64
   hyperthreading: Enabled
@@ -24,7 +24,7 @@ networking:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
   machineNetwork:
-  - cidr: 192.168.126.0/24
+  - cidr: 192.168.136.0/24
   serviceNetwork:
   - 172.30.0.0/16
 platform:
