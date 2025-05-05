@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: istio-cni
+    openshift.io/cluster-monitoring: "true"
+  name: istio-cni

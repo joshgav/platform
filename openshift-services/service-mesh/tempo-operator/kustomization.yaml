@@ -1,8 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: openshift-opentelemetry-operator
+namespace: openshift-tempo-operator
 resources:
 - namespace.yaml
-- generate-processors-rbac.yaml
 - operatorgroup.yaml
 - subscription.yaml

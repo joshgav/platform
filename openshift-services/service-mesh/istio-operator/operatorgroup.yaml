@@ -1,0 +1,8 @@
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-istio-operator
+  namespace: openshift-istio-operator
+spec:
+  upgradeStrategy: Default

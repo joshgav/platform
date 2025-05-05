@@ -1,0 +1,56 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: opentelemetry-basic
+  namespace: istio-system
+spec:
+  observability:
+    metrics: {}
+  deploymentUpdateStrategy: {}
+  config:
+    exporters:
+      debug:
+        verbosity: basic
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: '0.0.0.0:4317'
+          http:
+            endpoint: '0.0.0.0:4318'
+    service:
+      pipelines:
+        traces:
+          exporters:
+            - debug
+          receivers:
+            - otlp
+        logs:
+          exporters:
+            - debug
+          receivers:
+            - otlp
+      telemetry:
+        logs:
+          level: DEBUG
+        metrics:
+          address: '0.0.0.0:8888'
+  mode: deployment
+  resources: {}
+  podDnsConfig: {}
+  managementState: managed
+  upgradeStrategy: automatic
+  ingress:
+    route: {}
+  daemonSetUpdateStrategy: {}
+  targetAllocator:
+    allocationStrategy: consistent-hashing
+    filterStrategy: relabel-config
+    observability:
+      metrics: {}
+    prometheusCR:
+      scrapeInterval: 30s
+    resources: {}
+  replicas: 1
+  ipFamilyPolicy: SingleStack
+  configVersions: 3

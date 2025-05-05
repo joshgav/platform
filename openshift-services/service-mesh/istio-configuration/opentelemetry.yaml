@@ -1,0 +1,97 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: opentelemetry
+  namespace: istio-system
+spec:
+  podAnnotations:
+    sidecar.istio.io/inject: 'true'
+  observability:
+    metrics:
+      enableMetrics: true
+  deploymentUpdateStrategy: {}
+  config:
+    extensions:
+      bearertokenauth:
+        filename: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+    exporters:
+      debug:
+        verbosity: basic
+      otlphttp/tempo:
+        endpoint: https://tempo-default-gateway.tempo-observability.svc.cluster.local:8080/api/traces/v1/dev
+        tls:
+          insecure: false
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+        auth:
+          authenticator: bearertokenauth
+        headers:
+          X-Scope-OrgID: dev
+      prometheus:
+        endpoint: 0.0.0.0:8889
+        add_metric_suffixes: false
+        resource_to_telemetry_conversion:
+          enabled: true
+
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: '0.0.0.0:4317'
+          http:
+            endpoint: '0.0.0.0:4318'
+
+    processors:
+      k8sattributes: {}
+
+    connectors:
+      spanmetrics:
+        metrics_flush_interval: 15s
+
+    service:
+      extensions:
+        - bearertokenauth
+      pipelines:
+        traces:
+          exporters:
+            - debug
+            - spanmetrics
+            - otlphttp/tempo
+          receivers:
+            - otlp
+        logs:
+          exporters:
+            - debug
+            - otlphttp/tempo
+          receivers:
+            - otlp
+        metrics:
+          receivers:
+            - spanmetrics
+          exporters:
+            - debug
+            - prometheus
+      telemetry:
+        logs:
+          level: DEBUG
+        metrics:
+          address: '0.0.0.0:8888'
+  mode: deployment
+  resources: {}
+  podDnsConfig: {}
+  managementState: managed
+  upgradeStrategy: automatic
+  ingress:
+    route: {}
+  daemonSetUpdateStrategy: {}
+  targetAllocator:
+    allocationStrategy: consistent-hashing
+    filterStrategy: relabel-config
+    observability:
+      metrics: {}
+    prometheusCR:
+      scrapeInterval: 30s
+    resources: {}
+  replicas: 1
+  ipFamilyPolicy: SingleStack
+  configVersions: 3

@@ -1,0 +1,8 @@
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-kiali-operator
+  namespace: openshift-kiali-operator
+spec:
+  upgradeStrategy: Default

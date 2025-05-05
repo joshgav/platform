@@ -1,0 +1,46 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind:  TempoStack
+metadata:
+  name: default
+  namespace: tempo-observability
+spec:
+  observability:
+    metrics:
+      createServiceMonitors: true
+      createPrometheusRules: true
+  storage:
+    secret:
+      name: tempo-observability-secret
+      type: s3
+  storageSize: 10Gi
+  resources:
+    total:
+      limits:
+        memory: 4Gi
+        cpu: 2000m
+  tenants:
+    mode: openshift
+    authentication:
+      - tenantName: dev
+        tenantId: "1610b0c3-c509-4592-a256-a1871353dbfa"
+      - tenantName: prod
+        tenantId: "1610b0c3-c509-4592-a256-a1871353dbfb"
+  template:
+    gateway:
+      enabled: true
+    queryFrontend:
+      jaegerQuery:
+        enabled: true
+        findTracesConcurrentRequests: 20
+        monitorTab:
+          enabled: true
+          prometheusEndpoint: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+    querier:
+      replicas: 3
+      resources:
+        requests:
+          memory: 2Gi
+          cpu: 2
+        limits:
+          memory: 2Gi
+          cpu: 2
