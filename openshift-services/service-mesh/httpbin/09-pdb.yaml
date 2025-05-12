@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    istio: ingressgateway
+    release: istio
+  name: ingressgatewaypdb
+spec:
+  minAvailable: 1 
+  selector:
+    matchLabels:
+      istio: ingressgateway
