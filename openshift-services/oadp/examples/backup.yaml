@@ -1,0 +1,9 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: vms-backup
+  namespace: openshift-adp
+spec:
+  snapshotMoveData: true
+  includedNamespaces:
+    - vms
