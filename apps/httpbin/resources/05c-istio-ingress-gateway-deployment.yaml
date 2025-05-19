@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-ingressgateway
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+      app: httpbin
+  template:
+    metadata:
+      annotations:
+        # Select the gateway injection template (rather than the default sidecar template)
+        inject.istio.io/templates: gateway
+      labels:
+        # Set a unique label for the gateway. This is required to ensure Gateways can select this workload
+        istio: ingressgateway
+        app: httpbin
+        # Enable gateway injection. If connecting to a revisioned control plane, replace with "istio.io/rev: revision-name"
+        sidecar.istio.io/inject: "true"
+    spec:
+      serviceAccountName: httpbin
+      containers:
+      - name: istio-proxy
+        image: auto # The image will automatically update each time the pod starts.

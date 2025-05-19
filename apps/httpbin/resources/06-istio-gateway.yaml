@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: httpbin-gateway
+spec:
+  selector:
+    istio: ingressgateway
+    app: httpbin
+  servers:
+  - port:
+      number: 8080
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"

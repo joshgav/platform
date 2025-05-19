@@ -1,0 +1,29 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: machinenet
+  namespace: httpbin
+spec:
+  nodeSelector: {}
+  desiredState:
+    ovn:
+      bridge-mappings:
+      - localnet: machinenet
+        bridge: br-ex
+        state: present
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: machinenet
+  namespace: httpbin
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "machinenet",
+      "topology": "localnet",
+      "netAttachDefName": "httpbin/machinenet",
+      "type": "ovn-k8s-cni-overlay",
+      "subnets": "192.168.100.128/26"
+    }

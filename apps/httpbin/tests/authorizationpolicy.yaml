@@ -1,0 +1,33 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin-allow
+  namespace: httpbin
+spec:
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: 
+        - "cluster.local/ns/httpbin/sa/default"
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/anything*"]
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: httpbin-deny
+  namespace: httpbin
+spec:
+  action: DENY
+  rules:
+  - from:
+    - source:
+        principals: 
+        - "cluster.local/ns/httpbin/sa/default"
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/dump*"]
