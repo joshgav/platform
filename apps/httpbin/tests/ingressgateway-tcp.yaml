@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-ingressgateway-tcp
+spec:
+  type: ClusterIP
+  selector:
+    istio: ingressgateway
+    app: httpbin
+  ports:
+  - name: httpa
+    port: 9000
+    targetPort: 9000
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: httpbin-gateway-tcp
+spec:
+  selector:
+    istio: ingressgateway
+    app: httpbin
+  servers:
+  - port:
+      number: 9000
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: httpbin-tcp
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - httpbin-gateway-tcp
+  http:
+  - match:
+    - port: 9000
+    route:
+    - destination:
+        host: httpbin
+        port:
+          number: 8000
