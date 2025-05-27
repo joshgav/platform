@@ -37,29 +37,29 @@ roxctl version
 echo "INFO: verify login"
 roxctl central whoami --insecure-skip-tls-verify
 
-## generate init-bundle for secured cluster
+## generate CRS for secured cluster
 cluster_exists="false"
-roxctl central init-bundles list --insecure-skip-tls-verify | grep -q "^${cluster_name}\b"
+roxctl central crs list --insecure-skip-tls-verify | grep -q "^${cluster_name}\b"
 if [[ $? == 0 ]]; then
-    echo "WARN: init-bundle for ${cluster_name} already exists"
+    echo "WARN: CRS for ${cluster_name} already exists"
     cluster_exists="true"
 fi
 if [[ "${cluster_exists}" == "true" && -n "${RECREATE_CLUSTER}" ]]; then
-    roxctl central init-bundles revoke ${cluster_name} \
+    roxctl central crs revoke ${cluster_name} \
         --insecure-skip-tls-verify
-    rm ${cluster_name}-init-bundle.yaml
+    rm ${cluster_name}-crs.yaml
 elif [[ "${cluster_exists}" == "true" ]]; then
     exit
 fi
 
 ## generate secured cluster
-echo "INFO: generate init-bundles for cluster: ${cluster_name}"
-roxctl central init-bundles generate ${cluster_name} --output-secrets ${cluster_name}-init-bundle.yaml \
+echo "INFO: generate CRS for cluster: ${cluster_name}"
+roxctl central crs generate ${cluster_name} --output ${cluster_name}-crs.yaml \
     --insecure-skip-tls-verify
 
 if [[ "${cluster_name}" == "local-cluster" ]]; then
     echo "INFO: installing local secured cluster"
     ${this_dir}/deploy-operator.sh
-    oc apply -n stackrox -f ${cluster_name}-init-bundle.yaml
+    oc apply -n stackrox -f ${cluster_name}-crs.yaml
     apply_kustomize_dir ${this_dir}/securedcluster
 fi
