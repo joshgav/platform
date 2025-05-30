@@ -6,14 +6,13 @@ if [[ -f ${root_dir}/.env ]]; then source ${root_dir}/.env; fi
 if [[ -f ${this_dir}/.env ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
+ansible_namespace=aap
+
 kustomize build ${this_dir}/operator | oc apply -f -
-await_resource_ready automationcontrollers
+await_resource_ready ansibleautomationplatforms
 
-ansible_controller_namespace=ansible-automation-controller
 ansible_hub_bucket_name=ansible-automation-hub
-
-ensure_namespace ${ansible_controller_namespace}
-ensure_bucket ${ansible_hub_bucket_name} ${ansible_controller_namespace}
+ensure_bucket ${ansible_hub_bucket_name} ${ansible_namespace}
 
 export S3_REGION=${S3_REGION:-''}
 
