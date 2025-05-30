@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: InstallConfig
+metadata:
+  name: ${OPENSHIFT_CLUSTER_NAME}
+baseDomain: ${OPENSHIFT_DOMAIN_NAME}
+compute:
+- name: worker
+  replicas: 3
+  platform:
+    vsphere:
+      cpus: 8
+      coresPerSocket: 1
+      memoryMB: 32384
+      osDisk:
+        diskSizeGB: 120
+controlPlane:
+  name: master
+  replicas: 3
+  platform:
+    vsphere:
+      cpus: 4
+      coresPerSocket: 1
+      memoryMB: 16196
+      osDisk:
+        diskSizeGB: 120
+networking:
+  networkType: OVNKubernetes
+  machineNetwork:
+  - cidr: 192.168.46.0/24
+  clusterNetwork:
+  - cidr: 10.0.0.0/16
+    hostPrefix: 23
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  vsphere:
+    apiVIPs:
+    - '192.168.46.201'
+    ingressVIPs:
+    - '192.168.46.202'
+    loadBalancer:
+      type: OpenShiftManagedDefault
+    defaultMachinePlatform:
+      cpus: 8
+      coresPerSocket: 1
+      memoryMB: 32384
+      osDisk:
+        diskSizeGB: 120
+    vcenters:
+    - server: ${VCENTER_SERVER}
+      port: 443
+      user: ${VCENTER_USERNAME}
+      password: ${VCENTER_PASSWORD}
+      datacenters:
+      - ${VCENTER_DATACENTER}
+    failureDomains:
+    - name: default
+      region: ${VCENTER_REGION}
+      zone: ${VCENTER_ZONE}
+      server: ${VCENTER_SERVER}
+      topology:
+        datacenter: ${VCENTER_DATACENTER}
+        computeCluster: /${VCENTER_DATACENTER}/host/${VCENTER_CLUSTER}
+        networks:
+        - ${VCENTER_NETWORK}
+        datastore: /${VCENTER_DATACENTER}/datastore/${VCENTER_DATASTORE}
+        folder: /${VCENTER_DATACENTER}/vm/${VCENTER_FOLDER}
+publish: External
+pullSecret: '${OPENSHIFT_PULL_SECRET}'
+sshKey: '${SSH_PUBLIC_KEY}'
