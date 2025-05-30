@@ -1,8 +1,8 @@
 # OpenShift Data Foundation (ODF)
 
-- Deploy full ODF with `./deploy-odf.sh`
+- Deploy full ODF with `./deploy-ceph.sh`
 - Deploy just the operator with `./deploy-operator.sh`
-- Deploy the operator and Noobaa with `./deploy-noobaa.sh`
+- Deploy the operator and Noobaa with `./deploy-mcg.sh`
 - Test creating and using a bucket with `./test.sh` 
 
 ## Notes

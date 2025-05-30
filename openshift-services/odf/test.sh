@@ -17,6 +17,8 @@ spec:
     bucketClass: noobaa-default-bucket-class
 EOF
 
+oc project openshift-storage
+
 phase=''
 while [[ "${phase}" != "Bound" ]]; do
     phase=$(oc get obc ${bucket_name}-claim -o json | jq -r '.status.phase')
@@ -33,9 +35,9 @@ export BUCKET_NAME=$(oc get configmap ${bucket_name}-claim -o json | jq -r '.dat
 export BUCKET_PORT=$(oc get configmap ${bucket_name}-claim -o json | jq -r '.data.BUCKET_PORT')
 
 echo "INFO: copying files from ${this_dir} into bucket ${BUCKET_NAME}"
-aws s3 cp --recursive ${this_dir} s3://${BUCKET_NAME}/ \
+aws s3 cp --no-verify-ssl --recursive ${this_dir} s3://${BUCKET_NAME}/ \
     --endpoint-url="${BUCKET_HOST_EXTERNAL}"
 
 echo "INFO: listing files"
-aws s3 ls ${BUCKET_NAME} \
+aws s3 ls --no-verify-ssl ${BUCKET_NAME} \
     --endpoint-url="${BUCKET_HOST_EXTERNAL}"

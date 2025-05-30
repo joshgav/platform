@@ -7,4 +7,4 @@ source ${root_dir}/lib/kubernetes.sh
 
 ${this_dir}/deploy-operator.sh
 
-apply_kustomize_dir ${this_dir}/storage
+apply_kustomize_dir ${this_dir}/ceph
