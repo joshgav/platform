@@ -11,6 +11,9 @@ spec:
     disabled: false
     storage_type: S3
     object_storage_s3_secret: ansible-automation-hub-s3
+    # storage_type: file
+    # file_storage_storage_class: efs
+    # file_storage_size: 10Gi
   lightspeed:
     disabled: false
   service_type: ClusterIP

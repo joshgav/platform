@@ -1,0 +1,15 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+    name: aws-efs-csi-driver-operator
+spec:
+    name: aws-efs-csi-driver-operator
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+    channel: stable
+    installPlanApproval: Automatic
+    config:
+      env:
+      - name: ROLEARN
+        value: 'arn:aws:iam::${aws_account_id}:role/rosa01-aws-efs-csi-operator'

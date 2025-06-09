@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::${aws_account_id}:oidc-provider/${oidc_issuer_id}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${oidc_issuer_id}:sub": [  
+            "system:serviceaccount:openshift-cluster-csi-drivers:aws-efs-csi-driver-operator",
+            "system:serviceaccount:openshift-cluster-csi-drivers:aws-efs-csi-driver-controller-sa"
+          ]
+        }
+      }
+    }
+  ]
+}
