@@ -1,5 +1,8 @@
 # Install on VMware
 
+1. Run `./prepare.sh` to prep an agent ISO.
+1. Upload the ISO as a file in a vCenter datastore.
+
 ## Resources
 - https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/installing_on_vmware_vsphere/index
 - https://github.com/openshift/installer/tree/main/docs/user/vsphere

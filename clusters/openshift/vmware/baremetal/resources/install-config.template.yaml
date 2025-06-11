@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: InstallConfig
+metadata:
+  name: ${OPENSHIFT_CLUSTER_NAME}
+baseDomain: ${OPENSHIFT_DOMAIN_NAME}
+compute:
+- name: worker
+  replicas: 3
+controlPlane:
+  name: master
+  replicas: 3
+networking:
+  networkType: OVNKubernetes
+  machineNetwork:
+  - cidr: 192.168.46.0/24
+  clusterNetwork:
+  - cidr: 10.0.0.0/16
+    hostPrefix: 23
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  baremetal:
+    apiVIPs:
+    - 192.168.46.201
+    ingressVIPs:
+    - 192.168.46.202
+publish: External
+pullSecret: '${OPENSHIFT_PULL_SECRET}'
+sshKey: '${SSH_PUBLIC_KEY}'

@@ -1,0 +1,165 @@
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: agent-config
+rendezvousIP: 192.168.46.130
+additionalNTPSources:
+- 0.rhel.pool.ntp.org
+- 1.rhel.pool.ntp.org
+hosts:
+- hostname: master00
+  role: master
+  interfaces:
+  - name: eth0
+    macAddress: '00:50:56:00:01:00'
+  networkConfig:
+    interfaces:
+    - name: eth0
+      type: ethernet
+      state: up
+      ipv4:
+        address:
+        - ip: 192.168.46.130
+          prefix-length: 24
+        enabled: true
+    dns-resolver:
+      config:
+        server:
+        # - 192.168.46.1
+        - 8.8.8.8
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.46.1
+        next-hop-interface: eth0
+        metric: 150
+- hostname: master01
+  role: master
+  interfaces:
+  - name: eth0
+    macAddress: '00:50:56:00:01:01'
+  networkConfig:
+    interfaces:
+    - name: eth0
+      type: ethernet
+      state: up
+      ipv4:
+        address:
+        - ip: 192.168.46.131
+          prefix-length: 24
+        enabled: true
+    dns-resolver:
+      config:
+        server:
+        # - 192.168.46.1
+        - 8.8.8.8
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.46.1
+        next-hop-interface: eth0
+        metric: 150
+- hostname: master02
+  role: master
+  interfaces:
+  - name: eth0
+    macAddress: '00:50:56:00:01:02'
+  networkConfig:
+    interfaces:
+    - name: eth0
+      type: ethernet
+      state: up
+      ipv4:
+        address:
+        - ip: 192.168.46.132
+          prefix-length: 24
+        enabled: true
+    dns-resolver:
+      config:
+        server:
+        # - 192.168.46.1
+        - 8.8.8.8
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.46.1
+        next-hop-interface: eth0
+        metric: 150
+- hostname: worker00
+  role: worker
+  interfaces:
+  - name: eth0
+    macAddress: '00:50:56:00:01:03'
+  networkConfig:
+    interfaces:
+    - name: eth0
+      type: ethernet
+      state: up
+      ipv4:
+        address:
+        - ip: 192.168.46.133
+          prefix-length: 24
+        enabled: true
+    dns-resolver:
+      config:
+        server:
+        # - 192.168.46.1
+        - 8.8.8.8
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.46.1
+        next-hop-interface: eth0
+        metric: 150
+- hostname: worker01
+  role: worker
+  interfaces:
+  - name: eth0
+    macAddress: '00:50:56:00:01:04'
+  networkConfig:
+    interfaces:
+    - name: eth0
+      type: ethernet
+      state: up
+      ipv4:
+        address:
+        - ip: 192.168.46.134
+          prefix-length: 24
+        enabled: true
+    dns-resolver:
+      config:
+        server:
+        # - 192.168.46.1
+        - 8.8.8.8
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.46.1
+        next-hop-interface: eth0
+        metric: 150
+- hostname: worker02
+  role: worker
+  interfaces:
+  - name: eth0
+    macAddress: '00:50:56:00:01:05'
+  networkConfig:
+    interfaces:
+    - name: eth0
+      type: ethernet
+      state: up
+      ipv4:
+        address:
+        - ip: 192.168.46.135
+          prefix-length: 24
+        enabled: true
+    dns-resolver:
+      config:
+        server:
+        # - 192.168.46.1
+        - 8.8.8.8
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.46.1
+        next-hop-interface: eth0
+        metric: 150
