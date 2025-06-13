@@ -18,3 +18,12 @@ AWS. See `./operand/machineset-example.yaml` for an example.
   delete it with `oc delete storageprofiles.cdi.kubevirt.io noobaa.noobaa.io`. See
   <https://bugzilla.redhat.com/show_bug.cgi?id=2169686> for info.
 - Container disks are published at <https://quay.io/organization/containerdisks>
+- To enable old OS's: https://access.redhat.com/solutions/6571471
+```bash
+oc annotate --overwrite -n openshift-cnv hco kubevirt-hyperconverged kubevirt.kubevirt.io/jsonpatch='[
+  {"op": "add", "path": "/spec/configuration/architectureConfiguration", "value": {} },  
+  {"op": "add", "path": "/spec/configuration/architectureConfiguration/amd64", "value": {} },
+  {"op": "add", "path": "/spec/configuration/architectureConfiguration/amd64/emulatedMachines", "value": ["q35*", "pc-q35*", "pc-i440fx-rhel7.6.0"] }
+]'
+```
+- To check: `oc get kv kubevirt-kubevirt-hyperconverged -n openshift-cnv -o yaml | grep -A 3 emulate`

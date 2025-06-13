@@ -4,15 +4,15 @@ metadata:
   name: ${OPENSHIFT_CLUSTER_NAME}
 baseDomain: ${OPENSHIFT_BASE_DOMAIN}
 controlPlane:
+  name: master
   architecture: amd64
   hyperthreading: Enabled
-  name: master
   replicas: 3
 compute:
-- architecture: amd64
+- name: worker
+  architecture: amd64
   hyperthreading: Enabled
-  name: worker
-  replicas: 2
+  replicas: 3
 networking:
   networkType: OVNKubernetes
   clusterNetwork:

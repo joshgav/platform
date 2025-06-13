@@ -5,9 +5,6 @@ metadata:
   labels:
     keycloak: cluster
 spec:
-  instances: 2
+  instances: 1
   externalAccess:
     enabled: true
-  keycloakDeploymentSpec:
-    podannotations:
-      instrumentation.opentelemetry.io/inject-java: "true"

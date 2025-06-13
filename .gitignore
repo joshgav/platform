@@ -1,6 +1,6 @@
-.env
-_local.env
+*.env
 .kube
 .ssh
 _workdir
 /temp
+scratch.sh

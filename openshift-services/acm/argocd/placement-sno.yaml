@@ -1,0 +1,9 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: sno
+  namespace: openshift-gitops
+spec:
+  clusterSets:
+    - sno

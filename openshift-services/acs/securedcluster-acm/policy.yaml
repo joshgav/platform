@@ -128,8 +128,9 @@ spec:
                 spec:
                   clusterName: |
                     {{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}
-                  centralEndpoint: |
-                    central-stackrox.{{hub (lookup "config.openshift.io/v1" "Ingress" "" "cluster").spec.domain hub}}:443
+                  centralEndpoint: central-stackrox.apps.ipi.aws.joshgav.com:443
+                  # centralEndpoint: |
+                  #   central-stackrox.{{hub (lookup "config.openshift.io/v1" "Ingress" "" "cluster").spec.domain hub}}:443
                   perNode:
                     collector:
                       collection: EBPF

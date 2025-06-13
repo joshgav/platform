@@ -26,6 +26,14 @@ spec:
       - tenantName: prod
         tenantId: "1610b0c3-c509-4592-a256-a1871353dbfb"
   template:
+    compactor:
+      resources:
+        limits:
+          cpu: 750m
+          memory: 6Gi
+        requests:
+          cpu: 500m
+          memory: 2Gi
     gateway:
       enabled: true
     queryFrontend:

@@ -10,10 +10,8 @@ operator_namespace=open-cluster-management
 # operator_version=release-2.8
 
 ensure_namespace ${operator_namespace} true
-create_local_operatorgroup ${operator_namespace}
-
-echo "INFO: install acm operator"
-create_subscription ${operator_name} ${operator_namespace}
+apply_kustomize_dir ${this_dir}/operator
+await_resource_ready multiclusterhub
 
 kustomize build ${this_dir}/base | oc apply -f -
 

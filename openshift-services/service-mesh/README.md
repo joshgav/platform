@@ -41,3 +41,6 @@ All scripts are idempotent - that is, they can be run over and over again to app
 - https://developers.redhat.com/products/red-hat-connectivity-link/overview
 - https://kuadrant.io/
 - https://www.solutionpatterns.io/soln-pattern-connectivity-link/solution-pattern/index.html
+
+
+- For Istio in ROSA: <https://access.redhat.com/solutions/6529231>
