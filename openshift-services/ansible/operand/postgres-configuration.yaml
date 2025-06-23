@@ -4,7 +4,7 @@ kind: Secret
 type: Opaque
 metadata:
   name: ansible-automation-controller-postgres-configuration
-  namespace: <target namespace>
+  namespace: ${ansible_namespace}
 stringData:
   host: <external ip or url resolvable by the cluster>
   port: <external port, this usually defaults to 5432>

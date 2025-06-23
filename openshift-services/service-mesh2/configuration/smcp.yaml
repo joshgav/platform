@@ -1,0 +1,36 @@
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: basic
+  namespace: istio-system
+spec:
+  version: v2.6
+  mode: ClusterWide
+  policy:
+    type: Istiod
+  telemetry:
+    type: Istiod
+  meshConfig:
+    discoverySelectors:
+      - matchExpressions:
+          - key: ossm2-discovery
+            operator: In
+            values:
+            - enabled
+  security:
+    manageNetworkPolicy: false
+  tracing:
+    type: None
+  gateways:
+    ingress:
+      ingress: false
+    openshiftRoute:
+      enabled: false
+    enabled: false
+  addons:
+    grafana:
+      enabled: false
+    kiali:
+      enabled: false
+    prometheus:
+      enabled: false

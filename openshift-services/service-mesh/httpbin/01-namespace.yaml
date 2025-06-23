@@ -3,5 +3,6 @@ kind: Namespace
 metadata:
   name: httpbin
   labels:
-    istio-discovery: enabled
-    istio-injection: enabled
+    ossm2-discovery: enabled
+    # istio-discovery: enabled
+    # istio-injection: enabled

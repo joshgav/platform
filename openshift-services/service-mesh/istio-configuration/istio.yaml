@@ -1,12 +1,14 @@
 apiVersion: sailoperator.io/v1
 kind: Istio
 metadata:
-  name: default
+  # cannot use name `default` when migrating from 2.x
+  # with spec.updateStrategy.type: RevisionBased
+  name: main
 spec:
   namespace: istio-system
   updateStrategy:
     inactiveRevisionDeletionGracePeriodSeconds: 30
-    type: InPlace
+    type: RevisionBased
   values:
     global:
       logging:
@@ -15,7 +17,7 @@ spec:
       accessLogFile: /dev/stdout
       discoverySelectors:
         - matchLabels:
-            istio-discovery: enabled
+            ossm3-discovery: enabled
       enableTracing: true
       extensionProviders:
         - name: otel

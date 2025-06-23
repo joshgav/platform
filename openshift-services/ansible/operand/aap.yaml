@@ -2,6 +2,7 @@ kind: AnsibleAutomationPlatform
 apiVersion: aap.ansible.com/v1alpha1
 metadata:
   name: aap
+  # name: ${ansible_instance_name}
 spec:
   controller:
     disabled: false
