@@ -9,3 +9,6 @@ spec:
     weight: 100
   port:
     targetPort: http2
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

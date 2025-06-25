@@ -4,3 +4,4 @@ namespace: istio-system
 resources:
 - crb-kiali.yaml
 - kiali.yaml
+- ossmconsole.yaml

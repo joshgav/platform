@@ -4,5 +4,6 @@ metadata:
   name: httpbin
   labels:
     ossm2-discovery: enabled
-    # istio-discovery: enabled
+    ossm3-discovery: enabled
+    istio-discovery: enabled
     # istio-injection: enabled

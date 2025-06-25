@@ -7,6 +7,9 @@
 ## ArgoCD Integration
 - https://argocd-applicationset.readthedocs.io/en/stable/Generators-Cluster-Decision-Resource/
 
+## Observability
+- https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.13/html/observability/index
+
 ## Resources
 - Docs: https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/clusters/index#hosted-control-planes-intro
 - Control plane: https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.8/html-single/clusters/index#hosting-service-cluster-configure-aws

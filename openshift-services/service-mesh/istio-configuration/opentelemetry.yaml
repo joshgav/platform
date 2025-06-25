@@ -27,6 +27,15 @@ spec:
           authenticator: bearertokenauth
         headers:
           X-Scope-OrgID: dev
+      otlp/tempo:
+        endpoint: tempo-default-gateway.tempo-observability.svc.cluster.local:8090
+        tls:
+          insecure: false
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+        auth:
+          authenticator: bearertokenauth
+        headers:
+          X-Scope-OrgID: dev
       prometheus:
         endpoint: 0.0.0.0:8889
         add_metric_suffixes: false
@@ -57,12 +66,12 @@ spec:
             - debug
             - spanmetrics
             - otlphttp/tempo
+            - otlp/tempo
           receivers:
             - otlp
         logs:
           exporters:
             - debug
-            - otlphttp/tempo
           receivers:
             - otlp
         metrics:

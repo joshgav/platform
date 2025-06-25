@@ -44,3 +44,5 @@ All scripts are idempotent - that is, they can be run over and over again to app
 
 
 - For Istio in ROSA: <https://access.redhat.com/solutions/6529231>
+
+- https://medium.com/kialiproject/installing-openshift-service-mesh-3-tp1-with-kiali-and-grafana-tempo-6b76881ceaef

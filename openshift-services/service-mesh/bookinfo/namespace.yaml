@@ -3,5 +3,8 @@ kind: Namespace
 metadata:
   name: bookinfo
   labels:
+    ossm3-discovery: enabled
+    ossm2-discovery: enabled
     istio-discovery: enabled
-    istio-injection: enabled
+    # istio-injection: enabled
+    istio.io/rev: main-v1-24-latest

@@ -11,9 +11,9 @@ spec:
     pod_annotations:
       sidecar.istio.io/inject: "false"
   external_services:
-    istio:
-      istiod_deployment_name: istiod
-      config_map_name: istio
+    # istio:
+    #   istiod_deployment_name: istiod-main-v1-24-latest
+    #   config_map_name: istio-main-v1-24-latest
     prometheus:
       auth:
         type: bearer
@@ -26,11 +26,10 @@ spec:
       namespace_selector: true
       provider: tempo
       # use_grpc: true
-      # grpc_port: 9095
-      # internal_url: tempo-default-query-frontend.tempo-observability.svc.cluster.local:9095
+      # grpc_port: 8090
       use_grpc: false
-      internal_url: https://tempo-default-query-frontend.tempo-observability.svc.cluster.local:3200/
-      external_url: https://tempo-default-gateway-tempo-observability.apps.cluster-tf9nd.tf9nd.sandbox2654.opentlc.com/api/traces/v1/dev
+      internal_url: https://tempo-default-gateway.tempo-observability.svc.cluster.local:8080/api/traces/v1/dev/tempo
+      external_url: https://tempo-default-gateway-tempo-observability.apps.ipi.aws.joshgav.com/api/traces/v1/dev/search
       auth:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
         insecure_skip_verify: true
