@@ -1,0 +1,19 @@
+apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+  namespace: openshift-lightspeed
+spec:
+  llm:
+    providers:
+      - name: my-openai
+        type: openai
+        credentialsSecretRef:
+          name: credentials
+        url: https://api.openai.com/v1
+        models:
+          - name: gpt-4-turbo
+  ols:
+    defaultModel: gpt-4-turbo
+    defaultProvider: my-openai
+    introspectionEnabled: true
