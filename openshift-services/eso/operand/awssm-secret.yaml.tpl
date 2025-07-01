@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: awssm-secret
-  namespace: eso
 type: Opaque
 stringData:
   access-key-id: ${AWS_ACCESS_KEY_ID}
