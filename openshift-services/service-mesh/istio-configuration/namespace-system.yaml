@@ -6,4 +6,5 @@ metadata:
     kubernetes.io/metadata.name: istio-system
     openshift.io/cluster-monitoring: "true"
     istio-discovery: enabled
+    ossm3-discovery: enabled
   name: istio-system

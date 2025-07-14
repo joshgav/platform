@@ -43,6 +43,11 @@ spec:
         monitorTab:
           enabled: true
           prometheusEndpoint: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+        resources:
+          requests:
+            memory: 2Gi
+          limits:
+            memory: 2Gi
     querier:
       replicas: 3
       resources:
