@@ -1,0 +1,15 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: istio-ingressgateway2-passthrough
+spec:
+  host: istio-ingressgateway2.apps.ipi.aws.joshgav.com
+  to:
+    kind: Service
+    name: istio-ingressgateway2
+    weight: 100
+  port:
+    targetPort: https
+  tls:
+    termination: passthrough
+    insecureEdgeTerminationPolicy: Redirect

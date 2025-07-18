@@ -13,6 +13,10 @@ spec:
     global:
       logging:
         level: debug
+      defaultPodDisruptionBudget:
+        enabled: false
+    pilotConfig:
+      autoscaleMin: 2
     meshConfig:
       accessLogFile: /dev/stdout
       discoverySelectors:
