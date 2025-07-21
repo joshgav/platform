@@ -9,3 +9,4 @@ apply_kustomize_dir ${this_dir}/operator
 await_resource_ready olsconfig
 
 apply_kustomize_dir ${this_dir}/operand
+# apply_kustomize_dir ${this_dir}/azure

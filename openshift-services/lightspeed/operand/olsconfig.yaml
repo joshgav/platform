@@ -9,7 +9,7 @@ spec:
       - name: my-openai
         type: openai
         credentialsSecretRef:
-          name: credentials
+          name: openai-credential
         url: https://api.openai.com/v1
         models:
           - name: gpt-4-turbo

@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: credentials
+  name: azure-credential
   namespace: openshift-lightspeed
 type: Opaque
 stringData:
-  apitoken: ${OPENAI_API_KEY}
+  apitoken: ${AZURE_OPENAI_API_KEY}

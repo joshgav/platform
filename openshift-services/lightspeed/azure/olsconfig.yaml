@@ -1,0 +1,21 @@
+apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+  namespace: openshift-lightspeed
+spec:
+  llm:
+    providers:
+      - name: azure-openai
+        type: azure_openai
+        credentialsSecretRef:
+          name: azure-credential
+        url: https://lightspeed.openai.azure.com/
+        models:
+          - name: o4-mini
+        deploymentName: o4-mini
+        apiVersion: 2025-01-01-preview
+  ols:
+    defaultModel: o4-mini
+    defaultProvider: azure-openai
+    introspectionEnabled: true
