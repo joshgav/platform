@@ -1,0 +1,29 @@
+apiVersion: loki.grafana.com/v1
+kind: LokiStack
+metadata:
+  name: loki
+spec:
+  size: 1x.small
+  storage:
+    schemas:
+    - version: v13
+      effectiveDate: "2024-04-02"
+    secret:
+      name: loki-s3
+      type: s3
+    tls:
+      # caName is the name of a ConfigMap containing a CA certificate for the S3 endpoint
+      caName: openshift-service-ca.crt
+      # caKey is the data key in a ConfigMap of a CA certificate for the S3 endpoint
+      # defaults to “service-ca.crt”
+      caKey: service-ca.crt
+  storageClassName: gp3-csi
+  tenants:
+    mode: openshift-network
+    openshift:
+      adminGroups:
+      - cluster-admin
+  limits:
+    global:
+      retention:
+        days: 1

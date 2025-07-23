@@ -1,0 +1,29 @@
+apiVersion: flows.netobserv.io/v1beta2
+kind: FlowCollector
+metadata:
+  name: cluster
+spec:
+  namespace: netobserv
+  deploymentModel: Direct
+  agent:
+    ebpf:
+      logLevel: info
+    type: eBPF
+  loki:
+    enable: true
+    mode: LokiStack
+    lokiStack:
+      name: loki
+      namespace: netobserv
+  prometheus:
+    querier:
+      mode: Auto
+      enable: true
+  consolePlugin:
+    enable: true
+    logLevel: info
+    replicas: 1
+  processor:
+    logLevel: info
+    logTypes: Flows
+  exporters: []
