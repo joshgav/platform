@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: productpage
+  namespace: bookinfo-simple
+spec:
+  parentRefs:
+  - name: bookinfo-simple-gateway
+    namespace: openshift-ingress
+  hostnames: ["bookinfo.gateway.apps.ipi.aws.joshgav.com"]
+  rules:
+  - backendRefs:
+    - name: productpage
+      port: 9080

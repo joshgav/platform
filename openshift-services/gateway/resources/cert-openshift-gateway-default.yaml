@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: openshift-gateway-default
+  namespace: openshift-ingress
+spec:
+  commonName: '*.gateway.apps.ipi.aws.joshgav.com'
+  dnsNames:
+    - '*.gateway.apps.ipi.aws.joshgav.com'
+  secretName: openshift-gateway-default-keypair
+  issuerRef:
+    name: acme
+    kind: ClusterIssuer
+    group: cert-manager.io
+  subject:
+    organizationalUnits:
+      - 'kubernetes'
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+    - key encipherment
+    - signing

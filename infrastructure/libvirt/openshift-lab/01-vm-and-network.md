@@ -15,7 +15,7 @@ api.${cluster_name}.openshift.joshgav.com       ${HOST_IP}
 
 ### Install tools on host (hypervisor)
 
-Install KVM and libvirt:
+Install KVM and libvirt ([doc](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_virtualization/assembly_enabling-virtualization-in-rhel-9_configuring-and-managing-virtualization)):
 
 ```bash
 sudo dnf install qemu-kvm libvirt virt-install virt-viewer
@@ -127,7 +127,7 @@ Create a partition on a block device on the host:
 
 ```bash
 sudo parted /dev/vdb
-mklabel msdos
+mklabel gpt
 mkpart primary 4MiB -1s
 print
 quit
@@ -138,7 +138,7 @@ Mount the partition to a dir for use by libvirt:
 
 ```bash
 # grab UUID for new partition
-sudo blkid /dev/vdb1
+sudo blkid /dev/vdb1 | cut -f 2 -d ' '
 # set params for partition in host fstab
 UUID=7b86686b-6d10-47a2-9ad0-69b0ab9121c3
 echo "UUID=${UUID} /var/lib/libvirt/cluster-images ext4 defaults 0 2" >> /etc/fstab
@@ -240,10 +240,11 @@ Set network name and static MAC address to match a static entry in DHCP server.
 export VM_NAME=master0
 export VM_RAM='16384'
 export VM_CPU='8'
+export VM_DISK_SIZE=120
+export VM_POOL_NAME=cluster-images
+
 export VM_NETWORK=sno1
 export VM_MAC="52:54:00:ee:42:e1"
-export VM_DISK_SIZE=120
-export VM_POOL_NAME=cluster
 export PVC_POOL_NAME=cluster-pvcs
 
 export VIRSH_DEFAULT_CONNECT_URI=qemu:///system

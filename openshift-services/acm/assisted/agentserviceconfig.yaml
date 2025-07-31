@@ -15,10 +15,9 @@ spec:
     resources:
       requests:
         storage: 10Gi
-  osImages:
-    - openshiftVersion: "4.13"
-      # find at https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/release.txt
-      version: "413.92.202309112228-0"
-      url: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/rhcos-live.x86_64.iso"
-      rootFSUrl: "https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/rhcos-live-rootfs.x86_64.img"
-      cpuArchitecture: "x86_64"
+  imageStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Gi
