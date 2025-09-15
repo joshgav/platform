@@ -39,3 +39,6 @@ The cluster will be accessible at this URL:
 
 [AWS]: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 [openshift-install]: https://console.redhat.com/openshift/downloads#tool-x86_64-openshift-install
+
+## Bring your own VPC (BYO VPC)
+- Example VPC with private subnets and NAT: <https://docs.aws.amazon.com/vpc/latest/userguide/vpc-example-private-subnets-nat.html>

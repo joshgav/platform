@@ -1,7 +1,7 @@
 apiVersion: tempo.grafana.com/v1alpha1
 kind: TempoStack
 metadata:
-  name: default-instance
+  name: default
 spec:
   storageSize: 10Gi
   storage:
@@ -11,14 +11,16 @@ spec:
     tls:
       enabled: true
       caName: openshift-service-ca.crt
+  tenants:
+    mode: openshift
+    authentication:
+      - tenantName: dev
+        tenantId: "1610b0c3-c509-4592-a256-a1871353dbfa"
+      - tenantName: prod
+        tenantId: "1610b0c3-c509-4592-a256-a1871353dbfb"
   template:
-    queryFrontend:
-      jaegerQuery:
-        enabled: true
-        ingress:
-          route:
-            termination: edge
-          type: route
+    gateway:
+      enabled: true
   resources:
     total:
       limits:

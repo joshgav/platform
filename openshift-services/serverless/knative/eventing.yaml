@@ -1,16 +1,6 @@
 apiVersion: operator.knative.dev/v1alpha1
 kind: KnativeEventing
 metadata:
-    name: default
+    name: knative-eventing
     namespace: knative-eventing
-spec:
-    defaultBrokerClass: Kafka
-    config:
-        config-br-defaults:
-            default-br-config: |
-                clusterDefault:
-                    apiVersion: v1
-                    brokerClass: Kafka
-                    kind: ConfigMap
-                    name: kafka-broker-config
-                    namespace: knative-eventing
+spec: {}

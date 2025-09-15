@@ -13,9 +13,12 @@ setsebool -P httpd_can_network_connect 1
 semanage port -a -t http_port_t -p tcp 6443
 ```
 
-```
+```bash
+# may be necessary to connect RHEL machines
+rhc connect --activationkey ${ACTIVATION_KEY_NAME} --organization ${ORGANIZATION_ID}
+
 dnf module list nginx
-dnf module enable nginx:1.24
+dnf module enable nginx:1.26
 dnf install nginx
 
 systemctl enable nginx
@@ -30,7 +33,7 @@ Test connectivity by navigating to <http://openshift.joshgav.com/> (no HTTPS).
 CA_NAME=ca.joshgav.com
 
 ## generate the private key
-openssl genrsa -out ${CA_NAME}.key -des3 2048
+openssl genrsa -out ${CA_NAME}.key 2048
 
 ## create and self-sign the corresponding public key as a CA
 openssl req -x509 -new -subj "/CN=${CA_NAME}" \

@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: collector
+  name: otel
 spec:
   mode: deployment
   config: 
@@ -15,7 +15,7 @@ spec:
     processors: {}
     exporters:
       otlp:
-        endpoint: tempo-default-instance-distributor.tempostack.svc:4317
+        endpoint: tempo-default-distributor.tempo-observability.svc.cluster.local:4317
         tls:
           insecure: true
       debug: 

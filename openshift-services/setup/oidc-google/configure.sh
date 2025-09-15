@@ -18,7 +18,7 @@ oc create secret generic google-signin -n openshift-config \
 oc patch oauths.config.openshift.io cluster --type merge --patch "
 spec:
   identityProviders:
-    - name: Google
+    - name: RedHat
       mappingMethod: claim
       type: Google
       google:

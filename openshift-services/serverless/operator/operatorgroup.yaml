@@ -1,5 +1,5 @@
 apiVersion: operators.coreos.com/v1alpha2
 kind: OperatorGroup
 metadata:
-    name: serverless
+    name: openshift-serverless
     namespace: openshift-serverless
