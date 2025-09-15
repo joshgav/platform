@@ -4,42 +4,6 @@ metadata:
   name: ocs-storagecluster
   namespace: openshift-storage
 spec:
-  resources:
-    api:
-      limits:
-        cpu: 300m
-        memory: 512Mi
-      requests:
-        cpu: 300m
-        memory: 512Mi
-    mgr:
-      limits:
-        cpu: 300m
-        memory: 512Mi
-      requests:
-        cpu: 300m
-        memory: 512Mi
-    mon:
-      limits:
-        cpu: 300m
-        memory: 512Mi
-      requests:
-        cpu: 300m
-        memory: 512Mi
-    osd:
-      limits:
-        cpu: 300m
-        memory: 512Mi
-      requests:
-        cpu: 300m
-        memory: 512Mi
-    mds:
-      limits:
-        cpu: 300m
-        memory: 512Mi
-      requests:
-        cpu: 300m
-        memory: 512Mi
   multiCloudGateway:
     endpoints:
       minCount: 2
