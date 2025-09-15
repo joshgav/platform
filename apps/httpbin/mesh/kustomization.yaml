@@ -2,9 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: httpbin
 resources:
+- ../base
 - 01-namespace.yaml
-- 02-serviceaccount.yaml
-- 03a-service.yaml
 - 03b-machinenet-nncp.yaml
 - 04-deployment.yaml
 - 05a-istio-ingress-gateway-role.yaml
