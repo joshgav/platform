@@ -8,3 +8,6 @@ source ${root_dir}/lib/kubernetes.sh
 apply_kustomize_dir ${this_dir}/operator
 await_resource_ready storageclusters
 await_resource_ready objectbucketclaims
+
+oc patch console.operator.openshift.io cluster \
+    --type=json -p='[{"op": "add", "path": "/spec/plugins/-", "value": "odf-console"}]'

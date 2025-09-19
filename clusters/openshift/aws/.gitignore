@@ -1,5 +1,5 @@
 .env
 .kube
 .ssh
-_workdir
+_workdir*
 /temp
