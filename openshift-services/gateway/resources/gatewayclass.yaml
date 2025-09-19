@@ -3,4 +3,4 @@ kind: GatewayClass
 metadata:
   name: openshift-default
 spec:
-  controllerName: openshift.io/gateway-controller/v1 
+  controllerName: openshift.io/gateway-controller/v1

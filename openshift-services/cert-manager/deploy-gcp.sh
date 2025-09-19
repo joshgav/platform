@@ -7,7 +7,7 @@ if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
 export OPENSHIFT_BASE_DOMAIN=gcp.joshgav.com
-export GCP_PROJECT_ID=openenv-cvcgb
+export GCP_PROJECT_ID=${GCP_PROJECT_ID}
 
 ${this_dir}/deploy-operator.sh
 

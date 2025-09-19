@@ -5,11 +5,11 @@ root_dir=$(cd ${this_dir}/../../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source "${root_dir}/.env"; fi
 if [[ -e "${this_dir}/.env" ]]; then source "${this_dir}/.env"; fi
 
-infra_name=$(oc get infrastructures.config.openshift.io cluster -ojson | jq -r '.status.infrastructureName')
-base_machineset_name=${infra_name}-worker-${AWS_REGION}
-
 oc apply -f ${this_dir}/cluster-autoscaler.yaml
 
+## for AWS only
+# infra_name=$(oc get infrastructures.config.openshift.io cluster -ojson | jq -r '.status.infrastructureName')
+# base_machineset_name=${infra_name}-worker-${AWS_REGION}
 # for zone_id in "a" "b" "c"; do
 #     export MACHINESET_NAME=${base_machineset_name}${zone_id}
 #     echo "INFO: creating MachineAutoscaler for MachineSet ${MACHINESET_NAME}"
