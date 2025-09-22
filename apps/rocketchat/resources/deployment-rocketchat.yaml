@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketchat
+  labels:
+    app: rocketchat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketchat
+  template:
+    metadata:
+      labels:
+        app: rocketchat
+    spec:
+      containers:
+        - name: rocketchat
+          image: registry.rocket.chat/rocketchat/rocket.chat:7.9.3
+          env:
+            - name: MONGO_URL
+              value: "mongodb://rocketchat-db:27017/rocketchat"
+            - name: MONGO_OPLOG_URL
+              value: "mongodb://rocketchat-db:27017/local"
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+      restartPolicy: Always

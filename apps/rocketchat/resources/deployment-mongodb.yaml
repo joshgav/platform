@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketchat-db
+  labels:
+    app: rocketchat
+    component: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketchat-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: rocketchat-db
+    spec:
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
+      containers:
+        - name: rocketchat-db
+          image: docker.io/library/mongo:8
+          command:
+            - /bin/sh
+            - -c
+            - >
+              mongod --bind_ip 0.0.0.0 --port 27017
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          volumeMounts:
+            - name: rocketchat-data
+              mountPath: /data/db
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - >
+                  mongo --eval "rs.initiate({_id: 'rs0', members:
+                  [{_id: 0, host: 'localhost:27017'}]})"
+            initialDelaySeconds: 30
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 3
+            failureThreshold: 10
+      volumes:
+        - name: rocketchat-data
+          persistentVolumeClaim:
+            claimName: rocketchat-data-claim
