@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: rocketchat
-          image: registry.rocket.chat/rocketchat/rocket.chat:7.9.3
+          image: registry.rocket.chat/rocketchat/rocket.chat:2.4.9
           env:
             - name: MONGO_URL
               value: "mongodb://rocketchat-db:27017/rocketchat"

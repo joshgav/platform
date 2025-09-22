@@ -10,22 +10,25 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rocketchat-db
+      app: rocketchat
+      component: db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: rocketchat-db
+        app: rocketchat
+        component: db
     spec:
       containers:
         - name: rocketchat-db
-          image: docker.io/library/mongo:8
+          image: docker.io/mongo:4.0
           command:
             - /bin/sh
             - -c
             - >
-              mongod --bind_ip 0.0.0.0 --port 27017
+              mongod --bind_ip 0.0.0.0 --port 27017 --smallfiles --oplogSize 128
+              --replSet rs0 --storageEngine=mmapv1
           ports:
             - containerPort: 27017
               protocol: TCP
@@ -37,8 +40,9 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - mongosh --eval 'db.adminCommand("ping")'
-            initialDelaySeconds: 10
+                - >
+                  mongo --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'localhost:27017'}]})"
+            initialDelaySeconds: 30
             periodSeconds: 5
             timeoutSeconds: 5
             successThreshold: 2
