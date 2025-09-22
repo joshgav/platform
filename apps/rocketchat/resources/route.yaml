@@ -10,4 +10,7 @@ spec:
     kind: Service
     name: rocketchat
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
