@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: rocketchat
+  namespace: openshift-gitops
+spec:
+  generators:
+    - clusterDecisionResource:
+        configMapRef: acm-placement
+        labelSelector:
+          matchLabels:
+            cluster.open-cluster-management.io/placement: rocketchat-placement
+        requeueAfterSeconds: 180
+  template:
+    metadata:
+      name: rocketchat-{{name}}
+      labels:
+        velero.io/exclude-from-backup: "true"
+    spec:
+      project: default
+      sources:
+        - repositoryType: git
+          repoURL: https://github.com/joshgav/platform
+          targetRevision: rocketchat
+          path: apps/rocketchat/resources
+          kustomize: {}
+      destination:
+        namespace: rocketchat
+        server: "{{server}}"
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: false
+        syncOptions:
+          - CreateNamespace=true
+          - PruneLast=false

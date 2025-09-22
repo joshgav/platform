@@ -18,9 +18,6 @@ spec:
       labels:
         app: rocketchat-db
     spec:
-      securityContext:
-        runAsUser: 999
-        fsGroup: 999
       containers:
         - name: rocketchat-db
           image: docker.io/library/mongo:8
