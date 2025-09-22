@@ -37,14 +37,12 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - >
-                  mongo --eval "rs.initiate({_id: 'rs0', members:
-                  [{_id: 0, host: 'localhost:27017'}]})"
-            initialDelaySeconds: 30
-            periodSeconds: 2
-            timeoutSeconds: 1
-            successThreshold: 3
-            failureThreshold: 10
+                - mongosh --eval 'db.adminCommand("ping")'
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 2
+            failureThreshold: 3
       volumes:
         - name: rocketchat-data
           persistentVolumeClaim:
