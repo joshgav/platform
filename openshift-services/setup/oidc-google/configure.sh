@@ -41,3 +41,12 @@ if [[ -n "${GOOGLE_IDENTITY_NUMBER}" ]]; then
   oc create useridentitymapping Gmail:${GOOGLE_IDENTITY_NUMBER} ${GOOGLE_IDENTITY_NAME}
   oc adm policy add-cluster-role-to-user cluster-admin ${GOOGLE_IDENTITY_NAME}
 fi
+
+oc apply -f - <<EOF
+apiVersion: user.openshift.io/v1
+kind: Group
+metadata:
+  name: cluster-admins
+users:
+  - joshgavant
+EOF
