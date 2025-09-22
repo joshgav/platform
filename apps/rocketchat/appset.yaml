@@ -10,7 +10,7 @@ spec:
         labelSelector:
           matchLabels:
             cluster.open-cluster-management.io/placement: rocketchat-placement
-        requeueAfterSeconds: 180
+        requeueAfterSeconds: 30
   template:
     metadata:
       name: rocketchat-{{name}}
@@ -19,8 +19,7 @@ spec:
     spec:
       project: default
       sources:
-        - repositoryType: git
-          repoURL: https://github.com/joshgav/platform
+        - repoURL: https://github.com/joshgav/platform
           targetRevision: rocketchat
           path: apps/rocketchat/resources
           kustomize: {}
