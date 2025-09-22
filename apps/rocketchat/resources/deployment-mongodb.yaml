@@ -20,6 +20,9 @@ spec:
         app: rocketchat
         component: db
     spec:
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
       containers:
         - name: rocketchat-db
           image: docker.io/mongo:4.0
