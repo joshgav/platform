@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rocketchat
+  namespace: openshift-gitops
+  labels:
+    velero.io/exclude-from-backup: "true"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/joshgav/platform
+    targetRevision: main
+    path: apps/rocketchat/resources
+    kustomize: {}
+  destination:
+    namespace: rocketchat5
+    server: "https://kubernetes.default.svc"
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: false
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=false

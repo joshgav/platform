@@ -20,7 +20,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/joshgav/platform
-          targetRevision: rocketchat
+          targetRevision: main
           path: apps/rocketchat/resources
           kustomize: {}
       destination:
