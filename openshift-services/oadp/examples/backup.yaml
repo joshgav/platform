@@ -4,6 +4,5 @@ metadata:
   name: vms-backup
   namespace: openshift-adp
 spec:
-  snapshotMoveData: true
   includedNamespaces:
     - vms

@@ -25,6 +25,7 @@ spec:
       enable: true
       uploaderType: kopia
     velero:
+      defaultSnapshotMoveData: true
       defaultPlugins:
         - openshift
         - aws
