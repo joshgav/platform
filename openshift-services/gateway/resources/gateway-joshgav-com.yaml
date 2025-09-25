@@ -1,19 +1,19 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: simple-gateway
+  name: universal-gateway
   namespace: openshift-ingress
 spec:
   gatewayClassName: openshift-default
   listeners:
   - name: https
-    hostname: "*.gateway.apps.ipi.aws.joshgav.com"
+    hostname: "*.joshgav.com"
     port: 443
     protocol: HTTPS
     tls:
       mode: Terminate
       certificateRefs:
-      - name: openshift-gateway-default-keypair
+      - name: joshgav-com-keypair
     allowedRoutes:
       namespaces:
         from: All

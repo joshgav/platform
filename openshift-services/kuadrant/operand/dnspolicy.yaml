@@ -1,0 +1,16 @@
+apiVersion: kuadrant.io/v1
+kind: DNSPolicy
+metadata:
+  name: universal-gateway-dnspolicy
+  namespace: openshift-ingress
+spec:
+  healthCheck:
+    failureThreshold: 3
+    interval: 10s
+    path: /
+  targetRef:
+    name: universal-gateway
+    group: gateway.networking.k8s.io
+    kind: Gateway
+  providerRefs:
+  - name: aws-credentials
