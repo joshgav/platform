@@ -27,9 +27,7 @@ platform:
     projectID: ${GCP_PROJECT_ID}
     region: ${GCP_REGION}
     defaultMachinePlatform:
-      type: n4-standard-16
-      osDisk:
-        diskType: hyperdisk-balanced
+      type: n2-standard-16
 publish: External
 pullSecret: '${OPENSHIFT_PULL_SECRET}'
 sshKey: '${SSH_PUBLIC_KEY}'
