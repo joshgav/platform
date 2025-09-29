@@ -4,11 +4,11 @@ metadata:
   name: logging-loki
   namespace: openshift-logging
 spec:
-  size: 1x.medium
+  size: 1x.small
   storage:
     schemas:
-    - version: v12
-      effectiveDate: "2022-06-01"
+    - version: v13
+      effectiveDate: "2025-09-24"
     secret:
       name: logging-loki-s3
       type: s3
@@ -21,8 +21,6 @@ spec:
   storageClassName: gp3-csi
   tenants:
     mode: openshift-logging
-  rules:
-    enabled: false
   limits:
     global:
       retention:

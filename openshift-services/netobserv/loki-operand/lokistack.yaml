@@ -22,8 +22,8 @@ spec:
     mode: openshift-network
     openshift:
       adminGroups:
-      - cluster-admin
+      - cluster-admins
   limits:
     global:
       retention:
-        days: 1
+        days: 3

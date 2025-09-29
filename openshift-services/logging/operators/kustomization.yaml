@@ -5,3 +5,4 @@ resources:
 - operatorgroups.yaml
 - lokistack-operator.yaml
 - logging-operator.yaml
+- coo.yaml

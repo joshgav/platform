@@ -7,7 +7,7 @@ if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 source ${root_dir}/lib/ensure_bucket.sh
 
-namespace=tempostack
+namespace=tempo-observability
 ensure_namespace ${namespace}
 
 ## this function exports ${S3_ENDPOINT_URL}, ${S3_ACCESS_KEY_ID}, ${S3_SECRET_ACCESS_KEY}, ${S3_BUCKET_NAME}

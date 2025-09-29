@@ -17,6 +17,7 @@ EOF
     bucket_phase='Pending'
     while [[ "${bucket_phase}" != "Bound" ]]; do
         echo "INFO: awaiting binding of bucket claim ${bucket_name}-claim"
+        sleep 2
         bucket_phase=$(oc get objectbucketclaim -n ${bucket_namespace} ${bucket_name}-claim -ojson | jq -r '.status.phase')
     done
     echo "INFO: bucket claim ${bucket_name}-claim bound"

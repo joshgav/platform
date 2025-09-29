@@ -14,7 +14,7 @@ echo "INFO: installing loki-operator"
 apply_kustomize_dir ${this_dir}/loki-operator
 await_resource_ready "lokistacks"
 
-bucket_name=loki-data
+bucket_name=netobserv-loki-data
 ensure_bucket ${bucket_name} ${namespace}
 # S3_ENDPOINT_URL=$(echo "${S3_ENDPOINT_URL}" | sed 's/^https*:\/\///' | sed 's/:.*$//')
 echo "INFO: using S3_ENDPOINT_URL: ${S3_ENDPOINT_URL}"

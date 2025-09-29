@@ -14,6 +14,7 @@ apply_kustomize_dir ${this_dir}/operator
 await_resource_ready multiclusterhub
 
 kustomize build ${this_dir}/base | oc apply -f -
+await_resource_ready managedclustersetbinding
 
 oc get argocds.argoproj.io -n openshift-gitops openshift-gitops &> /dev/null
 if [[ $? == 0 ]]; then

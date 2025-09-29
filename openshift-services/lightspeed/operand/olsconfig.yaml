@@ -12,8 +12,8 @@ spec:
           name: openai-credential
         url: https://api.openai.com/v1
         models:
-          - name: gpt-4-turbo
+          - name: gpt-5
   ols:
-    defaultModel: gpt-4-turbo
+    defaultModel: gpt-5
     defaultProvider: my-openai
     introspectionEnabled: true

@@ -7,5 +7,5 @@ spec:
   name: loki-operator
   sourceNamespace: openshift-marketplace
   source: redhat-operators
-  channel: stable
+  channel: stable-6.3
   installPlanApproval: Automatic
