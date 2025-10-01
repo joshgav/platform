@@ -10,12 +10,12 @@ spec:
         type: azure_openai
         credentialsSecretRef:
           name: azure-credential
-        url: https://lightspeed.openai.azure.com/
+        url: https://lightspeed2.openai.azure.com/
         models:
-          - name: o4-mini
-        deploymentName: o4-mini
-        apiVersion: 2025-01-01-preview
+          - name: gpt-4o
+        deploymentName: gpt-4o
+        apiVersion: 2024-12-01-preview
   ols:
-    defaultModel: o4-mini
+    defaultModel: gpt-4o
     defaultProvider: azure-openai
     introspectionEnabled: true

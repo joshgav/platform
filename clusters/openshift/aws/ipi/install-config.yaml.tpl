@@ -26,7 +26,7 @@ platform:
   aws:
     region: ${AWS_REGION}
     defaultMachinePlatform:
-      type: m7i-flex.2xlarge
+      type: m7i-flex.4xlarge
 publish: External
 pullSecret: '${OPENSHIFT_PULL_SECRET}'
 sshKey: '${SSH_PUBLIC_KEY}'

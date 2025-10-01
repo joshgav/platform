@@ -1,9 +1,9 @@
 import os
 from openai import AzureOpenAI
 
-endpoint = "https://lightspeed.openai.azure.com/"
-model_name = "o4-mini"
-deployment = "o4-mini"
+endpoint = "https://lightspeed2.openai.azure.com/"
+model_name = "gpt-4o"
+deployment = "gpt-4o"
 
 subscription_key = os.environ.get("AZURE_OPENAI_API_KEY")
 api_version = "2024-12-01-preview"
@@ -25,7 +25,7 @@ response = client.chat.completions.create(
             "content": "I am going to Paris, what should I see?",
         }
     ],
-    max_completion_tokens=100000,
+    max_completion_tokens=10000,
     model=deployment
 )
 
