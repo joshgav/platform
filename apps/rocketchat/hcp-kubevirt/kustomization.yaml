@@ -1,6 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
-  - ../base
-  - pvc-rocketchat-data.yaml
-  - service-rocketchat.yaml
+- ../base
+
+patches:
+- path: pvc-rocketchat-data.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: rocketchat-data-claim
+- path: service-rocketchat.yaml
+  target:
+    kind: Service
+    name: rocketchat
