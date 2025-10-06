@@ -15,8 +15,6 @@ spec:
         level: debug
       defaultPodDisruptionBudget:
         enabled: false
-    pilotConfig:
-      autoscaleMin: 2
     meshConfig:
       accessLogFile: /dev/stdout
       discoverySelectors:
@@ -30,4 +28,4 @@ spec:
             service: opentelemetry-collector.istio-system.svc.cluster.local
             resourceDetectors:
               environment: {}
-  version: v1.24-latest
+  version: v1.26-latest

@@ -5,6 +5,6 @@ metadata:
   labels:
     ossm3-discovery: enabled
     istio-discovery: enabled
-    istio.io/rev: main-v1-24-latest
+    istio.io/rev: main-v1-26-latest
     ossm2-discovery: enabled
     # istio-injection: enabled

@@ -23,19 +23,16 @@ spec:
       url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9091
     tracing:
       enabled: true
-      namespace_selector: true
       provider: tempo
-      # use_grpc: true
-      # grpc_port: 8090
       use_grpc: false
+      query_timeout: 15
       internal_url: https://tempo-default-gateway.tempo-observability.svc.cluster.local:8080/api/traces/v1/dev/tempo
       external_url: https://tempo-default-gateway-tempo-observability.apps.ipi.aws.joshgav.com/api/traces/v1/dev/search
+      health_check_url: https://tempo-default-gateway-tempo-observability.apps.ipi.aws.joshgav.com/api/traces/v1/dev/tempo/api/echo 
       auth:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-        insecure_skip_verify: true
+        insecure_skip_verify: false
         type: bearer
         use_kiali_token: true
       tempo_config:
-        url_format: "grafana"
-        datasource_uid: "a8d2ef1c-d31c-4de5-a90b-e7bc5252cd00"
-        org_id: "1"
+        url_format: "jaeger"

@@ -6,7 +6,7 @@ spec:
   storageSize: 10Gi
   storage:
     secret:
-      name: tempostack-bucket-secret
+      name: tempo-observability-secret
       type: s3
     tls:
       enabled: true

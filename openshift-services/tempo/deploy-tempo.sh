@@ -11,6 +11,6 @@ namespace=tempo-observability
 ensure_namespace ${namespace}
 
 ## this function exports ${S3_ENDPOINT_URL}, ${S3_ACCESS_KEY_ID}, ${S3_SECRET_ACCESS_KEY}, ${S3_BUCKET_NAME}
-ensure_bucket tempo-data ${namespace}
+ensure_bucket ${namespace} ${namespace}
 
 apply_kustomize_dir ${this_dir}/tempostack

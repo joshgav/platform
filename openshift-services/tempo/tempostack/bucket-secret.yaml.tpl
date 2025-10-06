@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: tempostack-bucket-secret
+  name: tempo-observability-secret
 stringData:
   access_key_id: ${S3_ACCESS_KEY_ID}
   access_key_secret: ${S3_SECRET_ACCESS_KEY}
