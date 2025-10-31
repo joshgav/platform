@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: istio-ingressgateway-bookinfo
+  namespace: bookinfo
+spec:
+  commonName: 'istio-ingressgateway-bookinfo.apps.ipi.aws.joshgav.com'
+  dnsNames:
+    - 'istio-ingressgateway.apps.ipi.aws.joshgav.com'
+    - 'istio-ingressgateway-bookinfo.apps.ipi.aws.joshgav.com'
+    - 'bookinfo.apps.ipi.aws.joshgav.com'
+    - 'bookinfo.aws.joshgav.com'
+  secretName: istio-ingressgateway-bookinfo-keypair
+  issuerRef:
+    name: acme
+    kind: ClusterIssuer
+    group: cert-manager.io
+  subject:
+    organizationalUnits:
+      - 'kubernetes'
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+    - key encipherment
+    - signing

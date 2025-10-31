@@ -8,5 +8,6 @@ resources:
 - ./istio.yaml
 - ./istio-cni.yaml
 - ./istio-telemetry.yaml
+- ./istio-revision-tag.yaml
 - ./peerauthentication.yaml
 - ./prometheus-monitors.yaml

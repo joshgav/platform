@@ -1,0 +1,8 @@
+apiVersion: sailoperator.io/v1
+kind: IstioRevisionTag
+metadata:
+  name: main
+spec:
+  targetRef:
+    kind: Istio
+    name: main

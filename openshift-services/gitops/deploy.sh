@@ -8,4 +8,10 @@ source ${root_dir}/lib/kubernetes.sh
 kustomize build ${this_dir}/operator | oc apply -f -
 await_resource_ready argocd
 
+ready=0
+while [[ ${ready} == 0 ]]; do
+    oc get namespace openshift-gitops > /dev/null
+    if [[ $? == 0 ]]; then ready=1; else ready=0; sleep 2; fi
+done
+
 kustomize build ${this_dir}/gitops | oc apply -f -

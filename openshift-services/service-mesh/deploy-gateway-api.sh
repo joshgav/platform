@@ -5,4 +5,5 @@ root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
-kustomize build ${this_dir}/gateway2 | oc apply -f -
+# TODO: also need to create a DNS record to the hostname
+kustomize build ${this_dir}/gateway-api | oc apply -f -

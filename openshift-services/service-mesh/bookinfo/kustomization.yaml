@@ -4,9 +4,5 @@ namespace: bookinfo
 resources:
 - namespace.yaml
 - https://raw.githubusercontent.com/openshift-service-mesh/istio/refs/heads/master/samples/bookinfo/platform/kube/bookinfo.yaml
-- https://raw.githubusercontent.com/istio-ecosystem/sail-operator/refs/heads/main/chart/samples/ingress-gateway.yaml
-- https://raw.githubusercontent.com/openshift-service-mesh/istio/refs/heads/master/samples/bookinfo/networking/bookinfo-gateway.yaml
-- hpa.yaml
-- pdb.yaml
-- route.yaml
 - podmonitor.yaml
+- route.yaml

@@ -1,14 +1,14 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: istio-ingressgateway
+  name: bookinfo
 spec:
   to:
     kind: Service
-    name: istio-ingressgateway
+    name: productpage
     weight: 100
   port:
-    targetPort: http2
+    targetPort: http
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect

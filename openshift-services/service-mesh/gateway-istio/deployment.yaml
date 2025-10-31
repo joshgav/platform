@@ -2,11 +2,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: istio-ingressgateway2
+  name: istio-ingressgateway
 spec:
   selector:
     matchLabels:
-      istio: ingressgateway2
+      istio: ingressgateway
   template:
     metadata:
       annotations:
@@ -14,7 +14,7 @@ spec:
         inject.istio.io/templates: gateway
       labels:
         # Set a unique label for the gateway. This is required to ensure Gateways can select this workload
-        istio: ingressgateway2
+        istio: ingressgateway
         # Enable gateway injection. If connecting to a revisioned control plane, replace with "istio.io/rev: revision-name"
         sidecar.istio.io/inject: "true"
     spec:

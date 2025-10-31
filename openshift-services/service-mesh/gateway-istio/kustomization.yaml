@@ -6,6 +6,8 @@ resources:
 - role.yaml
 - service.yaml
 - deployment.yaml
+- pdb.yaml
+- hpa.yaml
 - route.yaml
 - route-passthrough.yaml
 - gateway.yaml

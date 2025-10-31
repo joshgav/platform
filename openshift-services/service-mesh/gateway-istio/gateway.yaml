@@ -1,12 +1,12 @@
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
-  name: bookinfo-gateway2
+  name: bookinfo-gateway
 spec:
   # The selector matches the ingress gateway pod labels.
   # If you installed Istio using Helm following the standard documentation, this would be "istio=ingress"
   selector:
-    istio: ingressgateway2 # use istio default controller
+    istio: ingressgateway # use istio default controller
   servers:
   - port:
       number: 8080
@@ -22,4 +22,4 @@ spec:
     - "*"
     tls:
       mode: SIMPLE
-      credentialName: istio-ingressgateway2-bookinfo-keypair
+      credentialName: istio-ingressgateway-bookinfo-keypair

@@ -1,14 +1,16 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: istio-ingressgateway2-bookinfo
+  name: gateway-api-bookinfo
   namespace: bookinfo
 spec:
-  commonName: 'istio-ingressgateway2-bookinfo.apps.ipi.aws.joshgav.com'
+  commonName: 'gateway-api-bookinfo.apps.ipi.aws.joshgav.com'
   dnsNames:
-    - 'istio-ingressgateway2.apps.ipi.aws.joshgav.com'
-    - 'istio-ingressgateway2-bookinfo.apps.ipi.aws.joshgav.com'
-  secretName: istio-ingressgateway2-bookinfo-keypair
+    - 'gateway-api.apps.ipi.aws.joshgav.com'
+    - 'gateway-api-bookinfo.apps.ipi.aws.joshgav.com'
+    - 'bookinfo.apps.ipi.aws.joshgav.com'
+    - 'bookinfo.aws.joshgav.com'
+  secretName: gateway-api-bookinfo-keypair
   issuerRef:
     name: acme
     kind: ClusterIssuer

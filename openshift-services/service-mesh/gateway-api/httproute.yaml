@@ -4,9 +4,12 @@ metadata:
   name: bookinfo
 spec:
   parentRefs:
-  - name: bookinfo-gateway3
+  - name: bookinfo-gateway-api
   rules:
   - matches:
+    - path:
+        type: Exact
+        value: /
     - path:
         type: Exact
         value: /productpage

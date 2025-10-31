@@ -5,5 +5,4 @@ root_dir=$(cd ${this_dir}/../.. && pwd)
 if [[ -e "${root_dir}/.env" ]]; then source ${root_dir}/.env; fi
 source ${root_dir}/lib/kubernetes.sh
 
-# TODO: also need to create a DNS record to the hostname
-kustomize build ${this_dir}/gateway3 | oc apply -f -
+kustomize build ${this_dir}/gateway-istio | oc apply -f -
